@@ -14,7 +14,7 @@ from io import BytesIO
 import urllib.request
 
 errorlog = []
-client = ImageAnalysisClient(endpoint="https://updog.cognitiveservices.azure.com/", credential=AzureKeyCredential("5Y8HgwE8IFi5VqQAp13661G5QswnkYDIuPSFyTGzU6wwwke4qwtEJQQJ99BAACPV0roXJ3w3AAAFACOGyYJd"))
+client = ImageAnalysisClient(endpoint="https://wayt-azureocr.cognitiveservices.azure.com/", credential=AzureKeyCredential("8bkM3LvovG72sEnfdZHZK0B30U0zdRtxAEEJipqZ1loIfHaoTDVNJQQJ99ALAC5RqLJXJ3w3AAAFACOGYosD"))
 clientstring = "client registered."
 errorlog.append(clientstring)
     
@@ -74,4 +74,3 @@ def run(datarecieved): #funktioniert nur, wenn es data mit "image" gibt, dass zu
         
     else:
         return AMLResponse("Fehlende oder ungueltige Eingabe", 400)
-
