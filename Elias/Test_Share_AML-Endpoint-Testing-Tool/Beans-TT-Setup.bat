@@ -4,7 +4,7 @@ SET "EDITED=LAST TIME EDITED [11.01.24] - [16:21]"
 :START
 REM ADAPTABLE VARIABLES - CHANGE HERE !!!
 :: Name of starting app
-set "appToStart=Test_Request_251001_15x09.py"
+set "appToStart=Test_Request_250111_16x57.py"
 :: Port for WebApp
 set "portWebApp=5000"
 :: Name der virtuellen Umgebung

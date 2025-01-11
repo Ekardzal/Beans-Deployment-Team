@@ -10,7 +10,7 @@ from datetime import datetime
 app = Flask(__name__)
 
 # Geheimen Schlüssel setzen, der für die Sitzung benötigt wird
-app.secret_key = 'dein_geheimer_schluessel'
+app.secret_key = 'beans'
 
 # Funktion zum Laden und Kodieren eines Bildes
 def encode_image(image_file):
@@ -36,6 +36,10 @@ def index():
     end_time = session.get('end_time', None)
     return render_template('test_html_gui.html', result=result, request_time=request_time, end_time=end_time)
 
+@app.route('/scripts')
+def show_scripts():
+    return render_template('test_show_scripts.html')
+    
 @app.route('/analyse', methods=['POST'])
 def analyse():
     # Bild vom Formular erhalten
