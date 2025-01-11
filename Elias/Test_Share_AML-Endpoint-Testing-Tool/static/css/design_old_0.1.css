@@ -1,0 +1,477 @@
+html {
+	width:100vw;
+	height:100vh;
+	background-color:#d7d7db;
+}
+head {	
+}
+body {
+	overflow-x: hidden;
+	width: 100vw;
+	height: 100%;
+	text-align: center;
+	font-size: 10px;
+	/*----Learned - removes space between html and body----*/
+	margin: 0px;
+    padding: 0px;
+	/*----End Learn----*/
+}
+footer {
+	background-color: #010112;
+	width:100%;
+	margin:0px;
+    padding:1px;
+	position:relative;
+	/* For scrolling footer
+	position: fixed;*/
+	}
+.previewImg {
+	display:none;
+    width:auto;
+    height:auto;
+	max-width:100%;
+	max-height:100%;
+	margin-right:auto;
+	margin-left:auto;
+}
+.zoneLeft1 {
+float:left;
+width:42%;
+min-width:42%;
+max-width:42%;
+height:50vh;
+min-height:50vh;
+max-height:50vh;
+margin:20px;
+border:4px solid white;
+object-fit: cover;
+
+}
+.zoneRight1 {
+	float:right;
+	min-width:42%;
+	max-width:42%;
+	min-height:50vh;
+	max-width:45%;
+	max-height:45%;
+	margin:20px;
+	border:4px solid white;
+	color:white;
+	text-align:center;
+	text-decoration:none;
+	font-size:20px;
+}
+.zoneLeft2 {
+float:left;
+width:42%;
+min-width:42%;
+max-width:42%;
+height:30vh;
+min-height:30vh;
+max-height:30vh;
+margin:20px;
+border:4px solid white;
+overflow: hidden;
+}
+.zoneRight2 {
+float:right;
+width:42%;
+max-width:42%;
+height:30vh;
+max-height:20%;
+margin:20px;
+border:4px solid transparent;
+}
+#dropzone {
+	margin:0px;
+	width:100%;
+	height:100%;
+	border: 2px dashed #ccc;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #aaa;
+	font-size: 16px;
+}
+#dropzone.hover {
+  border-color: #333;
+  color: #333;
+}
+#detection-info {
+	text-align:left;
+	max-width:100%;
+	margin-right:auto;
+	margin-left:auto;
+	padding:5px;
+}
+#detected-objects-list li {
+  display: flex;          /* Aktiviert Flexbox */
+  justify-content: left; /* Zentriert den Text horizontal */
+  align-items: left;     /* Zentriert den Text vertikal */
+  height: 20px;            /* Höhe der Listenelemente */
+  margin: 2px 0;           /* Optional: Abstand zwischen den Listenelementen */
+}
+.ftext {font-family:'Trebuchet MS', serif; font-size: 18px; color:white;}
+.icon {width:28px; margin:auto; vertical-align:center; position:relative; display:block;}
+.eye {width:28px; margin-left:0; margin-right:0; margin-top:0; margin-bottom:0; float:right; position:relative; top:2px;}
+.blasha:hover {box-shadow: 0 0 4px 2px rgba(0, 140, 186, 0.5);}
+.blusha:hover {box-shadow: 0 0 3px 3px rgba(0, 140, 186, 0.5);}
+/*END INDIVIDUAL MENU*/
+span {font-family:'Trebuchet MS', serif; font-size: 20px;}
+p {font-family:'Trebuchet MS', serif; font-size: 18px; color:#344C11; margin: 4px; }
+a {font-family:'Trebuchet MS', serif; color: black; text-decoration-line: none;}
+.linea:hover {font-family:'Trebuchet MS', serif; color: black; font-size: 18px; text-decoration-line: underline;}
+.clink:hover {
+	text-shadow: #AEC670 1px 0 10px;
+	cursor: pointer;
+	transition-duration: 0.1s;
+	text-decoration: underline;
+}
+h1 {margin: 0; font-family:'Trebuchet MS', serif;font-size: 50px; color:black;}
+h2 {margin: 3px;; font-family:'Trebuchet MS', serif; font-size: 35px; color:black;}
+h3 {margin: 0; font-family:'Trebuchet MS', serif; font-size: 32px; color:white;}
+.h4 {margin: 0; font-family:'Trebuchet MS', serif; font-size: 28px; color:black;}
+hr {border: 8px solid #f8ffc4; display:none;}
+button {background-color:#d7d7db;}
+/*INDIVIDUAL MENU*/
+.buttinvi1 {
+	border: none;
+	cursor: pointer;
+	appearance: none;
+	background-color: inherit;
+}
+.buttinvi2 {
+	border: none;
+	cursor: pointer;
+	appearance: none;
+	background-color: inherit;
+}
+.navigation {font-family:'Trebuchet MS';font-size: 20px; color:#8a6a60;}
+.b1 {border: 2px solid white; border-radius:1px; width:93%; margin-bottom: 0; margin-top: 10px;}
+.cfloat {float: right; margin: 0;}
+.centering {display: block;margin-left: auto; margin-right: auto;}
+.tcenter {text-align:center;}
+.needspace {margin: 10px;}
+.neednospace {margin: 0px;}
+.space {margin:50px;}
+.black {color:black;}
+.white {color:white;}
+.box  {
+		width:60%;
+		font-family:'Trebuchet MS';
+		color: white;
+		display: block;
+		border: 2px solid black;
+        background-color: #333;
+		margin:auto;
+		padding: 5px;
+		text-align: center;
+		border-radius:5px;
+    }
+.boxinvi	{
+		display: block;
+		padding: 5px;
+		border-radius:5px;
+    }
+.leftimg	{
+	margin-left:15px;
+	position:absolute;
+	float:left;
+	display:block;
+	width:100px;
+}
+.showimg{
+  border-radius: 10px;
+  padding: 5px;
+  width: 50%;
+	max-width:100px;
+}
+.showimg:hover {
+  box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+}
+.banner {
+		background-color:#010112;
+		width:100vw;
+		padding-top:3px;
+		margin-left: auto;
+		margin-right: auto;
+		/*border-bottom: 2px solid black;
+		border-left: 2px solid black ;
+		border-right: 2px solid black ;*/
+    }
+.bannerleft {
+		transition:0.3s;
+		visibility:hidden;
+        background-color:#010112;
+		width: 8vw;
+		height: 100vh;
+		float: left;
+		margin: 0px;
+		overflow: hidden;
+		position: -webkit-sticky; /* Safari */
+		position: sticky;
+		left:-8%;
+		position: fixed; /*makes it longer for scroller*/
+    }
+.bannerright {
+	transition:0.3s;
+	/*visibility:hidden;*/
+	background: rgba(1, 1, 18, 0.8);
+	width:8vw;
+	height:100vh;
+	float:right;
+	margin:0px;
+	overflow:hidden;
+	position:-webkit-sticky; /* Safari */
+	position:sticky;
+	right:-8%;
+	position:fixed;
+    }
+/*----Navigation Bar----*/
+.banner ul {
+	width:90%;
+	list-style-type: none;
+	margin: 0;
+	overflow: hidden;
+    background-color:#474F7A;
+	top: 0;
+	margin-left: auto;
+	margin-right: auto;
+	border-radius:5px;
+}
+.banner li {
+float:left;
+font-family:'Trebuchet MS';
+margin-left:15px;
+margin-top:7px;
+margin-bottom:7px;
+}
+
+li a {
+  color:white;
+  text-align:center;
+  text-decoration:none;
+  font-size:20px;
+}
+li a:hover {
+	background-color: #010112;
+}
+.active {
+background-color: #010112;
+}
+.date {
+		font-family:'Trebuchet MS';
+		color: white;
+		display: block;
+		border: 1px solid black;
+        background-color: #333;
+		margin:auto;
+		padding: 5px;
+		text-align: center;	
+    }
+.navibox {
+		display: inline-block;
+		width: 8%;
+		border: 1px solid black;
+        background-color: #8a6a60;
+		border-radius: 5px;
+		margin: auto;
+		margin-top: 15px;
+		margin-bottom: 15px;
+		padding: 6px;
+		text-align: center;
+    }
+.testsection {font-size: 22px; color:white;}
+/*----TABLE----*/
+.table60 {
+	text-align:left;
+	font-family:'Trebuchet MS';
+	width:60%;
+	margin:auto;
+	border-radius: 10px;
+	padding: 5px;
+	}
+.table80 {
+	text-align:left;
+	font-family:'Trebuchet MS';
+	width:80%;
+	margin:auto;
+	border: 0px solid black;
+	border-radius: 10px;
+	}
+.simpletr {background-color:#C9D6E7;}
+.firstrow {background-color:#b0c4de;}
+.firstrow:hover {transition-duration: 0.3s; background-color:#fbffc5;}
+.secondrow {background-color:#C9D6E7;}
+.secondrow:hover {transition-duration: 0.3s; background-color:#fbffc5;}
+th {
+	text-align: center;
+	font-weight: bold;
+	background-color:#b0c4de;
+	font-size: 20px;
+	border: 1px groove black;
+	border-collapse: collapse;
+	border-radius: 5px;
+	}
+td {
+	font-size: 18px;
+	border: 1px groove black;
+	border-collapse: collapse;
+	border-radius: 5px;
+	padding: 4px;
+}
+td h2 {
+	font-size:24px;
+}
+.tablea {padding:10px;}
+/* The container <div> - needed to position the dropdown content */
+.dropdown {}
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+	display: none;
+	position: absolute;
+	background-color: #323244;
+	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+	z-index: 1;
+	text-align:left;
+}
+/* Links inside the dropdown */
+.dropdown-content li a {
+	color: white;
+	padding: 12px 16px;
+	text-decoration: none;
+	display: block;
+}
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #010112;}
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {display: block;}
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {background-color:#010112;}
+/*INDIVIDUAL - index.html*/
+.weather {
+	width: 70%;
+	height: 188px;
+	border:none;
+	border-radius:10px;
+	}
+/* INDIVIDUAL learn_java.html */
+textarea {
+	background-color:#2b2d31;
+	margin:0;
+	padding:10px;
+	font-size:20px;
+	color:white;
+	overflow:hidden;
+	resize:none;
+}
+.code {
+width: 70%;
+background:darkgrey;
+padding: 10px;
+margin: 5 auto 40px;
+border: 1px solid black;
+font-family:'Trebuchet MS';
+color:black;
+}
+.sidenav {
+	font-size: 120%;
+	width: 100%;
+	font-weight: bold;
+	color: black;
+	text-align: left;
+	text-decoration: none;
+	margin: 0px;
+	padding-bottom: 10px;
+	padding-left: 2px;
+	padding-right: 7px;
+	border-radius:0;
+}
+/*INDIVIDUAL - NOTES.html*/ /*
+font-family: 'gg sans', sans-serif;
+font-family: 'gg sans Normal', sans-serif;
+font-family: 'gg sans Medium', sans-serif;
+font-family: 'gg sans SemiBold', sans-serif;
+*/
+.notizen {
+	font-family:'Trebuchet MS'; font-size:30px; color:black;
+	text-align:left;
+	padding: 10px;
+	margin-left:auto;
+	margin-right:auto;
+	margin: 0px;
+	position:relative;
+	border: 1px solid black;
+	max-width:90%;
+	min-width:70%;
+}
+.wid50 {
+	margin-left:auto;
+	margin-right:auto;
+	text-align:center;
+	width:85%;
+	}
+.block {display:block; float:left;}
+.save {
+	width:auto;
+	height:30px;
+	background-color:#d7d7db;
+	float:right;
+	position:relative;
+	margin-left:5px;
+	margin-right:5px;
+	top:10px;
+	border: 2px solid white;
+	border-radius:5px;
+	}
+/*DESIGN TEST*/
+.fontlogo	{
+		font-weight:bold;
+		font-size:24px;
+		color:white;
+		margin:4px;
+		left:2%;
+		float:left;
+}
+.floatright	{
+	float:right;
+}
+.alicen	{
+	text-align:center;
+}
+.centab	table{
+	text-align:center;
+}
+.centered	{
+	margin-top:auto;
+	margin-bottom:auto;
+}
+.content	{
+	width:80%;
+	height:auto;
+	min-height:100vh;
+	background: rgba(1, 1, 18, 0.8);
+	margin-left:auto;
+	margin-right:auto;
+}
+.content2	{
+	height:250vh;
+}
+/*Anime List */
+.showani{
+	border-radius: 10px;
+	padding: 5px;
+	width: 50%;
+	max-width:100px;
+	float:left;
+}
+.tabani {
+	text-align:left;
+	font-family:'Trebuchet MS';
+	width:60%;
+	margin:auto;
+	border-radius: 10px;
+	padding: 5px;
+	text-align:center;
+	font-size:30px;
+}

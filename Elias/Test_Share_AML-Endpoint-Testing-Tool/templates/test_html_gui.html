@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analyseergebnisse</title>
+	<style>
+		html {background-color:#white;}
+		body {font-family: 'Lato', sans-serif;}
+		h1, h2, h3 {margin-left:10px; margin-right:10px;}
+		table {border:solid black 1px;}
+		th {border:solid black 1px;}
+		td {border:solid black 1px;}
+		
+		.content {width:80%; height:auto; min-height:100vh; margin-left:auto; margin-right:auto;}
+		.image-preview {width:97%;min-width:97%;max-width:97%;height:50vh;min-height:50vh;max-height:50vh;margin-left:auto;margin-right:auto;object-fit:cover;padding:5px;}
+		.image-preview img {width:auto;height:auto;min-width:20vw;max-width:100%;max-height:100%;margin-right:auto;margin-left:auto;}
+
+		#JSON_response {height:100%; min-height:70vh; max-height:70vh; overflow-y:auto; padding:10px;}
+		#JSON_response li { display: flex; justify-content: left; align-items: left; height: 30px; margin: 2px 0; font-size:16px}
+		 
+        .rounded-button  {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #ffffff;
+            background-color: rgba(0, 123, 255, 0.7); /* Halbtransparentes Blau */
+            border: none;
+            border-radius: 25px; /* Abgerundete Ecken */
+            cursor: pointer;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Leichter Schatten */
+            transition: all 0.3s ease; /* Weiche Übergänge */
+			margin-left:10px;
+			margin-right:10px;
+        }
+	</style>
+</head>
+<body>
+	<div class="content">
+		<h1>Endpunkt Testing Tool Ver:250111-1601</h1>
+		
+		<!-- Formular für das Hochladen eines Bildes -->
+		<form action="/analyse" method="post" enctype="multipart/form-data">
+			<label for="image" class="rounded-button">Datei auswählen</label>
+			<input type="file" name="image" id="image" required onchange="previewImage(event)" style="display: none;">
+			<button type="submit" class="rounded-button">Bild analysieren</button>
+		</form>
+		<br><br>
+		<table>
+			<tr>
+				<th>
+					<!-- Zeigt die Startzeit der Anfrage an -->
+					{% if request_time %}
+						<h3>Start: {{ request_time }}</h3>
+					{% endif %}
+				</th>
+				<th>
+					<!-- Zeigt die Endzeit (Analyse abgeschlossen) an -->
+					{% if end_time %}
+						<h3>End: {{ end_time }}</h3>
+					{% endif %}
+				</th>
+			</tr>
+			<tr>
+				<td>
+					<ul id="JSON_response">
+						<li>
+							<!-- Zeigt die Analyseergebnisse an -->
+							{% if result %}
+								<pre>{{ result }}</pre>
+							{% endif %}
+						</li>
+					</ul>
+				</td>
+				<td>
+					<div class="image-preview" id="imagePreview">
+						{% if image %}
+							<h2>Uploaded Image:</h2>
+							<img src="data:image/jpeg;base64,{{ image }}" alt="Hochgeladenes Bild" width="300">
+						{% endif %}
+					</div>
+				</td>
+			<tr>
+			
+		</table>
+	</div>
+    <script>
+        // Funktion zur Vorschau des Bildes
+        function previewImage(event) {
+            const imagePreview = document.getElementById('imagePreview');
+            const file = event.target.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    imagePreview.innerHTML = `<img src="${e.target.result}" alt="Vorschau des ausgewählten Bildes">`;
+                };
+
+                reader.readAsDataURL(file); // Bild als Base64 laden
+            } else {
+                imagePreview.innerHTML = '<p>Wähle ein Bild aus, um es hier anzuzeigen.</p>';
+            }
+        }
+    </script>
+</body>
+</html>
