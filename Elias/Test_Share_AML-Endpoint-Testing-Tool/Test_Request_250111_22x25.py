@@ -105,6 +105,11 @@ def analyse():
             
             # Lade das Bild mit Pillow
             img = Image.open(io.BytesIO(base64.b64decode(encoded_image)))
+            
+            # Modus überprüfen und ggf. konvertieren
+            if img.mode == "RGBA":
+                img = img.convert("RGB")  # Alpha-Kanal entfernen
+    
             draw = ImageDraw.Draw(img)
 
             # Zeichne die Bounding Boxen und Klassennamen auf das Bild
