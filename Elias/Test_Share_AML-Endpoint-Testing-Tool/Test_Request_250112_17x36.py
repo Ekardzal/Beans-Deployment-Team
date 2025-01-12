@@ -6,16 +6,32 @@ import os
 import urllib.request
 # "datetime" nötig für Zeitangaben
 from datetime import datetime
+# Nötig für Angabe der Analysze Zeit
+import time
 #Nötige Imports für Bounding Box Zeichnung von Pillow
 from PIL import Image, ImageDraw, ImageFont
 import io
+from flask_swagger_ui import get_swaggerui_blueprint
 import logging
 logging.basicConfig(level=logging.DEBUG)
 
 app = Flask(__name__)
 
+# URL für Swagger-UI und Pfad zur OpenAPI-Datei
+SWAGGER_URL = '/swagger'
+API_SPEC_URL = '/static/openapi.yaml'
+
+# Swagger-UI Blueprint einrichten
+swagger_ui = get_swaggerui_blueprint(SWAGGER_URL, API_SPEC_URL)
+app.register_blueprint(swagger_ui, url_prefix=SWAGGER_URL)
+
 # Geheimen Schlüssel setzen, der für die Sitzung benötigt wird
 app.secret_key = 'beans'
+
+# Ordner für gespeicherte Textdateien
+UPLOAD_FOLDER = 'uploads'
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # Funktion zum Laden und Kodieren eines Bildes
 def encode_image(image_file):
@@ -50,6 +66,8 @@ def show_scripts():
 def analyse():
     # Bild vom Formular erhalten
     image_file = request.files['image']
+    #----------------------------------------------------------NEU
+    save_file = request.form.get('saveFile') == 'true'  # Überprüfen, ob das Häkchen gesetzt ist
     
     # Base64-kodiertes Bild
     encoded_image = encode_image(image_file)
@@ -60,7 +78,7 @@ def analyse():
     # Daten für die Anfrage
     data = {
         "image": encoded_image,
-        "ext": image_file.filename.split('.')[-1]
+        # nicht mehr notwendig-> "ext": image_file.filename.split('.')[-1]
     }
     body = json.dumps(data).encode("utf-8")
 
@@ -71,14 +89,22 @@ def analyse():
     }
 
     try:
+        # Zeit vor der Anfrage messen
+        start_time = time.time()
+        
         # Anfrage an den Azure-Endpunkt senden
         logging.debug(f"------------------------------------------ Sending request to Azure endpoint: {url}")
         req = urllib.request.Request(url, data=body, headers=headers, method="POST")
         with urllib.request.urlopen(req) as response:
             response_content = response.read().decode("utf-8")
             response_json = json.loads(response_content)
+            # Zeit nach der Anfrage messen
+            end_time = time.time()
             logging.debug(f"------------------------------------------ Received response: {response_json}")
-            
+
+            # Berechne die Dauer der Anfragebearbeitung
+            duration = int(end_time - start_time)  # Wandelt die Dauer in eine Ganzzahl um
+    
             # Debugging: Überprüfe alle Klassennamen in der JSON-Antwort
             for prediction in response_json.get('predictions:', []):
                 if isinstance(prediction, list):
@@ -138,18 +164,25 @@ def analyse():
             logging.debug(f"------------------------------------------ Encoded image with bounding boxes size: {len(encoded_image_with_boxes)} bytes")
             
             # Endzeit der Analyse
-            end_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            end_time = datetime.now().strftime("%d-%m-%y %H:%M:%S")
             
             # Speichere Ergebnisse in der Session
             session['result'] = json.dumps(response_json, indent=4)
             session['request_time'] = request_time
             session['end_time'] = end_time
+            session['duration'] = duration  # Dauer in der Session speichern
             
+            #----------------------------------------------------------NEU
+            # Wenn das Häkchen gesetzt ist, speichere die Ergebnisse in einer Logdatei
+            if save_file:
+                save_analysis_to_files(image_file.filename, response_json, img)
+                
             # Gib das Bild und die Ergebnisse direkt an das Template zurück
             return render_template('test_html_gui.html', 
                                    result=session['result'], 
                                    request_time=request_time, 
-                                   end_time=end_time, 
+                                   end_time=end_time,
+                                   duration=duration,  # Dauer an das Template übergeben
                                    image=encoded_image_with_boxes)  # Übergebe das bearbeitete Bild an das Template
             
     except urllib.error.HTTPError as e:
@@ -158,6 +191,35 @@ def analyse():
         return f"URL-Fehler: {e.reason}"
     except Exception as e:
         return f"Ein Fehler ist aufgetreten: {e}"
+        
+# Funktion, um Analyseergebnisse und bearbeitete Bilder zu speichern
+def save_analysis_to_files(image_name, analysis_result, img):
+    # Zeitstempel für die Dateinamen
+    timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    
+    # Dateinamen für Textdatei und Bild
+    base_name = f"{timestamp}_{image_name.replace('.', '_')}"
+    output_textfile = os.path.join(UPLOAD_FOLDER, f"{base_name}_predictions.txt")
+    output_imagefile = os.path.join(UPLOAD_FOLDER, f"{base_name}.jpg")
+    
+    # Speichern der Ergebnisse in der Textdatei
+    with open(output_textfile, 'w') as file:
+        file.write(f"Bildname: {image_name}\n")
+        file.write(f"Analyse durchgeführt am: {timestamp}\n")
+        file.write("\n")
+        file.write("Ergebnisse der Analyse:\n")
+        json.dump(analysis_result, file, indent=4)
+    logging.debug(f"Analyseergebnisse gespeichert in: {output_textfile}")
+    
+    # Skalieren des Bildes
+    new_width = img.width // 2  # Reduziere Größe um 50 %
+    new_height = img.height // 2
+    scaled_img = img.resize((new_width, new_height), Image.Resampling.LANCZOS)  # Hochwertiges Resampling
+
+    
+    # Speichern des bearbeiteten Bildes
+    scaled_img.save(output_imagefile, format="JPEG", quality=80)
+    logging.debug(f"Bearbeitetes Bild gespeichert in: {output_imagefile}")
 
 if __name__ == '__main__':
     app.run(debug=True)

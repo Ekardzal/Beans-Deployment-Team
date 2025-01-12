@@ -3,25 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analyseergebnisse</title>
+    <title>Beans-ETT</title>
 	<style>
 		html {background-color:#white;}
 		body {font-family: 'Lato', sans-serif; overflow-x: hidden; width: 100vw; height: 100%; text-align: center; font-size: 10px; margin: 0px; padding: 0px;}
 		h1, h2, h3 {margin-left:10px; margin-right:10px;}
-		table {border:solid black 1px;}
+		h3 {font-size:15px;}
+		table {border:solid black 0px; margin-left:auto; margin-right:auto; min-width:90%;}
 		th {border:solid black 1px; font-size:20px;}
 		td {border:solid black 1px;}
 		li {float:left; font-family:'Trebuchet MS'; margin-left:15px; margin-top:7px; margin-bottom:7px;}
 		li a { color:white; text-align:center; text-decoration:none; font-size:20px; }
 		pre {text-align: left; padding: 10px; margin: 0; width: 100%;}
 		
-		.bannerUl {width:90%; background-color:#474F7A; overflow: hidden; margin:0; top:0; margin-left:auto; margin-right:auto; list-style-type:none; border-radius:5px;}
+		.bannerUl {width:90%; background-color:#1157a1; overflow: hidden; margin:0; top:0; margin-left:auto; margin-right:auto; list-style-type:none; border-radius:5px;}
 		.content {width:80%; height:auto; min-height:100vh; margin-left:auto; margin-right:auto;}
 		.image-preview {width:97%;min-width:97%;max-width:97%;height:50vh;min-height:50vh;max-height:50vh;margin-left:auto;margin-right:auto;object-fit:cover;padding:5px;}
 		.image-preview img {width:auto;height:auto;min-width:20vw;max-width:100%;max-height:100%;margin-right:auto;margin-left:auto;}
 		.bb-image {width:97%;min-width:97%;max-width:97%;height:100%;min-height:50vh;max-height:100%;margin-left:auto;margin-right:auto;object-fit:cover;padding:5px;}
 		.bb-image img {width:auto;height:auto;min-width:20vw;max-width:100%;max-height:100%;margin-right:auto;margin-left:auto;}
-		
 		
 		#td_preview {min-width:35vw;}
 		#td_response {min-width:35vw;}
@@ -32,36 +32,54 @@
 		.fontlogo {font-weight:bold; font-size:24px; color:white; margin:4px; left:2%; float:left;}
 		.boxinvi {display: block; padding: 5px; border-radius:5px;}
 		.active {background-color: #010112;}
-		.rounded-button {padding: 10px 20px; font-size: 16px; color: #ffffff; background-color: rgba(0, 123, 255, 0.7); border: none; border-radius: 25px; cursor: pointer; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); transition: all 0.3s ease; margin-left:10px; margin-right:10px; }
+		.rounded-button {padding: 10px 20px; font-size: 16px; color: #ffffff; background-color:#049ce4; border: none; border-radius: 25px; cursor: pointer; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); transition: all 0.3s ease; margin-left:10px; margin-right:10px; }
 		.dropdown-content {display: none; position: absolute; background-color: #323244; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1; text-align:left; }
 		.dropdown-content li a {color: white; padding: 12px 16px; text-decoration: none; display: block;}
 		.dropdown-content a:hover {background-color: #010112;}
 		.dropdown:hover .dropdown-content {display: block;}
 		.dropdown:hover .dropbtn {background-color:#010112;}
+		.white {color:white;}
+		.bannerright { background: rgba(1, 1, 18, 0.8); width:10vw; height:100vh; float:right; margin:0px; overflow:hidden; position:-webkit-sticky; /* Safari */ position:sticky;right:0;position:fixed; }
 	</style>
 </head>
 <body>
+	<!--BANNER RIGHT-->
+	<div class="bannerright">
+		<form action="/analyse" method="post" enctype="multipart/form-data">
+			<br><br><br>
+			<h1 class="white">Analyze</h1>
+						<br><br><br>
+			<label for="saveFile" style="padding: 10px 20px; font-size: 16px; color:white;">Logging</label>
+			<input type="checkbox" id="saveFile" name="saveFile" value="true"
+			{% if request.form.get('saveFile') == 'true' %} checked {% endif %}>
+			<br><br><br><br>
+			<label for="image" class="rounded-button">Datei auswählen</label>
+			<input type="file" name="image" id="image" required onchange="previewImage(event)" style="display: none;">
+			<br><br><br><br>
+			<button type="submit" class="rounded-button">Bild analysieren</button>
+		</form>
+		</div>
+	</div>
 	<!--Banner MIDDLE-->
 	<div class="banner"><br>
-		<!--<hr width="100%" class="b1"></hr><br>-->
-		<!--LINKS TO ALL SITES-->
 		<ul class="bannerUl">
 			<li><p></li>
 			<li><p>&nbsp;&nbsp;</li>
-			<a href="{{ url_for('index') }}"><p class="fontlogo">Endpunkt Testing Tool<br>Ver:11.01.25-17:09</p><br></a>
+			<a href="{{ url_for('index') }}"><p class="fontlogo">Endpoint Testing Tool<br>Ver:12.01.25-16:08</p><br></a>
 			<li><p></li>
 			<li><p></li>
-			<li><a class="white active" href="{{ url_for('index') }}">Home</a><!--ACTIVE--></li>
+			<li><a class="active" href="{{ url_for('index') }}">Home</a><!--ACTIVE--></li>
 			<div class="dropdown">
 				<li class="dropbtn">
-					<a href="{{ url_for('show_scripts') }}">Scripts</a>
+					<a class="white" href="{{ url_for('show_scripts') }}">Overview</a>
 					<div id="myDropdown" class="dropdown-content">
 						<div class="boxinvi">
-							<a class="white" href="{{ url_for('show_scripts') }}">scoring.py</a><br>
+							<a class="white" href="{{ url_for('show_scripts') }}">General</a><br>
 						</div>
 					</div>
 				</li>
 			</div>
+			<li><a href="/swagger" target="_blank">Swagger</a></li>
 		</ul>
 		<!--END LINKS TO ALL SITES-->
 		<br><br>
@@ -69,11 +87,7 @@
 	<div class="content">
 		<br><br>
 		<!-- Formular für das Hochladen eines Bildes -->
-		<form action="/analyse" method="post" enctype="multipart/form-data">
-			<label for="image" class="rounded-button">Datei auswählen</label>
-			<input type="file" name="image" id="image" required onchange="previewImage(event)" style="display: none;">
-			<button type="submit" class="rounded-button">Bild analysieren</button>
-		</form>
+
 		<br><br>
 		<table>
 			<tr>
@@ -82,12 +96,15 @@
 					{% if request_time %}
 						<h3>Start: {{ request_time }}</h3>
 					{% endif %}
-				</th>
-				<th>
 					<!-- Zeigt die Endzeit (Analyse abgeschlossen) an -->
 					{% if end_time %}
 						<h3>End: {{ end_time }}</h3>
 					{% endif %}
+					<p>Processing-Time: {{ duration }}</p>
+				</th>
+				<th>
+
+					<p id="fileName">No image selected</p> <!-- Zeigt den Dateinamen an -->
 				</th>
 			</tr>
 			<tr>
@@ -122,23 +139,28 @@
 	</div>
 
     <script>
-        // Funktion zur Vorschau des Bildes
-        function previewImage(event) {
-            const imagePreview = document.getElementById('imagePreview');
-            const file = event.target.files[0];
+		// Funktion zur Vorschau des Bildes
+		function previewImage(event) {
+			const imagePreview = document.getElementById('imagePreview');
+			const fileNameDisplay = document.getElementById('fileName');
+			const file = event.target.files[0];
 
-            if (file) {
-                const reader = new FileReader();
+			if (file) {
+				const reader = new FileReader();
 
-                reader.onload = function(e) {
-                    imagePreview.innerHTML = `<img src="${e.target.result}" alt="Vorschau des ausgewählten Bildes">`;
-                };
+				reader.onload = function(e) {
+					imagePreview.innerHTML = `<img src="${e.target.result}" alt="Vorschau des ausgewählten Bildes">`;
+				};
 
-                reader.readAsDataURL(file); // Bild als Base64 laden
-            } else {
-                imagePreview.innerHTML = '<p>Wähle ein Bild aus, um es hier anzuzeigen.</p>';
-            }
-        }
-    </script>
+				reader.readAsDataURL(file); // Bild als Base64 laden
+				
+				// Zeigt den Dateinamen an
+				fileNameDisplay.textContent = `Selected Picture: ${file.name}`;
+			} else {
+				imagePreview.innerHTML = '<p>Wähle ein Bild aus, um es hier anzuzeigen.</p>';
+				fileNameDisplay.textContent = 'Kein Bild ausgewählt';
+			}
+		}
+	</script>
 </body>
 </html>

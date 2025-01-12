@@ -3,19 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analyseergebnisse</title>
+    <title>Beans-ETT</title>
 	<style>
 		html {background-color:#white;}
 		body {font-family: 'Lato', sans-serif; overflow-x: hidden; width: 100vw; height: 100%; text-align: center; font-size: 10px; margin: 0px; padding: 0px;}
 		h1, h2, h3 {margin-left:10px; margin-right:10px;}
-		table {border:solid black 1px;}
-		th {border:solid black 1px; font-size:20px;}
-		td {border:solid black 1px;}
+		table {border:solid black 0px; margin-left:auto; margin-right:auto; min-width:90%;}
+		th {border:solid black 0px; font-size:20px;}
+		td {border:solid black 0px;}
 		ul { width:90%; list-style-type:none; margin:0; overflow: hidden; background-color:#474F7A; top:0; margin-left:auto; margin-right:auto; border-radius:5px; }
 		li { float:left; font-family:'Trebuchet MS'; margin-left:15px; margin-top:7px; margin-bottom:7px;}
 		li a { color:white; text-align:center; text-decoration:none; font-size:20px; }
-		pre {text-align: left; margin-left: 20px; font-family: 'Courier New', monospace;}
+		pre {text-align:left; padding:10px; margin:0; width:100%;}
 		
+		.bannerUl {width:90%; background-color:#1157a1; overflow: hidden; margin:0; top:0; margin-left:auto; margin-right:auto; list-style-type:none; border-radius:5px;}
 		.content {width:80%; height:auto; min-height:100vh; margin-left:auto; margin-right:auto;}
 		.image-preview {width:97%;min-width:97%;max-width:97%;height:50vh;min-height:50vh;max-height:50vh;margin-left:auto;margin-right:auto;object-fit:cover;padding:5px;}
 		.image-preview img {width:auto;height:auto;min-width:20vw;max-width:100%;max-height:100%;margin-right:auto;margin-left:auto;}
@@ -33,48 +34,51 @@
 		.dropdown-content a:hover {background-color: #010112;}
 		.dropdown:hover .dropdown-content {display: block;}
 		.dropdown:hover .dropbtn {background-color:#010112;}
-	
-
 	</style>
 </head>
 <body>
 	<!--Banner MIDDLE-->
 	<div class="banner"><br>
-		<!--<hr width="100%" class="b1"></hr><br>-->
-		<!--LINKS TO ALL SITES-->
-		<ul>
+		<ul class="bannerUl">
 			<li><p></li>
 			<li><p>&nbsp;&nbsp;</li>
-			<a href="index.html"><p class="fontlogo">Endpunkt Testing Tool<br>Ver:11.01.25-17:09</p><br></a>
+			<a href="{{ url_for('index') }}"><p class="fontlogo">Endpoint Testing Tool<br>Ver:12.01.25-16:08</p><br></a>
 			<li><p></li>
 			<li><p></li>
 			<li><a href="{{ url_for('index') }}">Home</a><!--ACTIVE--></li>
 			<div class="dropdown">
 				<li class="dropbtn">
-					<a class="white active" href="{{ url_for('show_scripts') }}">Scripts</a>
+					<a class="white active" href="{{ url_for('show_scripts') }}">Overview</a>
 					<div id="myDropdown" class="dropdown-content">
 						<div class="boxinvi">
-							<a class="white active" href="{{ url_for('show_scripts') }}">scoring.py</a><br>
+							<a class="white active" href="{{ url_for('show_scripts') }}">General</a><br>
 						</div>
 					</div>
 				</li>
 			</div>
+			<li><a href="/swagger" target="_blank">Swagger</a></li>
 		</ul>
 		<!--END LINKS TO ALL SITES-->
 		<br><br>
 	</div>
 	<div class="content">
 		<br><br>
+		<!-- Buttons für Textwechsel -->
+		<button id="button1" class="rounded-button">Error Codes</button>
+		<button id="button2" class="rounded-button">"scoring.py" | ver0.1-TI | DEPLOYED </button>
+		<button id="button3" class="rounded-button">"scoring.py" | ver0.1-TR | PENDING</button>
+		<button id="button4" class="rounded-button">openapi.yaml</button>
+		<br><br><br>
 		<table>
-			<tr>
-				<th>
-					"scoring.py" - in: "Azure Machine Learning" deployed
-				</th>
-			</tr>
 			<tr>
 				<th>
 					<pre>
 						<code>
+    <!-- Bereiche für Textanzeige -->
+	<div id="content1" style="display:none;">
+		In Process...
+    </div>
+	<div id="content2" style="display:none;">
 import os
 from ultralytics import YOLO 
 import json
@@ -152,11 +156,163 @@ def run(datarecieved): #funktioniert nur, wenn es data mit "image" gibt, dass zu
 		
 	else:
 		return AMLResponse("Fehlende oder ungueltige Eingabe", 400)
+    </div>
+    <div id="content3" style="display: none;">						
+import os
+from ultralytics import YOLO 
+import json
+import logging
+from azureml.contrib.services.aml_request import AMLRequest, rawhttp
+from azureml.contrib.services.aml_response import AMLResponse
+from azure.ai.vision.imageanalysis import ImageAnalysisClient
+from azure.ai.vision.imageanalysis.models import VisualFeatures
+from azure.core.credentials import AzureKeyCredential
+from PIL import Image
+import base64
+import io
+from io import BytesIO
+import urllib.request
+
+errorlog = []
+client = ImageAnalysisClient(endpoint="https://wayt-azureocr.cognitiveservices.azure.com/",
+credential=AzureKeyCredential("8bkM3LvovG72sEnfdZHZK0B30U0zdRtxAEEJipqZ1loIfHaoTDVNJQQJ99ALAC5RqLJXJ3w3AAAFACOGYosD"))
+clientstring = "client registered."
+errorlog.append(clientstring)
+	
+
+def init():
+	global model
+
+	model_path = os.path.join(os.getenv("AZUREML_MODEL_DIR"), "best.pt")
+	model = YOLO(model_path)
+	clientstring = "YOLO loaded."
+	errorlog.append(clientstring)
+
+
+@rawhttp
+def run(datarecieved): #funktioniert nur, wenn es data mit "image" gibt, dass zu einem image file decodet werden kann
+    if datarecieved.method == "POST":
+        try:
+            if model is None:
+                return AMLResponse("Model is not loaded. Dependency failed.", 424)
+
+            json_result = []
+            jsondict = {}
+            recieved = json.loads(datarecieved.data)
+            clientstring = "request received"
+            errorlog.append(clientstring)
+
+            # Validate file type
+            allowed_extensions = [".png", ".jpg", ".jpeg"]
+            file_extension = recieved.get("ext", "").lower()
+
+            if file_extension not in allowed_extensions:
+                clientstring = f"Unsupported file type: {file_extension}"
+                errorlog.append(clientstring)
+                return AMLResponse(f"Unsupported file type. Allowed types are: {', '.join(allowed_extensions)}", 400)
+
+            # Decode the image
+            try:
+                im_b64 = recieved["image"]
+                im_bytes = base64.b64decode(im_b64)
+                image = Image.open(io.BytesIO(im_bytes))
+
+                # Additional check: Ensure the MIME type matches allowed formats
+                if image.format not in ["PNG", "JPEG"]:
+                    clientstring = f"Image format {image.format} is not supported."
+                    errorlog.append(clientstring)
+                    return AMLResponse(f"Unsupported image format: {image.format}. Only PNG and JPEG are allowed.", 400)
+
+                width, height = image.size
+                clientstring = "image loaded." + repr(width) + "x" + repr(height)
+                errorlog.append(clientstring)
+            except Exception as image_error:
+                clientstring = f"Image decoding failed: {repr(image_error)}"
+                errorlog.append(clientstring)
+                return AMLResponse("Image decoding dependency failed.", 424)
+
+            # YOLO prediction
+            try:
+                clientstring = "prediction result for image"
+                errorlog.append(clientstring)
+                result = model(image)
+                json_result.append(json.loads(result[0].to_json()))
+                clientstring = "dumping results."
+                errorlog.append(clientstring)
+            except Exception as prediction_error:
+                clientstring = f"Model prediction failed: {repr(prediction_error)}"
+                errorlog.append(clientstring)
+                return AMLResponse("Model prediction dependency failed.", 424)
+
+            # Process bounding boxes and perform OCR
+            try:
+                boxing = result[0].boxes.xyxy
+                for box in boxing:
+                    clientstring = "finding text..."
+                    errorlog.append(clientstring)
+                    byted = BytesIO()
+                    cropped = image.crop(box.tolist())
+                    cropped.save(byted, recieved["ext"])
+                    imagebytes = byted.getvalue()
+                    OCRresult = client.analyze(image_data=imagebytes, visual_features=[VisualFeatures.READ])
+                    json_result.append(OCRresult.as_dict())
+                    clientstring = "dumping text in json"
+                    errorlog.append(clientstring)
+            except Exception as ocr_error:
+                clientstring = f"OCR analysis failed: {repr(ocr_error)}"
+                errorlog.append(clientstring)
+                return AMLResponse("OCR dependency failed. Please check the input or the service.", 424)
+
+            jsondict = {"predictions:": json_result}
+            package = str.encode(json.dumps(jsondict))
+            return AMLResponse(package, 200)
+
+        except Exception as e:
+            logging.debug(repr(e))
+            return AMLResponse(("Dependency failed: " + repr(e) + repr(errorlog)), 424)
+
+    else:
+        return AMLResponse("Fehlende oder ungueltige Eingabe", 400)
+    </div>
+    <div id="content4" style="display: none;">
+		In Process...
+    </div>
+
 						</code>
 					<pre>
 				</th>
 			</tr>
 		</table>
 	</div>
+	<script>
+        // Funktionen zum Ändern des angezeigten Textes
+        document.getElementById("button1").addEventListener("click", function() {
+            document.getElementById("content1").style.display = "block";
+            document.getElementById("content2").style.display = "none";
+            document.getElementById("content3").style.display = "none";
+			document.getElementById("content4").style.display = "none";
+        });
+		
+        document.getElementById("button2").addEventListener("click", function() {
+            document.getElementById("content1").style.display = "none";
+            document.getElementById("content2").style.display = "block";
+            document.getElementById("content3").style.display = "none";
+			document.getElementById("content4").style.display = "none";
+        });
+
+        document.getElementById("button3").addEventListener("click", function() {
+            document.getElementById("content1").style.display = "none";
+            document.getElementById("content2").style.display = "none";
+            document.getElementById("content3").style.display = "block";
+			document.getElementById("content4").style.display = "none";
+        });
+
+        document.getElementById("button4").addEventListener("click", function() {
+            document.getElementById("content1").style.display = "none";
+            document.getElementById("content2").style.display = "none";
+            document.getElementById("content3").style.display = "none";
+			document.getElementById("content4").style.display = "block";
+        });
+    </script>
 </body>
 </html>

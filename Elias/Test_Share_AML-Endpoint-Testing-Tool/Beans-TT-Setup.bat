@@ -1,10 +1,10 @@
 setlocal enabledelayedexpansion
 @echo off
-SET "EDITED=LAST TIME EDITED [11.01.24] - [19:46]"
+SET "EDITED=LAST TIME EDITED [12.01.25] - [19:21]"
 :START
 REM ADAPTABLE VARIABLES - CHANGE HERE !!!
 :: Name of starting app
-set "appToStart=Test_Request_250111_22x25.py"
+set "appToStart=Test_Request_250112_17x36.py"
 :: Port for WebApp
 set "portWebApp=5000"
 :: Name der virtuellen Umgebung
@@ -68,13 +68,14 @@ echo Check for requirements.txt...
 if not exist requirements.txt (set /a check4=%check4%+1 & color 0c) else (set /a checkInt=%checkInt%+1)
 echo Check for script "%appToStart%"
 if not exist %appToStart% (set /a check5=%check5%+1 & color 0c) else (set /a checkInt=%checkInt%+1)
+echo.
+if %check1% GTR 0 (echo %check1Text% & echo.)
+if %check2% GTR 0 (echo %check2Text% & echo.)
+if %check3% GTR 0 (echo %check3Text% & echo.)
+if %check4% GTR 0 (echo %check4Text% & echo.)
 echo = EXISTING REQUIREMENTS: [%checkInt%/%CheckSum%]
 echo.
 echo =======================================================
-if %check1% GTR 0 (echo %check1Text%)
-if %check2% GTR 0 (echo %check2Text%)
-if %check3% GTR 0 (echo %check3Text%)
-if %check4% GTR 0 (echo %check4Text%)
 echo 			MENU
 echo =======================================================
 :MENU
@@ -158,7 +159,7 @@ if "%wannaStart%"=="2" (goto END)
 goto END
 :INSTALLEXTRAS
 echo.
-echo Are you sure, that you want to install pillow? [Yes = 1][No = 2]
+echo Are you sure, that you want to install flask-swagger-ui? [Yes = 1][No = 2]
 set /p confirmExtraInstall=:
 if "%confirmExtraInstall: =%"=="" (goto END)                          
 if "%confirmExtraInstall%"=="" (goto END) 
@@ -166,15 +167,15 @@ if "%confirmExtraInstall%"=="1" (
 	if exist "%cd%\venv" (
 	cd /d "%cd%"
 	call venv\Scripts\activate
-	echo Installing Pillow...
-	pip install pillow
+	echo installing flask-swagger-ui...
+	pip install flask-swagger-ui
 	)
 	if %errorlevel% neq 0 (
 		echo.
-		echo [Error] Pillow installation failed.
+		echo [Error] flask-swagger-ui installation failed
 	) else (
 		echo.
-		echo Pillow was installed successfully.
+		echo flask-swagger-ui was installed successfully.
 	)
 )
 if "%confirmExtraInstall%"=="2" (goto END)
