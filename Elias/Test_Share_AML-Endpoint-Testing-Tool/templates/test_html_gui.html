@@ -57,10 +57,12 @@
 			<input type="checkbox" id="saveFile" name="saveFile" value="true"
 			{% if request.form.get('saveFile') == 'true' %} checked {% endif %}>
 			<br><br><br><br>
-			<label for="image" class="rounded-button">Datei auswählen</label>
-			<input type="file" name="image" id="image" required onchange="previewImage(event)" style="display: none;">
+			<label for="image" class="rounded-button" style="min-width:85%;">Datei auswählen</label>
+			<input type="file" name="image" id="image" required onchange="previewImage(event)" style="display:none;" >
 			<br><br><br><br>
-			<button type="submit" id="uploadButton" class="rounded-button">Bild analysieren</button>
+			<!-- Noch buggy weil resultate clearbar während analyse<button type="button" id="clearButton" class="rounded-button" style="min-width:85%;">Entleeren</button>-->
+			<br><br><br><br>
+			<button type="submit" id="uploadButton" class="rounded-button" style="min-width:85%;">Bild analysieren</button>
 			<h3 class="white">Selected Image:</h3> <!-- Zeigt den Dateinamen an -->
 			<h3 id="fileName" class="white"></h3> <!-- Zeigt den Dateinamen an -->
 		</form>
@@ -125,7 +127,7 @@
 				<td id="td_preview">
 					<div class="image-preview" id="imagePreview">
 						{% if image %}
-							<h2>Uploaded Image:</h2>
+							<h3 style="margin-top:0px;">Uploaded Image:</h3>
 							<img src="data:image/jpeg;base64,{{ image }}" alt="Hochgeladenes Bild" width="300">
 						{% endif %}
 					</div>
@@ -172,6 +174,24 @@
 			}
 		}
 	</script>
+	<script>
+    /*MOMENTAN NICHT VERWENDET
+		document.getElementById('clearButton').addEventListener('click', function() {
+        // Lösche das Ergebnis und Bild
+        const resultContainer = document.getElementById('JSON_response');
+        const imageContainer = document.getElementById('imagePreview');
+
+        resultContainer.innerHTML = '';  // Löscht die angezeigten Ergebnisse
+        imageContainer.innerHTML = '<p>Kein Bild ausgewählt</p>';  // Setzt die Bildanzeige zurück
+
+        // Setze den Dateinamen zurück
+        document.getElementById('fileName').textContent = 'Kein Bild ausgewählt';
+
+        // Entferne den Leuchteffekt vom Upload-Button
+        const uploadButton = document.getElementById('uploadButton');
+        uploadButton.classList.remove('ready');
+    });*/ 
+	</script>
     <script>
         // JavaScript zum Anzeigen des Lade-Indikators
         const form = document.getElementById('uploadForm');
@@ -180,8 +200,7 @@
         form.addEventListener('submit', function(event) {
             // Lade-Indikator anzeigen
             loading.style.display = 'block';
-        });
-		
+        });		
     </script>
 </body>
 </html>

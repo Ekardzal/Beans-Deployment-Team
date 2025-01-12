@@ -11,6 +11,8 @@ set "portWebApp=5000"
 set venvDir=venv
 ::Name of this batch file
 set "batchName=Beans-TT-Setup.bat"
+set "gitPath=Elias\Test_Share_AML-Endpoint-Testing-Tool"
+set /a "gitTest=0"
 Color 0a
 CLS
 REM Check Width of Console Window
@@ -51,6 +53,7 @@ CLS
 echo # %EDITED% # Timestamp: %timestamp% #
 echo Current Path: %CD%
 echo =======================================================
+echo Hello %username% (^^_^^)
 echo.
 echo Check for python installation...
 REM CHECK1
@@ -76,7 +79,7 @@ if %check4% GTR 0 (echo %check4Text% & echo.)
 echo = EXISTING REQUIREMENTS: [%checkInt%/%CheckSum%]
 echo.
 echo =======================================================
-echo 			MENU
+echo 			MENU		
 echo =======================================================
 :MENU
 echo [1] Start App "%appToStart%"

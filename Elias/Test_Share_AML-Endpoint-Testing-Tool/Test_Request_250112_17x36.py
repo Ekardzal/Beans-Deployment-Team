@@ -78,7 +78,7 @@ def analyse():
     # Daten für die Anfrage
     data = {
         "image": encoded_image,
-        # nicht mehr notwendig-> "ext": image_file.filename.split('.')[-1]
+        #nicht mehr notwendig-> "ext": image_file.filename.split('.')[-1]
     }
     body = json.dumps(data).encode("utf-8")
 
