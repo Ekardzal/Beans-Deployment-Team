@@ -34,6 +34,14 @@
 		.dropdown-content a:hover {background-color: #010112;}
 		.dropdown:hover .dropdown-content {display: block;}
 		.dropdown:hover .dropbtn {background-color:#010112;}
+		
+		#loading {
+      display: none; /* Startet als unsichtbar */
+      font-size: 20px;
+      color: blue;
+      text-align: center;
+      margin-top: 20px;
+    }
 	</style>
 </head>
 <body>
@@ -65,10 +73,10 @@
 		<br><br>
 		<!-- Buttons für Textwechsel -->
 		<button id="button1" class="rounded-button">Error Codes</button>
-		<button id="button2" class="rounded-button">"scoring.py" | ver0.1-TI | DEPLOYED </button>
-		<button id="button3" class="rounded-button">"scoring.py" | ver0.1-TR | PENDING</button>
-		<button id="button4" class="rounded-button">openapi.yaml</button>
-		<br><br><br>
+		<button id="button2" class="rounded-button">"scoring.py" | ver0.1-TI</button>
+		<button id="button3" class="rounded-button">"scoring.py" | ver0.1-TR</button>
+		<button id="button4" class="rounded-button">"scoring.py" | 12.01.25 - Ti+Tr | DEPLOYED</button>
+		<button id="button5" class="rounded-button">openapi.yaml</button>
 		<table>
 			<tr>
 				<th>
@@ -76,9 +84,20 @@
 						<code>
     <!-- Bereiche für Textanzeige -->
 	<div id="content1" style="display:none;">
-		In Process...
+[Mögliche HTTP Fehlercodes]
+
+[HTTP-Fehler: 424]
+	Code: InvalidRequest
+	The image dimension is not allowed to be smaller than 50 and larger than 16000.
+	Message: The image dimension is not allowed to be smaller than 50 and larger than 16000.
+	=
+	Abmessungen eines Bildes, das an Server gesendet wurde, außerhalb der akzeptierten Größenbeschränkungen:
+	- mindestens 50 Pixel
+	- maximal 16.000 Pixel
     </div>
 	<div id="content2" style="display:none;">
+["Erstes funktionierendes Scoring Script" | Entstehung: ca. 10.01.25 | Ersteller: Timo]
+
 import os
 from ultralytics import YOLO 
 import json
@@ -157,7 +176,9 @@ def run(datarecieved): #funktioniert nur, wenn es data mit "image" gibt, dass zu
 	else:
 		return AMLResponse("Fehlende oder ungueltige Eingabe", 400)
     </div>
-    <div id="content3" style="display: none;">						
+    <div id="content3" style="display: none;">
+["Erster Versuch Scoring Script" | Entstehung: ca. 12.01.25 | Ersteller: Tristan]	
+
 import os
 from ultralytics import YOLO 
 import json
@@ -277,6 +298,9 @@ def run(datarecieved): #funktioniert nur, wenn es data mit "image" gibt, dass zu
     <div id="content4" style="display: none;">
 		In Process...
     </div>
+	<div id="content5" style="display: none;">
+		In Process...
+    </div>
 
 						</code>
 					<pre>
@@ -291,6 +315,7 @@ def run(datarecieved): #funktioniert nur, wenn es data mit "image" gibt, dass zu
             document.getElementById("content2").style.display = "none";
             document.getElementById("content3").style.display = "none";
 			document.getElementById("content4").style.display = "none";
+			document.getElementById("content5").style.display = "none";
         });
 		
         document.getElementById("button2").addEventListener("click", function() {
@@ -298,6 +323,7 @@ def run(datarecieved): #funktioniert nur, wenn es data mit "image" gibt, dass zu
             document.getElementById("content2").style.display = "block";
             document.getElementById("content3").style.display = "none";
 			document.getElementById("content4").style.display = "none";
+			document.getElementById("content5").style.display = "none";
         });
 
         document.getElementById("button3").addEventListener("click", function() {
@@ -305,13 +331,23 @@ def run(datarecieved): #funktioniert nur, wenn es data mit "image" gibt, dass zu
             document.getElementById("content2").style.display = "none";
             document.getElementById("content3").style.display = "block";
 			document.getElementById("content4").style.display = "none";
+			document.getElementById("content5").style.display = "none";
         });
-
-        document.getElementById("button4").addEventListener("click", function() {
+		
+		        document.getElementById("button4").addEventListener("click", function() {
             document.getElementById("content1").style.display = "none";
             document.getElementById("content2").style.display = "none";
             document.getElementById("content3").style.display = "none";
 			document.getElementById("content4").style.display = "block";
+			document.getElementById("content5").style.display = "none";
+        });
+
+        document.getElementById("button5").addEventListener("click", function() {
+            document.getElementById("content1").style.display = "none";
+            document.getElementById("content2").style.display = "none";
+            document.getElementById("content3").style.display = "none";
+			document.getElementById("content4").style.display = "none";
+			document.getElementById("content5").style.display = "block";
         });
     </script>
 </body>
