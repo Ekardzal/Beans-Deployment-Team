@@ -1,10 +1,10 @@
 setlocal enabledelayedexpansion
 @echo off
-SET "EDITED=LAST TIME EDITED [11.01.24] - [16:21]"
+SET "EDITED=LAST TIME EDITED [11.01.24] - [19:46]"
 :START
 REM ADAPTABLE VARIABLES - CHANGE HERE !!!
 :: Name of starting app
-set "appToStart=Test_Request_250111_16x57.py"
+set "appToStart=Test_Request_250111_22x25.py"
 :: Port for WebApp
 set "portWebApp=5000"
 :: Name der virtuellen Umgebung
@@ -36,13 +36,21 @@ set /a "check3=0"
 set "check3Text=[Error] no venv folder found"
 set /a "check4=0"
 set "check4Text=[Error] no requirements.txt found"
+set /a "check5=0"
+set "check5Text=[Error] no %appToStart% found"
 REM Anzahl zu checkender Faktoren
 set checkInt=0
-set checkSum=4
+set checkSum=5
 :CHECKREQ
+set /a "check1=0"
+set /a "check2=0"
+set /a "check3=0"
+set /a "check4=0"
+set /a "checkInt=0"
 CLS
 echo # %EDITED% # Timestamp: %timestamp% #
 echo Current Path: %CD%
+echo =======================================================
 echo.
 echo Check for python installation...
 REM CHECK1
@@ -58,23 +66,23 @@ if not exist venv (set /a check3=%check3%+1 & color 0c) else (set /a checkInt=%c
 REM CHECK4
 echo Check for requirements.txt...
 if not exist requirements.txt (set /a check4=%check4%+1 & color 0c) else (set /a checkInt=%checkInt%+1)
+echo Check for script "%appToStart%"
+if not exist %appToStart% (set /a check5=%check5%+1 & color 0c) else (set /a checkInt=%checkInt%+1)
+echo = EXISTING REQUIREMENTS: [%checkInt%/%CheckSum%]
 echo.
-echo =========================================
-echo 	REQUIREMENTS: [%checkInt%/%CheckSum%]
-echo =========================================
+echo =======================================================
 if %check1% GTR 0 (echo %check1Text%)
 if %check2% GTR 0 (echo %check2Text%)
 if %check3% GTR 0 (echo %check3Text%)
 if %check4% GTR 0 (echo %check4Text%)
-echo.
-echo =========================================
-echo 	MENU
-echo =========================================
+echo 			MENU
+echo =======================================================
 :MENU
-echo [1] Start App *name*
+echo [1] Start App "%appToStart%"
+echo.
 echo [2] Start Virtual Environment
 echo [3] Install Requirements
-echo [4] Check Requirements
+echo [4] Install Extras
 echo .
 set "input"=""
 set /p input=:
@@ -83,7 +91,8 @@ if "%input%"=="" (goto START)
 if "%input%"=="1" (goto STARTAPP)
 if "%input%"=="2" (goto STARTVENV)
 if "%input%"=="3" (goto CREATEVENV)
-if "%input%"=="4" (goto CHECKREQ)
+if "%input%"=="4" (goto INSTALLEXTRAS)
+if "%input%"=="X" (goto CHECKREQ)
 goto START
 goto END
 pause >nul
@@ -106,7 +115,6 @@ if exist "%cd%\venv" (
 cd /d "%cd%"
 start /b venv\Scripts\activate
 ) else (echo Can't find "%cd%\venv")
-start http://127.0.0.1:%portWebApp%/
 pause >nul
 goto END
 :CREATEVENV
@@ -147,6 +155,30 @@ if "%wannaStart: =%"=="" (goto END)
 if "%wannaStart%"=="" (goto END) 
 if "%wannaStart%"=="1" (goto STARTAPP)
 if "%wannaStart%"=="2" (goto END)
+goto END
+:INSTALLEXTRAS
+echo.
+echo Are you sure, that you want to install pillow? [Yes = 1][No = 2]
+set /p confirmExtraInstall=:
+if "%confirmExtraInstall: =%"=="" (goto END)                          
+if "%confirmExtraInstall%"=="" (goto END) 
+if "%confirmExtraInstall%"=="1" (
+	if exist "%cd%\venv" (
+	cd /d "%cd%"
+	call venv\Scripts\activate
+	echo Installing Pillow...
+	pip install pillow
+	)
+	if %errorlevel% neq 0 (
+		echo.
+		echo [Error] Pillow installation failed.
+	) else (
+		echo.
+		echo Pillow was installed successfully.
+	)
+)
+if "%confirmExtraInstall%"=="2" (goto END)
+pause >nul
 goto END
 pause >nul
 goto END
