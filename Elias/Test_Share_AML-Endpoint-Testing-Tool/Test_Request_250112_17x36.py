@@ -191,7 +191,59 @@ def analyse():
         return f"URL-Fehler: {e.reason}"
     except Exception as e:
         return f"Ein Fehler ist aufgetreten: {e}"
+
+@app.route('/test', methods=['GET'])
+def test_route():
+    # Base64-kodiertes Bild (hier ein Beispielbild, das du weiterverwenden kannst)
+    encoded_image = "/9j/4AAQSkZJRgABAQIAJQAlAAD/2wBDAP//////////////////////////////////////////////////////////////////////////////////////2wBDAf//////////////////////////////////////////////////////////////////////////////////////wgARCABLAEkDAREAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAEC/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAH/2gAMAwEAAhADEAAAAYIpAACUKWFSAqiM0KWAAAM0BqAAAM0BYVACiJQAFikJQAAohVjNAAAAAAAAAAAAAWJVIAD/xAAUEAEAAAAAAAAAAAAAAAAAAABg/9oACAEBAAEFAkn/xAAUEQEAAAAAAAAAAAAAAAAAAABg/9oACAEDAQE/AUn/xAAUEQEAAAAAAAAAAAAAAAAAAABg/9oACAECAQE/AUn/xAAUEAEAAAAAAAAAAAAAAAAAAABg/9oACAEBAAY/Akn/xAAWEAEBAQAAAAAAAAAAAAAAAAARUBD/2gAIAQEAAT8hqmE3/9oADAMBAAIAAwAAABAZbbKQIZQOQf8A7/kn/wC+4JhJBoJJnpAIBgoAIAAAAIAAAJJIoJJP/8QAFBEBAAAAAAAAAAAAAAAAAAAAYP/aAAgBAwEBPxBJ/8QAFBEBAAAAAAAAAAAAAAAAAAAAYP/aAAgBAgEBPxBJ/8QAHBAAAwEAAwEBAAAAAAAAAAAAAAERECAxUTBA/9oACAEBAAE/EKUpSlKVlKLsmTWvCD7xd6smvvVwTxj1MbvBMb5IRD8c04xsT9Kh/qXw/9k="
+    
+    # Decodiere und speichere das Bild als Datei -> Zum Testen ob Base64 richtig oben angebebn
+    #with open("test_image_base64.jpg", "wb") as f:
+        #f.write(base64.b64decode(encoded_image))
+    
+    # Anfrage an den Azure-Endpunkt senden
+    try:
+        # Startzeit der Anfrage
+        start_time = time.time()
         
+        # Daten für die Anfrage
+        data = {
+            "image": encoded_image,
+        }
+        body = json.dumps(data).encode("utf-8")
+        
+        # Header für die Anfrage
+        headers = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {api_key}"
+        }
+        
+        # Anfrage an den Azure-Endpunkt senden
+        req = urllib.request.Request(url, data=body, headers=headers, method="POST")
+        with urllib.request.urlopen(req) as response:
+            response_content = response.read().decode("utf-8")
+            response_json = json.loads(response_content)
+            
+            # Antwortzeit und Status
+            end_time = time.time()
+            duration = int(end_time - start_time)  # Dauer der Anfragebearbeitung
+            
+            # Überprüfen, ob die Antwort erfolgreich war
+            if response.status == 200:
+                status_message = "Endpoint ist responding: {}s".format(duration)
+                svg_class = 'success'  # Setze die Klasse auf 'success' für grün
+            else:
+                status_message = f"Fehler bei der Anfrage: {response.status}. Dauer: {duration} Sekunden"
+                svg_class = 'error'  # Setze die Klasse auf 'error' für rot
+            return render_template('test_html_gui.html', status_message=status_message, svg_class=svg_class) #, result=response_json -> Nicht notwendig momentan
+    
+    except urllib.error.HTTPError as e:
+        return f"HTTP-Fehler: {e.code} - {e.read().decode('utf-8')}"
+    except urllib.error.URLError as e:
+        return f"URL-Fehler: {e.reason}"
+    except Exception as e:
+        return f"Ein Fehler ist aufgetreten: {e}"
+
 # Funktion, um Analyseergebnisse und bearbeitete Bilder zu speichern
 def save_analysis_to_files(image_name, analysis_result, img):
     # Zeitstempel für die Dateinamen
