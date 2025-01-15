@@ -5,72 +5,83 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Beans-ETT</title>
 	<style>
-		html {background-color:#white;}
-		body {font-family: 'Lato', sans-serif; overflow-x: hidden; width: 100vw; height: 100%; text-align: center; font-size: 10px; margin: 0px; padding: 0px;}
+		html {background-color:white;}
+		body {font-family: 'Lato', sans-serif; overflow-x: hidden; width: 100vw; height: 100%; text-align: center; font-size: 10px; margin:0; padding: 0px;}
 		h1, h2, h3 {margin-left:10px; margin-right:10px;}
 		h3 {font-size:15px;}
-		table {margin-left:auto; margin-right:auto; min-width:90%;border-collapse:collapse;width:100%;max-width:100%;white-space:nowrap;border-spacing 20px;}
-		th {border: 1px solid #ddd; font-size:20px;color: #ffffff; background-color:#049ce4; padding:5px;}
-		td {border: 1px solid #ddd; background: #F8F8F8; border-radius:10px;}
+		<!--Table-->
+		.table-wrapper{margin: 10px 70px 70px;box-shadow: 0px 35px 50px rgba( 0, 0, 0, 0.2 );}
+		table {min-width:89%; width:89%; max-width:89%; margin-left:auto; margin-right:auto; border-collapse:collapse;white-space:nowrap;border-spacing:20px;}
+		th {border: 2px solid #ddd; font-size:20px;color: #ffffff; background-color:#049ce4; padding:5px; border-radius:5px;}
+		td {border: 2px solid #ddd; background:#F8F8F8; border-radius:5px;}
+		<!---->
 		li {float:left; font-family:'Trebuchet MS'; margin-left:15px; margin-top:7px; margin-bottom:7px;}
 		li a {color:white; text-align:center; text-decoration:none; font-size:20px;}
+		li a:hover {box-shadow: 0 0 2px 4px rgba(0, 0, 0, 0.9); background-color: #010112;}
 		pre {text-align: left; padding: 10px; margin: 0; width: 100%;}
-		
-		.bannerUl {width:90%; background-color:#1157a1; overflow: hidden; margin:0; top:0; margin-left:auto; margin-right:auto; list-style-type:none; border-radius:5px;}
-		.content {width:80%; height:auto; min-height:100vh; margin-left:auto; margin-right:auto;}
-		.image-preview {width:97%;min-width:97%;max-width:97%;height:50vh;min-height:50vh;max-height:50vh;margin-left:auto;margin-right:auto;object-fit:cover;padding:5px;}
-		.image-preview img {width:auto;height:auto;min-width:20vw;max-width:100%;max-height:100%;margin-right:auto;margin-left:auto;}
+
+		.bannerUl {width:90%; background-color:#004e9e; overflow: hidden; margin:0; top:0; margin-left:auto; margin-right:auto; list-style-type:none; border-radius:5px;}
+		.content {width:85%; height:auto; min-height:100vh; margin-left:auto; margin-right:auto;}
+
 		.bb-image {width:97%;min-width:97%;max-width:97%;height:100%;min-height:50vh;max-height:100%;margin-left:auto;margin-right:auto;object-fit:cover;padding:5px;}
 		.bb-image img {width:auto;height:auto;min-width:20vw;max-width:100%;max-height:100%;margin-right:auto;margin-left:auto;}
 		.bb-image svg {margin-right:auto;margin-left:auto;margin-top:50px;fill:#ddd;border: 2px solid #ddd; align-items:center; position:relative; display:inline-block;}
 		.resultValues {font-size: 15px; margin-top:1px; margin-bottom:1px; text-align:left; margin-left:11px;}
 
+	/* BANNER */
 		.banner {background-color:#010112; width:100vw; padding-top:3px; margin-left: auto; margin-right: auto;}
+		/*background: rgba(1, 1, 18, 0.8)*/
+		.bannerright {border: 0px black solid; width:11vw; height:100vh; float:right; padding-right:3px; display:flex; flex-direction:column; margin:0px; overflow:hidden; position:-webkit-sticky; /* Safari */ position:sticky;right:0;position:fixed; }
+	/**/
 		.fontlogo {font-weight:bold; font-size:24px; color:white; margin:4px; left:2%; float:left;}
 		.boxinvi {display: block; padding: 5px; border-radius:5px;}
-		.active {background-color: #010112;}
-		.rounded-button {padding: 10px 20px; font-size: 16px; color: #ffffff; background-color:#049ce4; border:none; border-radius:25px; cursor:pointer; box-shadow:0px 4px 6px rgba(0, 0, 0, 0.1); transition: all 0.3s ease; margin-left:10px; margin-right:10px; }
+		.active {box-shadow: 0 0 2px 4px rgba(0, 0, 0, 0.9); background-color: #010112;}
+	/*Button*/
+		.rounded-button{text-align:center; max-height:50px;  min-width:90%; max-width:70%; margin-left:10px; margin-right:10px; white-space:nowrap;
+		overflow: hidden; text-overflow: ellipsis; padding: 10px; font-size: 16px; color: #ffffff; background-color:#049ce4; border:none; border-radius:25px; cursor:pointer; box-shadow:0px 4px 6px rgba(0, 0, 0, 0.1); transition: all 0.3s ease;}
+		.dynFon {text-align:center; font-size: clamp(12px, 1vw, 24px);}
+	/**/
 		.dropdown-content {display: none; position: absolute; background-color: #323244; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1; text-align:left; }
 		.dropdown-content li a {color: white; padding: 12px 16px; text-decoration: none; display: block;}
-		.dropdown-content a:hover {background-color: #010112;}
+		.dropdown-content a:hover {box-shadow: 0 0 2px 4px rgba(0, 0, 0, 0.9); background-color: #010112;}
 		.dropdown:hover .dropdown-content {display: block;}
-		.dropdown:hover .dropbtn {background-color:#010112;}
+		.dropdown:hover .dropbtn {box-shadow: 0 0 2px 4px rgba(0, 0, 0, 0.9); background-color: #010112;}
 		.white {color:white;}
-		.bannerright { background: rgba(1, 1, 18, 0.8); width:10vw; height:100vh; float:right; margin:0px; overflow:hidden; position:-webkit-sticky; /* Safari */ position:sticky;right:0;position:fixed; }
 		.ready { background-color: #4CAF50; /* Zum Beispiel: grün */ box-shadow: 0 0 2px 2px rgba(0, 255, 0, 0.7); /* Grüner Leuchteffekt */}
-		.table-wrapper{margin: 10px 70px 70px;box-shadow: 0px 35px 50px rgba( 0, 0, 0, 0.2 );}
-		        .success {
-            fill: green; /* Farbe bei Erfolg: Grün */
-        }
 
-        .error {
-            fill: red; /* Farbe bei Fehler: Rot */
-        }
+		.success {background-color:white; color:#004e9e; box-shadow: 0 0 2px 4px rgba(255, 255, 255, 0.9); }
+        .error {fill: red; /* Farbe bei Fehler: Rot */}
 		
 		#td_preview {min-width:35vw;}
 		#td_response {min-width:35vw;}
 		#JSON_response {height:100%; min-height:65vh; max-height:65vh; width:100%; overflow-y:auto; padding-left:0px;}
-		#JSON_response li { display: flex; justify-content: left; align-items: left; height: 30px; margin: 2px 0; font-size:16px;}
+		#JSON_response li { display: flex;  height: 30px; margin: 2px 0; font-size:16px;}
+		#response_list {height:100%; max-height:65vh; width:100%; overflow-y:auto; padding-left:0px;}
+		#response_list { display: flex;  height: 30px; margin: 2px 0; font-size:16px;}
 		#loading {display: none; font-size: 20px; color: black; text-align: center; margin-top: 20px; background:rgba(4, 156, 228, 0.7);}
 		#fileName { word-wrap: break-word; white-space: normal; word-break: break-word;}
+		.image-preview {border:0px solid black; display: flex; justify-content: center; align-items: center; margin:0; width:97%; min-width:97%; max-width:97%;height:65vh;min-height:60vh;max-height:65vh;margin-left:auto;margin-right:auto;object-fit:cover;}
+		.image-preview img {width:auto;height:auto;min-width:20vw;max-width:100%;max-height:100%;margin-right:auto;margin-left:auto;}
+		.separated {border-top: 1px solid #ddd; /* Schwarze Linie oben */padding-top: 10px; margin-top: 20px;}
 	</style>
 </head>
 <body>
 	<!--BANNER RIGHT-->
 	<div class="bannerright">
+		<br><br><br><br><br><br><br><br><br>
+		<h1>Analyze Picture</h1>
+		<br><br>
 		<form action="/analyse" method="post" enctype="multipart/form-data" id="uploadForm">
-			<br><br><br>
-			<h1 class="white">Analyze</h1>
-			<br><br><br>
-			<label for="saveFile" style="padding: 10px 20px; font-size: 16px; color:white;">Logging</label>
+			<label for="saveFile" style="padding: 10px 20px; font-size: 20px; color:black;">Logging</label>
 			<input type="checkbox" id="saveFile" name="saveFile" value="true"
 			{% if request.form.get('saveFile') == 'true' %} checked {% endif %}>
 			<br><br><br><br>
-			<label for="image" class="rounded-button" style="width:85%; max-width:85%;">Datei auswählen</label>
+			<!--<label for="image" class="rounded-button" <span class="dynFon">Datei auswählen</span></label>-->
+			<button type="button" class="rounded-button" onclick="document.getElementById('image').click();"><span class="dynFon">Datei auswählen</span></button>
 			<input type="file" name="image" id="image" required onchange="previewImage(event)" style="display:none;" >
 			<!-- Noch buggy weil resultate clearbar während analyse<button type="button" id="clearButton" class="rounded-button" style="min-width:85%;">Entleeren</button>-->
-			<br><br><br><br>
-			<button type="submit" id="uploadButton" class="rounded-button" style="width:85%; max-width:85%;">Bild analysieren</button>
+			<br><br><br>
+			<button type="submit" id="uploadButton" class="rounded-button" ><span class="dynFon">Bild analysieren</span></button>
 			<h3 class="white">Selected Image:</h3> <!-- Zeigt den Dateinamen an -->
 			<h3 id="fileName" class="white"></h3> <!-- Zeigt den Dateinamen an -->
 		</form>
@@ -100,11 +111,11 @@
 			<li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li>
 			<li>
 			<a href="{{ url_for('test_route') }}">
-				<svg xmlns="http://www.w3.org/2000/svg" id="routingTest" width="30" height="30" fill="white" class="{{ svg_class }}" viewBox="0 0 16 16">
+				<svg xmlns="http://www.w3.org/2000/svg" id="routingTest" width="30" height="30" fill="white" viewBox="0 0 16 16">
 				  <path d="M8 2a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13h8.906C14.502 13 16 11.57 16 9.773c0-1.636-1.242-2.969-2.834-3.194C12.923 3.999 10.69 2 8 2m2.354 5.146a.5.5 0 0 1-.708.708L8.5 6.707V10.5a.5.5 0 0 1-1 0V6.707L6.354 7.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0z"/>
 				</svg>
 			</a>
-			<li class="white" style="font-size:20px; margin-top:10px;">{{ status_message }}</li>  <!-- Statusmeldung anzeigen -->
+			<li style="font-size:20px; margin-top:10px;"><span class="{{ svg_class }}">{{ status_message }}</span></li>  <!-- Statusmeldung anzeigen -->
 		</ul>
 		<!--END LINKS TO ALL SITES-->
 		<br><br>
@@ -140,6 +151,13 @@
 				</tr>
 				<tr>
 					<td id="td_response">
+						<h3>Found Classes with Confidence:</h3>
+						<ul id="response_list">
+							{% for item in detected_classes %}
+							<li>{{ item.name }}: {{ item.confidence | round(2) }}</li>
+							{% endfor %}
+						</ul>
+						<h3 class="separated">JSON Response:</h3>
 						<ul id="JSON_response">
 							<li>
 								<!-- Zeigt die Analyseergebnisse an -->
@@ -150,12 +168,14 @@
 						</ul>
 					</td>
 					<td id="td_preview">
-						<div class="image-preview" id="imagePreview">
+						<div style=" position: relative;" class="image-preview" id="imagePreview">
 							{% if image %}
-								<h3 style="margin-top:0px;">Uploaded Image:</h3>
-								<img src="data:image/jpeg;base64,{{ image }}" alt="Hochgeladenes Bild" width="300">
+								<h3 style="margin-top:0px;  position: absolute; top: 2%; ">Analysed Image:</h3>
+								<img src="data:image/jpeg;base64,{{ image }}" alt="Hochgeladenes Bild">
 							{% endif %}
+							<!--<img class="test123" src="{{ url_for('static', filename='Test_PNG_Dose.png') }}" alt="Test Dose"> TEST PICTURE -->
 						</div>
+
 					</td>
 				<tr>
 				<tr>

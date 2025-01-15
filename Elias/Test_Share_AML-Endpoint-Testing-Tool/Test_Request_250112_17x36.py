@@ -102,6 +102,15 @@ def analyse():
             end_time = time.time()
             logging.debug(f"------------------------------------------ Received response: {response_json}")
 
+         # Extrahiere die erkannten Klassen und Confidence-Werte
+            detected_classes = []
+            for prediction in response_json.get('predictions:', []):
+                if isinstance(prediction, list):
+                    for pred in prediction:
+                        class_name = pred.get('name', 'Unbekannt')
+                        confidence = pred.get('confidence', 0.0)  # Fallback-Wert, falls nicht vorhanden
+                        detected_classes.append({"name": class_name, "confidence": confidence})
+
             # Berechne die Dauer der Anfragebearbeitung
             duration = int(end_time - start_time)  # Wandelt die Dauer in eine Ganzzahl um
     
@@ -183,7 +192,8 @@ def analyse():
                                    request_time=request_time, 
                                    end_time=end_time,
                                    duration=duration,  # Dauer an das Template übergeben
-                                   image=encoded_image_with_boxes)  # Übergebe das bearbeitete Bild an das Template
+                                   image=encoded_image_with_boxes,
+                                   detected_classes=detected_classes)  # Übergebe das bearbeitete Bild an das Template
             
     except urllib.error.HTTPError as e:
         return f"HTTP-Fehler: {e.code} - {e.read().decode('utf-8')}"
