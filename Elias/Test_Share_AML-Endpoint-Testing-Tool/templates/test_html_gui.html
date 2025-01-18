@@ -9,46 +9,47 @@
 		body {font-family: 'Lato', sans-serif; overflow-x: hidden; width: 100vw; height: 100%; text-align: center; font-size: 10px; margin:0; padding: 0px;}
 		h1, h2, h3 {margin-left:10px; margin-right:10px;}
 		h3 {font-size:15px;}
-		<!--Table-->
-		.table-wrapper{margin: 10px 70px 70px;box-shadow: 0px 35px 50px rgba( 0, 0, 0, 0.2 );}
-		table {min-width:89%; width:89%; max-width:89%; margin-left:auto; margin-right:auto; border-collapse:collapse;white-space:nowrap;border-spacing:20px;}
+	/*Table*/
+		.table-wrapper {min-width:88%; width:88%; max-width:88%; margin-left:auto; margin-right:auto; margin-bottom:50px; box-shadow: 0px 15px 10px rgba( 0, 0, 0, 0.4 ); padding:0px;}
+		table {width:100%; height:100%; margin-left:auto; margin-right:auto; border-collapse:collapse;white-space:nowrap;border-spacing:20px;}
 		th {border: 2px solid #ddd; font-size:20px;color: #ffffff; background-color:#049ce4; padding:5px; border-radius:5px;}
 		td {border: 2px solid #ddd; background:#F8F8F8; border-radius:5px;}
-		<!---->
-		li {float:left; font-family:'Trebuchet MS'; margin-left:15px; margin-top:7px; margin-bottom:7px;}
-		li a {color:white; text-align:center; text-decoration:none; font-size:20px;}
-		li a:hover {box-shadow: 0 0 2px 4px rgba(0, 0, 0, 0.9); background-color: #010112;}
-		pre {text-align: left; padding: 10px; margin: 0; width: 100%;}
-
-		.bannerUl {width:90%; background-color:#004e9e; overflow: hidden; margin:0; top:0; margin-left:auto; margin-right:auto; list-style-type:none; border-radius:5px;}
+		.fl-table p{margin:3px;}
+	/**/
+		/* BANNER */
+		.banner {background-color:#004e9e; width:100vw; padding-top:3px; margin-left: auto; margin-right: auto; border-bottom:2px black solid;}  /*background: rgba(1, 1, 18, 0.8)*/
+		.bannerUl {width:80%; overflow:hidden; margin:0; top:0; margin-left:auto; margin-right:auto; list-style-type:none; border-radius:5px;} /*background-color:#004e9e;*/
+		.bannerright {border: 0px black solid; width:11vw; height:100vh; float:right; padding-right:3px; display:flex; flex-direction:column; margin:0px; overflow:hidden; position:-webkit-sticky; /* Safari */ position:sticky;right:0;position:fixed;}
+		.bannerright label {font-size:100px;padding: 10px; font-size: 20px; color:black; text-align:left; display:inline-flex; margin-left:10px;}
+		.bannerright input {float:right; margin-top:15px; margin-right:5px; transform: scale(1.2);}
 		.content {width:85%; height:auto; min-height:100vh; margin-left:auto; margin-right:auto;}
+		.bannerUl li {float:left; font-family:'Trebuchet MS'; margin-left:17px; margin-top:7px; margin-bottom:7px;}
+		li a {color:white; text-align:center; text-decoration:none; font-size:20px;}
+		li a:hover {color:#049ce4; border-bottom: 2px solid #049ce4;}
+		pre {text-align: left; padding: 10px; margin: 0; width: 100%;}
 
 		.bb-image {width:97%;min-width:97%;max-width:97%;height:100%;min-height:50vh;max-height:100%;margin-left:auto;margin-right:auto;object-fit:cover;padding:5px;}
 		.bb-image img {width:auto;height:auto;min-width:20vw;max-width:100%;max-height:100%;margin-right:auto;margin-left:auto;}
 		.bb-image svg {margin-right:auto;margin-left:auto;margin-top:50px;fill:#ddd;border: 2px solid #ddd; align-items:center; position:relative; display:inline-block;}
 		.resultValues {font-size: 15px; margin-top:1px; margin-bottom:1px; text-align:left; margin-left:11px;}
 
-	/* BANNER */
-		.banner {background-color:#010112; width:100vw; padding-top:3px; margin-left: auto; margin-right: auto;}
-		/*background: rgba(1, 1, 18, 0.8)*/
-		.bannerright {border: 0px black solid; width:11vw; height:100vh; float:right; padding-right:3px; display:flex; flex-direction:column; margin:0px; overflow:hidden; position:-webkit-sticky; /* Safari */ position:sticky;right:0;position:fixed; }
 	/**/
 		.fontlogo {font-weight:bold; font-size:24px; color:white; margin:4px; left:2%; float:left;}
-		.boxinvi {display: block; padding: 5px; border-radius:5px;}
-		.active {box-shadow: 0 0 2px 4px rgba(0, 0, 0, 0.9); background-color: #010112;}
+		.boxinvi {display: block; padding: 5px; border-radius:5px; padding:5px; padding-left:10px; padding-right:10px;}
+		.active {color:#049ce4; border-bottom: 2px solid #049ce4;}
 	/*Button*/
 		.rounded-button{text-align:center; max-height:50px;  min-width:90%; max-width:70%; margin-left:10px; margin-right:10px; white-space:nowrap;
 		overflow: hidden; text-overflow: ellipsis; padding: 10px; font-size: 16px; color: #ffffff; background-color:#049ce4; box-shadow:0px 4px 6px rgba(0, 0, 0, 0.1); border:none; border-radius:25px; cursor:pointer; transition: all 0.3s ease;}
+		.rounded-button:hover {background-color:#004e9e;}
 		.dynFon {text-align:center; font-size: clamp(12px, 1vw, 24px);}
 	/**/
-		.dropdown-content {display: none; position: absolute; background-color: #323244; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1; text-align:left; }
+		.dropdown-content {display: none; background-color: #323244; position: absolute;  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 1; text-align:left;}
 		.dropdown-content li a {color: white; padding: 12px 16px; text-decoration: none; display: block;}
-		.dropdown-content a:hover {box-shadow: 0 0 2px 4px rgba(0, 0, 0, 0.9); background-color: #010112;}
+		.dropdown-content a:hover {color:#049ce4; border-bottom: 2px solid #049ce4;}
 		.dropdown:hover .dropdown-content {display: block;}
-		.dropdown:hover .dropbtn {box-shadow: 0 0 2px 4px rgba(0, 0, 0, 0.9); background-color: #010112;}
+		.dropdown:hover .dropbtn {color:#049ce4; border-bottom: 2px solid #049ce4;}
 		.white {color:white;}
 		.ready { background-color: #4CAF50; /* Zum Beispiel: grün */ box-shadow: 0 0 2px 2px rgba(0, 255, 0, 0.7); /* Grüner Leuchteffekt */}
-
 		.success {background-color:white; color:#004e9e; box-shadow: 0 0 2px 4px rgba(255, 255, 255, 0.9); }
         .error {fill: red; /* Farbe bei Fehler: Rot */}
 		
@@ -56,12 +57,10 @@
 		#td_response {min-width:35vw;}
 		#JSON_response {height:100%; min-height:65vh; max-height:65vh; width:100%; overflow-y:auto; padding-left:0px;}
 		#JSON_response li { display: flex;  height: 30px; margin: 2px 0; font-size:16px;}
-		#response_list {height:100%; max-height:65vh; width:100%; overflow-y:auto; padding-left:0px;}
-		#response_list li {display: flex;  height: 30px; margin: 2px 0; font-size:16px; padding-left:8px;}
+		#response_list {text-align:left; height:100%; max-height:65vh; width:100%; overflow-y:auto; padding-left:0px;}
+		#response_list li {display:block; font-weight: bold; height: 22px; margin: 2px 0; font-size:16px; padding-left:8px;}
 		#loading {display: none; font-size: 20px; color: black; text-align: center; margin-top: 20px; background:rgba(4, 156, 228, 0.7);}
 		#fileName {word-wrap: break-word; white-space: normal; word-break: break-word;}
-		.image-preview {border:0px solid black; display: flex; justify-content: center; align-items: center; margin:0; width:97%; min-width:97%; max-width:97%;height:65vh;min-height:60vh;max-height:65vh;margin-left:auto;margin-right:auto;object-fit:cover;}
-		.image-preview img {width:auto;height:auto;min-width:20vw;max-width:100%;max-height:100%;margin-right:auto;margin-left:auto;}
 		.db-image {width:auto;height:auto;min-width:1vw;max-width:100%;max-height:100%;margin-right:auto;margin-left:auto;}
 		.separated {border-top: 1px solid #ddd; /* Schwarze Linie oben */padding-top: 10px; margin-top: 20px;}
 		.db_td {    white-space: pre-wrap; /* Erlaubt Zeilenumbruch */
@@ -70,42 +69,49 @@
 			overflow: auto; /* Scrollbalken, falls der Text zu lang ist */
 			text-overflow: ellipsis; /* Zeigt "..." an, wenn der Text abgeschnitten wird */}
 		/* Optional: Container für Text und Statusleuchte */
-		.status-container {
-			display: flex; /* Stellt sicher, dass die Elemente nebeneinander sind */
-			align-items: center; /* Vertikal ausrichten */
-			font-size:20px;
-			margin-right:auto;
-			margin-left:auto;
-		}
-		.status-light {
-			width: 20px;
-			height: 20px;
-			border-radius: 50%;
-			background-color: grey; /* Startfarbe (grau) */
-			transition: background-color 0.5s; /* Sanfter Übergang der Farben */
-			margin-left:10px;
-		}
-		.status-light.valid {
-			background-color: green; /* Grün, wenn valid */
-		}
-		.status-light.invalid {
-			background-color: red; /* Rot, wenn invalid */
-		}
-		.status-light.missing {
-			background-color: yellow; /* Gelb, wenn kein Token vorhanden */
+		.status-container {display: flex; /* Stellt sicher, dass die Elemente nebeneinander sind */ align-items: center; /* Vertikal ausrichten */ font-size:20px; margin-right:auto; margin-left:auto;}
+		.status-light {width: 20px; height: 20px; border-radius: 50%; background-color: grey; /* Startfarbe (grau) */ transition: background-color 0.5s; /* Sanfter Übergang der Farben */ margin-left:10px;}
+		.status-light.valid {background-color: green; /* Grün, wenn valid */}
+		.status-light.invalid {background-color: red; /* Rot, wenn invalid */}
+		.status-light.missing {background-color: yellow; /* Gelb, wenn kein Token vorhanden */}
+		.image-preview {border:0px solid black; display: flex; justify-content: center; align-items: center; margin:0; width:97%; min-width:97%; max-width:97%;height:97%;min-height:90%;max-height:97%;margin-left:auto;margin-right:auto;object-fit:cover;}
+		.image-preview img {width:auto;height:auto;min-width:20vw;max-width:100%;max-height:100%;margin-right:auto;margin-left:auto;}
+		/* Grundstil für die Labels */
+		.info-label { position: relative; cursor: pointer; }
+		/* Tooltip (Dropdown) Stil, der standardmäßig unsichtbar ist */
+		.info-label::after {content: attr(data-tooltip); z-index: 9999; min-width:8vw; max-width:300px; position:absolute; bottom: -50px; left:50px;  background-color: rgba(0, 0, 0, 0.7); color: white; padding: 5px 10px; border-radius: 5px; font-size: 12px; display: none; opacity: 0; transition: opacity 0.5s ease; transform: translate(-10%);}
+		.info-label:hover::after {display: block; opacity: 1;left: auto;}
+		.hover-label {z-index: 9999; margin:0; position:relative;}
+		.hover-label:hover {opacity:0.2; cursor:pointer;}
+		.hover-label:hover ~ .preview-image {
+			position: fixed; /* Position fixieren, damit es immer im sichtbaren Bereich bleibt */
+			top: 50%; /* Vertikale Zentrierung */
+			left: 50%; /* Horizontale Zentrierung */
+			transform: translate(-50%, -50%);
+			width: 60vw; /* Breite auf 75% der Viewport-Breite setzen */
+			height:auto;
+			max-height:90vh;
+			background-color: black; /* Optional, je nachdem, ob du eine Hintergrundfarbe willst */
+			z-index: 10; /* Stellt sicher, dass das Bild über anderen Elementen liegt */
+			transition: all 0.4s ease;
 		}
 	</style>
 </head>
 <body>
 	<!--BANNER RIGHT-->
 	<div class="bannerright">
-		<br><br><br><br><br><br><br><br><br>
+		<br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 		<h1>Analyze Picture</h1>
-		<br><br>
+		<br>
 		<form action="/analyse" method="post" enctype="multipart/form-data" id="uploadForm">
-			<label for="saveFile" style="padding: 10px 20px; font-size: 20px; color:black;">Logging</label>
-			<input type="checkbox" id="saveFile" name="saveFile" value="true"
-			{% if request.form.get('saveFile') == 'true' %} checked {% endif %}>
+			<div style="text-align:left; margin-right:15px;">
+				<label for="saveFile" data-tooltip="Saving Result + Image -> local folder /uploads inside project folder" class="info-label">Save Local</label>
+				<input type="checkbox" id="saveFile" name="saveFile" value="true"
+				{% if request.form.get('saveFile') == 'true' %} checked {% endif %}>
+				<label for="saveDatabase" data-tooltip="Saving Result + Image in database and dropbox folder" class="info-label">Save Database </label>
+				<input type="checkbox" id="saveDatabase" name="saveDatabase" value="true"
+				{% if request.form.get('saveDatabase') == 'true' %} checked {% endif %}>
+			</div>
 			<br><br><br><br>
 			<!--<label for="image" class="rounded-button" <span class="dynFon">Datei auswählen</span></label>-->
 			<button type="button" class="rounded-button" onclick="document.getElementById('image').click();"><span class="dynFon">Datei auswählen</span></button>
@@ -113,23 +119,23 @@
 			<!-- Noch buggy weil resultate clearbar während analyse<button type="button" id="clearButton" class="rounded-button" style="min-width:85%;">Entleeren</button>-->
 			<br><br><br>
 			<button type="submit" id="uploadButton" class="rounded-button" ><span class="dynFon">Bild analysieren</span></button>
-			<h3 class="white">Selected Image:</h3> <!-- Zeigt den Dateinamen an -->
-			<h3 id="fileName" class="white"></h3> <!-- Zeigt den Dateinamen an -->
+			<br><br><br><span style="font-size:20px;" class="info-label" data-tooltip="Image for endpoint request">Selected Image:</span>
+			<h3 id="fileName"></h3> <!-- Zeigt den Dateinamen an -->
 		</form>
 		<br><br><br>
 		<h1>Dropbox Login</h1>
+		<br>
+		<button onclick="copyToClipboard(this)" name="123" class="rounded-button" data-tooltip="Showing access status to dropbox folder">Copy E-Mail</button>
 		<br><br>
-		<button onclick="copyToClipboard(this)" data-text="thenryndev@outlook.com" class="rounded-button">E-Mail</button>
+		<button onclick="copyToClipboard(this)" data-text="!Deployment123!" class="rounded-button info-label" data-tooltip="Showing access status to dropbox folder">Copy Passwort</button>
 		<br><br>
-		<button onclick="copyToClipboard(this)" data-text="!Deployment123!" class="rounded-button">Pwd</button>
-		<br><br><br>
 		<div class="status-container">
-			<span id="statusText">Dropbox:</span>
+			<span id="statusText" class="info-label" data-tooltip="Showing access status to dropbox folder">Dropbox:</span>
 			<span id="statusLight" class="status-light"></span>
 		</div>
 	</div>
 	<!--Banner MIDDLE-->
-	<div class="banner"><br>
+	<div class="banner">
 		<ul class="bannerUl">
 			<li><p></li>
 			<li><p>&nbsp;&nbsp;</li>
@@ -150,26 +156,26 @@
 				</li>
 			</div>
 			<li><a href="/swagger" target="_blank">Swagger</a></li>
-			<li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li>
-			<li>
-			<a href="{{ url_for('test_route') }}">
-				<svg xmlns="http://www.w3.org/2000/svg" id="routingTest" width="30" height="30" fill="white" viewBox="0 0 16 16">
-				  <path d="M8 2a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13h8.906C14.502 13 16 11.57 16 9.773c0-1.636-1.242-2.969-2.834-3.194C12.923 3.999 10.69 2 8 2m2.354 5.146a.5.5 0 0 1-.708.708L8.5 6.707V10.5a.5.5 0 0 1-1 0V6.707L6.354 7.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0z"/>
-				</svg>
-			</a>
+			<li></li><li></li><li></li>
+			<li style="position:absolute; left:49.3%;" >
+				<a href="{{ url_for('test_route') }}" style=border:0;">
+					<svg xmlns="http://www.w3.org/2000/svg" id="routingTest" width="30" height="30" fill="white" viewBox="0 0 16 16">
+					  <path d="M8 2a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13h8.906C14.502 13 16 11.57 16 9.773c0-1.636-1.242-2.969-2.834-3.194C12.923 3.999 10.69 2 8 2m2.354 5.146a.5.5 0 0 1-.708.708L8.5 6.707V10.5a.5.5 0 0 1-1 0V6.707L6.354 7.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0z"/>
+					</svg>
+				</a>
+			</li>
 			<li style="font-size:20px; margin-top:10px;"><span class="{{ svg_class }}">{{ status_message }}</span></li>  <!-- Statusmeldung anzeigen -->
 		</ul>
 		<!--END LINKS TO ALL SITES-->
-		<br><br>
+		<br>
 	</div>
 	<div class="content">
+		<p></p>
 		<!-- Formular zum Hochladen des Bildes -> TEST FORM FÜR AZURE OCR ROUTE -> Gerade gelöscht in Requesting Script
 		<form action="/azureocr" method="POST" enctype="multipart/form-data">
 			<input type="file" name="image">
 			<button type="submit">Upload Image</button>
-		</form>
-		 -->
-		<br><br>
+		</form> -->
 		<br><br>
 		<div class="table-wrapper">
 		<!-- ANALYSE TABELLE -->
@@ -184,7 +190,7 @@
 						{% if end_time %}
 							<p class="resultValues">End: {{ end_time }}</p>
 						{% endif %}
-						<p class="resultValues">Processing-Time: {{ duration }}<span> sek</span>
+						<p class="resultValues">Processing-Time: {{ duration }}<span> sec</span>
 					</th>
 					<th>
 						<div id="loading">Bearbeitung läuft, bitte warten...</div>
@@ -209,14 +215,13 @@
 						</ul>
 					</td>
 					<td id="td_preview">
-						<div style=" position: relative;" class="image-preview" id="imagePreview">
+						<div style="position:relative;" class="image-preview" id="imagePreview">
 							{% if image %}
-								<h3 style="margin-top:0px;  position: absolute; top: 2%; ">Analysed Image:</h3>
-								<img src="data:image/jpeg;base64,{{ image }}" alt="Hochgeladenes Bild">
+								<h1 style="margin-top:0px;  position: absolute; top: 2%; " class="hover-label">Analysed Image</h1>
+								<img class="preview-image" src="data:image/jpeg;base64,{{ image }}" alt="Hochgeladenes Bild">
 							{% endif %}
 							<!--<img class="test123" src="{{ url_for('static', filename='Test_PNG_Dose.png') }}" alt="Test Dose"> TEST PICTURE -->
 						</div>
-
 					</td>
 				<tr>
 				<tr>

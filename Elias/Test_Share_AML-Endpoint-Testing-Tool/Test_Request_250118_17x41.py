@@ -350,6 +350,7 @@ def analyse():
     image_file = request.files['image']
     #----------------------------------------------------------NEU
     save_file = request.form.get('saveFile') == 'true'  # Überprüfen, ob das Häkchen gesetzt ist
+    save_database = request.form.get('saveDatabase') == 'true'  # Überprüfen, ob das Häkchen gesetzt ist
     
     # Base64-kodiertes Bild
     encoded_image = encode_image(image_file)
@@ -458,11 +459,11 @@ def analyse():
         # Wenn das Häkchen gesetzt ist, speichere die Ergebnisse in einer Logdatei
         if save_file:
             save_analysis_to_files(image_file.filename, response_json, img)
-            # Bild mit Bounding Boxen in Dropbox hochladen und URL erhalten
-            #image_url = upload_image_with_boxes_to_dropbox(encoded_image_with_boxes, image_file.filename)
+
+
+        if save_database:
             # Versuche, den Dropbox-Client zu erhalten
             dropbox_client = get_dropbox_client()
-
             # Überprüfe, ob der Dropbox-Client erfolgreich erstellt wurde
             if isinstance(dropbox_client, dropbox.Dropbox):
                 # Bild mit Bounding Boxen in Dropbox hochladen und URL erhalten
@@ -480,8 +481,7 @@ def analyse():
                                end_time=end_time,
                                duration=duration,  # Dauer an das Template übergeben
                                image=encoded_image_with_boxes,
-                               detected_classes=detected_classes,
-                               image_url=image_url)  # Übergebe das bearbeitete Bild an das Template
+                               detected_classes=detected_classes)  # Übergebe das bearbeitete Bild an das Template
 
     except urllib.error.HTTPError as e:
         return f"HTTP-Fehler: {e.code} - {e.read().decode('utf-8')}"
