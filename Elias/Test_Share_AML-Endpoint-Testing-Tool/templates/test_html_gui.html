@@ -69,6 +69,31 @@
 			max-width: 300px; /* Maximalbreite für lange Inhalte */
 			overflow: auto; /* Scrollbalken, falls der Text zu lang ist */
 			text-overflow: ellipsis; /* Zeigt "..." an, wenn der Text abgeschnitten wird */}
+		/* Optional: Container für Text und Statusleuchte */
+		.status-container {
+			display: flex; /* Stellt sicher, dass die Elemente nebeneinander sind */
+			align-items: center; /* Vertikal ausrichten */
+			font-size:20px;
+			margin-right:auto;
+			margin-left:auto;
+		}
+		.status-light {
+			width: 20px;
+			height: 20px;
+			border-radius: 50%;
+			background-color: grey; /* Startfarbe (grau) */
+			transition: background-color 0.5s; /* Sanfter Übergang der Farben */
+			margin-left:10px;
+		}
+		.status-light.valid {
+			background-color: green; /* Grün, wenn valid */
+		}
+		.status-light.invalid {
+			background-color: red; /* Rot, wenn invalid */
+		}
+		.status-light.missing {
+			background-color: yellow; /* Gelb, wenn kein Token vorhanden */
+		}
 	</style>
 </head>
 <body>
@@ -91,6 +116,16 @@
 			<h3 class="white">Selected Image:</h3> <!-- Zeigt den Dateinamen an -->
 			<h3 id="fileName" class="white"></h3> <!-- Zeigt den Dateinamen an -->
 		</form>
+		<br><br><br>
+		<h1>Dropbox Login</h1>
+		<br><br>
+		<button onclick="copyToClipboard(this)" data-text="thenryndev@outlook.com" class="rounded-button">E-Mail</button>
+		<br><br>
+		<button onclick="copyToClipboard(this)" data-text="!Deployment123!" class="rounded-button">Pwd</button>
+		<br><br><br>
+		<div class="status-container">
+			<span id="statusText">Dropbox:</span>
+			<span id="statusLight" class="status-light"></span>
 		</div>
 	</div>
 	<!--Banner MIDDLE-->
@@ -231,22 +266,19 @@
 		}
 	</script>
 	<script>
-    /*MOMENTAN NICHT VERWENDET
-		document.getElementById('clearButton').addEventListener('click', function() {
-        // Lösche das Ergebnis und Bild
-        const resultContainer = document.getElementById('JSON_response');
-        const imageContainer = document.getElementById('imagePreview');
+		// Dynamische Funktion zum Kopieren von Text
+		function copyToClipboard(button) {
+			// Den Text aus der data-Attribut des Buttons extrahieren
+			const textToCopy = button.getAttribute('data-text');
 
-        resultContainer.innerHTML = '';  // Löscht die angezeigten Ergebnisse
-        imageContainer.innerHTML = '<p>Kein Bild ausgewählt</p>';  // Setzt die Bildanzeige zurück
-
-        // Setze den Dateinamen zurück
-        document.getElementById('fileName').textContent = 'Kein Bild ausgewählt';
-
-        // Entferne den Leuchteffekt vom Upload-Button
-        const uploadButton = document.getElementById('uploadButton');
-        uploadButton.classList.remove('ready');
-    });*/ 
+			// Clipboard API verwenden, um den Text zu kopieren
+			navigator.clipboard.writeText(textToCopy).then(function() {
+			// Benutzer informieren, dass der Text kopiert wurde
+			<!--alert('Text wurde in die Zwischenablage kopiert: ' + textToCopy);-->
+			}).catch(function(err) {
+				console.error('Fehler beim Kopieren: ', err);
+			});
+		}
 	</script>
     <script>
         // JavaScript zum Anzeigen des Lade-Indikators
@@ -258,5 +290,27 @@
             loading.style.display = 'block';
         });		
     </script>
+	<script>
+		// Funktion, die den Tokenstatus überprüft und die Statusleuchte anpasst
+		function checkDropboxToken() {
+			fetch('/check_token')
+					.then(response => response.json())
+					.then(data => {
+						const statusLight = document.getElementById('statusLight');
+
+						if (data.status === 'valid') {
+							statusLight.className = 'status-light valid'; // Setzt die Klasse auf 'valid', um die Farbe zu ändern
+						} else if (data.status === 'invalid') {
+							statusLight.className = 'status-light invalid'; // Setzt die Klasse auf 'invalid'
+						}
+					})
+					.catch(error => {
+						console.error('Fehler beim Überprüfen des Tokens:', error);
+					});
+		}
+
+		// Alle 5 Sekunden die Überprüfung durchführen
+		setInterval(checkDropboxToken, 5000);
+	</script>
 </body>
 </html>

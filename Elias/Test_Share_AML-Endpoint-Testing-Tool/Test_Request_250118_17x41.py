@@ -43,6 +43,20 @@ APP_KEY = "zek0ppvy1tei9cw"
 APP_SECRET = "oqp3gw6myhzxt81"
 REDIRECT_URI = "http://localhost:5000/callback"  # Stelle sicher, dass dies deine Redirect-URI ist.
 
+@app.route('/check_token')
+def check_token():
+    access_token = session.get('access_token')
+
+    if access_token:
+        try:
+            dropbox_client = dropbox.Dropbox(oauth2_access_token=access_token)
+            dropbox_client.users_get_current_account()  # API Call, um zu prüfen, ob das Token gültig ist
+            return {'status': 'valid'}  # Gültiges Token
+        except dropbox.exceptions.AuthError:
+            return {'status': 'invalid'}  # Ungültiges Token
+    else:
+        return {'status': 'missing'}  # Kein Token vorhanden
+
 # Route für Dropbox-Client, die den Authentifizierungsprozess prüft
 @app.route('/dropbox_client')
 # Schritt 2: Funktion, um den Dropbox-Client mit dem Refresh-Token zu initialisieren
