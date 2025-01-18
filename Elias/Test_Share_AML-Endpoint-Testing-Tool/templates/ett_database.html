@@ -73,7 +73,7 @@
 </head>
 <body>
 	<!--BANNER RIGHT-->
-	<div class="bannerright">
+	<div class="bannerright" style="display:none;>
 		<br><br><br><br><br><br><br><br><br>
 		<h1>Analyze Picture</h1>
 		<br><br>
@@ -94,7 +94,7 @@
 		</div>
 	</div>
 	<!--Banner MIDDLE-->
-	<div class="banner"><br>
+	<div class="banner""><br>
 		<ul class="bannerUl">
 			<li><p></li>
 			<li><p>&nbsp;&nbsp;</li>
@@ -102,8 +102,8 @@
 			<a href="{{ url_for('index') }}"><p class="fontlogo">Endpoint Testing Tool<br>Ver:13.01.25-14:14</p><br></a>
 			<li><p></li>
 			<li><p></li>
-			<li><a class="active" href="{{ url_for('index') }}">Home</a><!--ACTIVE--></li>
-			<li><a href="{{ url_for('database') }}">Database</a></li>
+			<li><a href="{{ url_for('index') }}">Home</a><!--ACTIVE--></li>
+			<li><a class="active" href="{{ url_for('database') }}">Database</a></li>
 			<div class="dropdown">
 				<li class="dropbtn">
 					<a class="white" href="{{ url_for('show_scripts') }}">Overview</a>
@@ -135,69 +135,33 @@
 		</form>
 		 -->
 		<br><br>
+		<h1>Analyse Results Database</h1>
 		<br><br>
-		<div class="table-wrapper">
-		<!-- ANALYSE TABELLE -->
-			<table class="fl-table">
-				<tr>
-					<th>
-						<!-- Zeigt die Startzeit der Anfrage an -->
-						{% if request_time %}
-							<p class="resultValues">Start: {{ request_time }}</p>
-						{% endif %}
-						<!-- Zeigt die Endzeit (Analyse abgeschlossen) an -->
-						{% if end_time %}
-							<p class="resultValues">End: {{ end_time }}</p>
-						{% endif %}
-						<p class="resultValues">Processing-Time: {{ duration }}<span> sek</span>
-					</th>
-					<th>
-						<div id="loading">Bearbeitung läuft, bitte warten...</div>
-					</th>
-				</tr>
-				<tr>
-					<td id="td_response">
-						<h3>Found Classes with Confidence:</h3>
-						<ul id="response_list">
-							{% for item in detected_classes %}
-							<li>{{ item.name }}: {{ item.confidence | round(2) }}</li>
-							{% endfor %}
-						</ul>
-						<h3 class="separated">JSON Response:</h3>
-						<ul id="JSON_response">
-							<li>
-								<!-- Zeigt die Analyseergebnisse an -->
-								{% if result %}
-									<pre>{{ result }}</pre>
-								{% endif %}
-							</li>
-						</ul>
-					</td>
-					<td id="td_preview">
-						<div style=" position: relative;" class="image-preview" id="imagePreview">
-							{% if image %}
-								<h3 style="margin-top:0px;  position: absolute; top: 2%; ">Analysed Image:</h3>
-								<img src="data:image/jpeg;base64,{{ image }}" alt="Hochgeladenes Bild">
-							{% endif %}
-							<!--<img class="test123" src="{{ url_for('static', filename='Test_PNG_Dose.png') }}" alt="Test Dose"> TEST PICTURE -->
-						</div>
+		<table style="width:95%; max-width:95%; min-width:95%; margin-left:auto; margin-right:auto;">
+			<thead>
+			<tr>
+				<th>ID</th>
+				<th>Bildname</th>
+				<th>Analysezeit</th>
+				<th>Bounding Boxes</th>
+				<th>BB-Image</th>
+				<th></th>
+			</tr>
+			</thead>
+			<tbody>
+			{% for item in items %}
+			<tr>
+				<td class="db_td">{{ item.image_name }}</td>
+				<td class="db_td">{{ item.analysis_time }}</td>
+				<td class="db_td">{{ item.predictions }}</td>
+				<td class="db_td">{{ item.bounding_boxes }}</td>
+				<td class="db_td"><img class="db-image" src="{{ item.image_url }}" alt="image with bounding boxes">{{ item.image_url }}</td>
+				<!--<td><img src="https://www.dropbox.com/scl/fi/lzlllkbksl15lcv32ebmx/text-types.jpg?rlkey=5okcvlx5ryv600gm6nu42d03j&dl=1"></td>-->
 
-					</td>
-				<tr>
-				<tr>
-					<td colspan="2">
-						<div class="bb-image">
-							<img style="margin-right:auto; margin-left:auto;" src="data:image/jpeg;base64,{{ image }}" onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
-						  <!-- Inline-SVG als Fallback -->
-							<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-repeat" viewBox="0 0 16 16" style="display: none;">
-							<path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41m-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9"/>
-							<path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5 5 0 0 0 8 3M3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9z"/>
-							</svg>
-						</div>
-					</td>
-				</tr>
-			</table>
-		</div>
+			</tr>
+			{% endfor %}
+			</tbody>
+		</table>
 	</div>
     <script>
 		// Funktion zur Vorschau des Bildes

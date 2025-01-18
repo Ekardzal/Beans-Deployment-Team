@@ -1,10 +1,10 @@
 setlocal enabledelayedexpansion
 @echo off
-SET "EDITED=LAST TIME EDITED [12.01.25] - [19:21]"
+SET "EDITED=LAST TIME EDITED [18.01.25] - [17:42]"
 :START
 REM ADAPTABLE VARIABLES - CHANGE HERE !!!
 :: Name of starting app
-set "appToStart=Test_Request_250112_17x36.py"
+set "appToStart=Test_Request_250118_17x41.py"
 :: Port for WebApp
 set "portWebApp=5000"
 :: Name der virtuellen Umgebung
@@ -97,6 +97,7 @@ if "%input%"=="2" (goto STARTVENV)
 if "%input%"=="3" (goto CREATEVENV)
 if "%input%"=="4" (goto INSTALLEXTRAS)
 if "%input%"=="X" (goto CHECKREQ)
+if "%input%"=="git" (goto COPYTOGIT)
 goto START
 goto END
 pause >nul
@@ -184,6 +185,63 @@ if "%confirmExtraInstall%"=="1" (
 if "%confirmExtraInstall%"=="2" (goto END)
 pause >nul
 goto END
+:COPYTOGIT
+::1 -> GIT HUB PATH
+set "copyToPath=G:\Github Projects\Beans-Deployment-Team\Elias\Test_Share_AML-Endpoint-Testing-Tool"
+::
+echo Do you want to copy the project to Github or your Desktop? [1 = G. / 2 = D.]
+set "wannaCopy="
+set /p wannaCopy=:
+if "%wannaStart: =%"=="" (goto START)                          
+if "%wannaCopy%"=="" (goto START) 
+if "%wannaCopy%"=="1" (goto GIT)
+if "%wannaCopy%"=="2" (goto COPYTODESK)
+goto START
+goto END
+:COPYTODESK
+set "copyToPath=%userprofile%\Desktop\Beans-ETT-Test"
+if not exist "%copyToPath%" (mkdir "%copyToPath%")
+:GIT
+set /a "checkInt=0"
+REM ----------------------------------
+::2
+set "copy1=requirements.txt"
+::3
+set "copy2=fonts"
+::4
+set "copy3=static"
+::5
+set "copy4=templates"
+::6
+set "copy5=%appToStart%"
+REM ----------------------------------
+set /a "checkSum=6"
+if exist "%copyToPath%" (echo EXIST: "%copyToPath%" & set /a "checkInt=%checkInt%+1") 
+if exist "%copy1%" (echo EXIST: "%copy1%" & set /a "checkInt=%checkInt%+1") 
+if exist "%copy2%" (echo EXIST: "%copy2%" & set /a "checkInt=%checkInt%+1") 
+if exist "%copy3%" (echo EXIST: "%copy3%" & set /a "checkInt=%checkInt%+1") 
+if exist "%copy4%" (echo EXIST: "%copy4%" & set /a "checkInt=%checkInt%+1") 
+if exist "%copy5%" (echo EXIST: "%copy5%" & set /a "checkInt=%checkInt%+1") 
+echo [INFO] EXIST STATUS [%checkInt%/%checkSum%]
+echo.
+if %checkInt%==%checkSum% (
+    echo everything exists copy process ist starting...
+	echo.
+    :: Kopiere alle Dateien und Ordner an das Ziel
+    xcopy /Y "%copy1%" "%copyToPath%" >nul
+	echo COPY "%copy1%" TO "%copyToPath%"
+    ROBOCOPY /E "%copy2%" "%copyToPath%\%copy2%" >nul
+	echo COPY "%copy2%" TO "%copyToPath%"
+    ROBOCOPY /E "%copy3%" "%copyToPath%\%copy3%" >nul
+	echo COPY "%copy3%" TO "%copyToPath%"
+    ROBOCOPY /E "%copy4%" "%copyToPath%\%copy4%" >nul
+	echo COPY "%copy4%" TO "%copyToPath%"
+	xcopy /Y "%copy5%" "%copyToPath%" >nul
+	echo COPY "%copy5%" TO "%copyToPath%"
+    echo [SUCESS] copy process done!
+) else (
+    echo [Error] Files or Folders missing!
+)
 pause >nul
 goto END
 :END

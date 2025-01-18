@@ -4,9 +4,11 @@ setlocal enabledelayedexpansion
 :: Define the paths of the files and folders to check
 set "projectFolder=Test_Share_AML-Endpoint-Testing-Tool"
 :: Define the destination directory
-set "destination=%userprofile%\Desktop\%projectFolder%\"
+set "destination=%userprofile%\Desktop\%projectFolder%"
+if not exist "%destination%" (set "destination=set "destination=%userprofile%\OneDrive\Desktop\%projectFolder%")
+if not exist "%destination%" (echo [ERROR] Destination 1, 2 doesn't exist)
 set "batchToStart=Beans-TT-Setup.bat"
-set "appToStart=Test_Request_250112_17x36.py"
+set "appToStart=Test_Request_250118_17x41.py"
 ::BATCH 
 set "file1=%projectFolder%\%batchToStart%"
 ::ALL OTHER FILES
@@ -65,7 +67,7 @@ for %%F in ("%folder1%" "%folder2%" "%folder3%") do (
     )
 )
 
-If exist "%userprofile%\Desktop\%projectFolder%\%batchToStart%" (echo SUCCESS& echo. & echo "%userprofile%\Desktop\%projectFolder%\%batchToStart%" & start /d "%userprofile%\Desktop\%projectFolder%\" %batchToStart%) else (echo ERROR)
+If exist "%destination%\%batchToStart%" (echo SUCCESS& echo. & echo "%destination%\%batchToStart%" & start /d "%destination%\" %batchToStart%) else (echo ERROR)
 
 :END
 ::pause >nul
