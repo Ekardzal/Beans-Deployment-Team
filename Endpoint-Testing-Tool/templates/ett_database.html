@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Beans-ETT</title>
+	<title>Beans-ETT</title>
 	<style>
 		html {background-color:white;}
 		body {font-family: 'Lato', sans-serif; overflow-x: hidden; width: 100vw; height: 100%; text-align: center; font-size: 10px; margin:0; padding: 0px;}
@@ -12,15 +12,11 @@
 		/*Table*/
 		.table-wrapper {min-width:88%; width:88%; max-width:88vw; margin-left:auto; margin-right:auto; margin-bottom:50px; box-shadow: 0px 15px 10px rgba( 0, 0, 0, 0.4 ); padding:0px;}
 		table {width:100%; max-width:100%; height:100%; margin-left:auto; margin-right:auto; border-collapse:collapse;white-space:nowrap;border-spacing:20px;}
+		.fl-table p{margin:3px;}
 		th {border: 2px solid #ddd; max-width:5vw; font-size:20px;color: #ffffff; background-color:#049ce4; padding:5px; border-radius:5px; overflow: hidden; text-overflow: ellipsis;}
 		td {border: 2px solid #ddd; background:#F8F8F8; border-radius:5px;}
-		.db_td {    white-space: pre-wrap; /* Erlaubt Zeilenumbruch */
-			word-wrap: break-word; /* Lange Wörter werden umgebrochen */
-			max-width:5vw;
-			max-height:100px;
-			overflow: auto; /* Scrollbalken, falls der Text zu lang ist */
-			text-overflow: ellipsis; /* Zeigt "..." an, wenn der Text abgeschnitten wird */}
-		.fl-table p{margin:3px;}
+		.db_td {table-layout: auto;white-space: pre-wrap; word-wrap: break-word; max-width:5vw;  overflow: auto; text-overflow: ellipsis; /* Zeigt "..." an, wenn der Text abgeschnitten wird */}
+		.db_BigFont {font-size:20px;}
 		/**/
 		.bannerUl {width:80%; overflow:hidden; margin:0; top:0; margin-left:auto; margin-right:auto; list-style-type:none; border-radius:5px;} /*background-color:#004e9e;*/
 		.content {width:85%; height:auto; min-height:100vh; margin-left:auto; margin-right:auto;}
@@ -60,19 +56,42 @@
 
 		.success {background-color:white; color:#004e9e; box-shadow: 0 0 2px 4px rgba(255, 255, 255, 0.9); }
         .error {fill: red; /* Farbe bei Fehler: Rot */}
-		
-		#td_preview {min-width:35vw;}
-		#td_response {min-width:35vw;}
-		#JSON_response {height:100%; min-height:65vh; max-height:65vh; width:100%; overflow-y:auto; padding-left:0px;}
-		#JSON_response li { display: flex;  height: 30px; margin: 2px 0; font-size:16px;}
+
+		.JSON_response {-webkit-line-clamp: 3; white-space: nowrap; overflow:hidden; text-overflow:ellipsis; cursor:pointer; padding:15px; font-size:15px;}
+		.JSON_response.expanded {
+			white-space: normal; /* Ermöglicht den Umbruch des Texts */
+			overflow: visible; /* Zeigt den gesamten Text */
+			font-size:10px;
+		}
+		#JSON_response li { display: flex;  height: 30px; margin: 10px; font-size:16px;}
+		.unfold {color:grey; font-size:12px;}
+		.unfold.hidden {
+			opacity: 0;
+		}
 		#response_list {height:100%; max-height:65vh; width:100%; overflow-y:auto; padding-left:0px;}
 		#response_list li {display: flex;  height: 30px; margin: 2px 0; font-size:16px; padding-left:8px;}
 		#loading {display: none; font-size: 20px; color: black; text-align: center; margin-top: 20px; background:rgba(4, 156, 228, 0.7);}
 		#fileName {word-wrap: break-word; white-space: normal; word-break: break-word;}
-		.image-preview {border:0px solid black; display: flex; justify-content: center; align-items: center; margin:0; width:97%; min-width:97%; max-width:97%;height:65vh;min-height:60vh;max-height:65vh;margin-left:auto;margin-right:auto;object-fit:cover;}
 		.image-preview img {width:auto;height:auto;min-width:20vw;max-width:100%;max-height:100%;margin-right:auto;margin-left:auto;}
 		.db-image {width:auto;height:auto;min-width:1vw;max-width:100%;max-height:100%;margin-right:auto;margin-left:auto;}
+		.db-image:active {
+			position: fixed; /* Position fixieren, damit es immer im sichtbaren Bereich bleibt */
+			top: 50%; /* Vertikale Zentrierung */
+			left: 50%; /* Horizontale Zentrierung */
+			transform: translate(-50%, -50%);
+			width: 60vw; /* Breite auf 75% der Viewport-Breite setzen */
+			height:auto;
+			max-height:90vh;
+			background-color: black; /* Optional, je nachdem, ob du eine Hintergrundfarbe willst */
+			z-index: 10; /* Stellt sicher, dass das Bild über anderen Elementen liegt */
+			transition: all 0.1s ease;
+		}
+		.db-image:hover + .container_image_dplink {opacity:100;}
+		.db-image:active + .container_image_dplink {opacity:0;}
 		.separated {border-top: 1px solid #ddd; /* Schwarze Linie oben */padding-top: 10px; margin-top: 20px;}
+		.container_image_dplink {z-index: 9999; display:flex; position: relative; margin:0px; opacity:0;}
+		.container_image_dplink:hover {opacity:100; cursor:pointer;}
+		.image_dplink {max-width:40px; opacity:0.5;border: 1px solid black; background-color:white; z-index: 9999; position:absolute; top:-55px; margin:0px;}
 	</style>
 </head>
 <body>
@@ -98,7 +117,7 @@
 		</div>
 	</div>
 	<!--Banner MIDDLE-->
-	<div class="banner""><br>
+	<div class="banner"">
 		<ul class="bannerUl">
 			<li><p></li>
 			<li><p>&nbsp;&nbsp;</li>
@@ -119,17 +138,9 @@
 				</li>
 			</div>
 			<li><a href="/swagger" target="_blank">Swagger</a></li>
-			<li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li>
-			<li>
-			<a href="{{ url_for('test_route') }}">
-				<svg xmlns="http://www.w3.org/2000/svg" id="routingTest" width="30" height="30" fill="white" viewBox="0 0 16 16">
-				  <path d="M8 2a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 6.095 0 7.555 0 9.318 0 11.366 1.708 13 3.781 13h8.906C14.502 13 16 11.57 16 9.773c0-1.636-1.242-2.969-2.834-3.194C12.923 3.999 10.69 2 8 2m2.354 5.146a.5.5 0 0 1-.708.708L8.5 6.707V10.5a.5.5 0 0 1-1 0V6.707L6.354 7.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0z"/>
-				</svg>
-			</a>
-			<li style="font-size:20px; margin-top:10px;"><span class="{{ svg_class }}">{{ status_message }}</span></li>  <!-- Statusmeldung anzeigen -->
 		</ul>
 		<!--END LINKS TO ALL SITES-->
-		<br><br>
+		<br>
 	</div>
 	<div class="content">
 		<br><br><br>
@@ -137,40 +148,62 @@
 			<thead>
 			<tr>
 				<th>Bildname</th>
-				<th onclick="sortTable(2, 'datetime')">Analysezeit</th>
+				<th onclick="sortTable(1, 'datetime')"><span style="cursor:pointer;">Analysezeit</span></th>
 				<th>JSON Response</th>
-				<th>Bounding Boxes</th>
+				<th style="display:none;">Bounding Boxes</th>
 				<th>BB-Image</th>
 			</tr>
 			</thead>
 			<tbody>
 			{% for item in items %}
 			<tr>
-				<td class="db_td">{{ item.image_name }}</td>
-				<td class="db_td">{{ item.analysis_time }}</td>
-				<td class="db_td">{{ item.predictions }}</td>
-				<td class="db_td">{{ item.bounding_boxes }}</td>
-				<td class="db_td"><img class="db-image" src="{{ item.image_url }}" alt="image with bounding boxes">{{ item.image_url }}</td>
+				<td class="db_td db_BigFont">{{ item.image_name }}</td>
+				<td class="db_td db_BigFont">{{ item.analysis_time }}</td>
+				<td class="db_td JSON_response" onclick="toggleText(this)">{{ item.predictions }}<p class="unfold">click to unfold...</p></td>
+				<td style="display:none;" class="db_td">{{ item.bounding_boxes }}</td>
+				<td class="db_td test123"><img class="db-image" src="{{ item.image_url }}" alt="image with bounding boxes">
+					<div class="container_image_dplink" onclick="copyToClipboard(this)" data-text="{{ item.image_url }}"><img class="image_dplink" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAACY0lEQVR4nO2Zz2oUQRCHv9wiRvMKYvTgQ0STrHh0UQRfwVz2pLDog+iK4DOo8RLBJILgC+jGSw4KiaDrn4mbi+BIQS0MTc9M947b3QvzQcHs0N1bv5mu3qpaaGlpmQeuAo+BIXCsJtcDoMMccAHYA/Ia29WxSbIGjBxE5GoydpXEuAz89hCRq31P6c3Inj+xOPlM39JpNbl+bhm3Q6Ii/gJ3K+bct4jZIEERPYe5W8a8h0RivYGIyUMozv1ABC4BPxuIEM4Y838RmAXgbUMRwlljDXkwQblmCdT+FOt0jDXeE5inhgPb+pZ8eRk72D8aDlyfYo17lrcqh0dQxoUvfwcs6v0bwBHwFbhVMb+nMVUU8ZoIjAsilvXebeBPwTER4ypiBKwQgf0aEWJfHEWcaNoShc0aEfL5pqOIDglQJkLuT5DTrD/PIuQA6AKvLKdTEBEbWooOtU441pjY9BCxrDGUxxBxvqI8rQtsVxGjWQd2VXn6v0TszPqILavsfEUIdzQVl3I309xJ0o6Z/2KXidjWtGPRQ0RylV3fSADnUkTPGNd1iAnZTlFY8yhPPzsEdvAaAu0djTwqu0OH00mCOjh7HiImW+sTcKDXwinjiM1iNJRzw6r6TmV0jTWCb62BpQPoy4Ild3pCYPYNB6ZJFfopdAczwwHpw/pgqyfeEIHMcGKpoYgfwEUiMJxya9lEjGOWpwPDmRcNRETvmueGPajpOyUnYsKuRcyWOrekTeWOpQOYlAjhnPabck8bp9IoKLLq+WflN+AKibJSss1ySxtTavnkWQceab6UhS5PW1paaMw/bajY23D20soAAAAASUVORK5CYII=" alt="link--v1"></div>
+				</td>
 				<!--<td><img src="https://www.dropbox.com/scl/fi/lzlllkbksl15lcv32ebmx/text-types.jpg?rlkey=5okcvlx5ryv600gm6nu42d03j&dl=1"></td>-->
 			</tr>
 			{% endfor %}
 			</tbody>
 		</table>
 	</div>
-    <script>
-		// Funktion zur Vorschau des Bildes
-		let sortOrder = false; // true = aufsteigend, false = absteigend
+	<script>
+		function toggleText(tdElement) {
+			// Toggle die 'expanded' Klasse für die angeklickte Zelle
+			tdElement.classList.toggle('expanded');
+
+			// Finde das .unfold Element innerhalb der angeklickten Zelle
+			var unfoldElement = tdElement.querySelector('.unfold');
+
+			// Toggle die 'hidden' Klasse für das .unfold Element
+			unfoldElement.classList.toggle('hidden');
+		}
+	</script>
+	<script>
+		let sortDirection = {}; // Objekt, um Sortierstatus für jede Spalte zu speichern
 
 		function sortTable(columnIndex, type = 'string') {
 			const table = document.getElementById('sortableTable');
 			const tbody = table.querySelector('tbody');
 			const rows = Array.from(tbody.querySelectorAll('tr'));
 
+			// Wenn noch keine Richtung gespeichert wurde, standardmäßig 'asc' setzen
+			if (!(columnIndex in sortDirection)) {
+				sortDirection[columnIndex] = 'asc';
+			}
+
+			// Sortierrichtung für diese Spalte umkehren
+			sortDirection[columnIndex] = sortDirection[columnIndex] === 'asc' ? 'desc' : 'asc';
+
+			// Sortierlogik
 			const sortedRows = rows.sort((a, b) => {
 				const cellA = a.children[columnIndex].textContent.trim();
 				const cellB = b.children[columnIndex].textContent.trim();
 
-				let comparison;
+				let comparison = 0;
 				if (type === 'number') {
 					comparison = parseFloat(cellA) - parseFloat(cellB);
 				} else if (type === 'datetime') {
@@ -179,67 +212,70 @@
 					comparison = cellA.localeCompare(cellB);
 				}
 
-				return sortOrder ? comparison : -comparison;
+				// Ergebnis basierend auf Sortierrichtung umkehren
+				return sortDirection[columnIndex] === 'asc' ? comparison : -comparison;
 			});
 
-			// Sortierreihenfolge umkehren
-			sortOrder = !sortOrder;
+			// Reihenfolge in der Tabelle aktualisieren
+			sortedRows.forEach(row => tbody.appendChild(row));
+		}
 
-			// Sortierte Zeilen wieder in den DOM einfügen
+		// Tabelle beim Laden der Seite automatisch sortieren (absteigend)
+		document.addEventListener('DOMContentLoaded', () => {
+			sortTable(1, 'datetime'); // Sortiere beim Laden der Seite nach der 2. Spalte (Datum)
+		});
+	</script>
+	<script>
+		let sortDirection = {}; // Objekt, um Sortierstatus für jede Spalte zu speichern
+
+		function sortTable(columnIndex, type = 'string') {
+			const table = document.getElementById('sortableTable');
+			const tbody = table.querySelector('tbody');
+			const rows = Array.from(tbody.querySelectorAll('tr'));
+
+			// Sortierrichtung umkehren, falls die Spalte erneut sortiert wird
+			if (!sortDirection[columnIndex]) {
+				sortDirection[columnIndex] = 'asc'; // Standardmäßig aufsteigend
+			} else {
+				sortDirection[columnIndex] = sortDirection[columnIndex] === 'asc' ? 'desc' : 'asc';
+			}
+
+			// Sortierlogik
+			const sortedRows = rows.sort((a, b) => {
+				const cellA = a.children[columnIndex].textContent.trim();
+				const cellB = b.children[columnIndex].textContent.trim();
+
+				let comparison = 0;
+				if (type === 'number') {
+					comparison = parseFloat(cellA) - parseFloat(cellB);
+				} else if (type === 'datetime') {
+					comparison = new Date(cellA) - new Date(cellB);
+				} else {
+					comparison = cellA.localeCompare(cellB);
+				}
+
+				// Ergebnis basierend auf Sortierrichtung umkehren
+				return sortDirection[columnIndex] === 'asc' ? comparison : -comparison;
+			});
+
+			// Reihenfolge in der Tabelle aktualisieren
 			sortedRows.forEach(row => tbody.appendChild(row));
 		}
 	</script>
 	<script>
-    /*MOMENTAN NICHT VERWENDET
-		document.getElementById('clearButton').addEventListener('click', function() {
-        // Lösche das Ergebnis und Bild
-        const resultContainer = document.getElementById('JSON_response');
-        const imageContainer = document.getElementById('imagePreview');
+		// Dynamische Funktion zum Kopieren von Text
+		function copyToClipboard(button) {
+			// Den Text aus der data-Attribut des Buttons extrahieren
+			const textToCopy = button.getAttribute('data-text');
 
-        resultContainer.innerHTML = '';  // Löscht die angezeigten Ergebnisse
-        imageContainer.innerHTML = '<p>Kein Bild ausgewählt</p>';  // Setzt die Bildanzeige zurück
-
-        // Setze den Dateinamen zurück
-        document.getElementById('fileName').textContent = 'Kein Bild ausgewählt';
-
-        // Entferne den Leuchteffekt vom Upload-Button
-        const uploadButton = document.getElementById('uploadButton');
-        uploadButton.classList.remove('ready');
-    });*/ 
-	</script>
-	<script>
-		function sortTable(columnIndex, type = 'string') {
-		const table = document.getElementById('sortableTable');
-		const tbody = table.querySelector('tbody');
-		const rows = Array.from(tbody.querySelectorAll('tr'));
-
-		// Sortierlogik basierend auf Spaltentyp
-		const sortedRows = rows.sort((a, b) => {
-		const cellA = a.children[columnIndex].textContent.trim();
-		const cellB = b.children[columnIndex].textContent.trim();
-
-		if (type === 'number') {
-		return parseFloat(cellA) - parseFloat(cellB);
-		} else if (type === 'date') {
-		return new Date(cellA) - new Date(cellB);
-		} else {
-		return cellA.localeCompare(cellB);
-		}
-		});
-
-		// Reihenfolge in der Tabelle aktualisieren
-		sortedRows.forEach(row => tbody.appendChild(row));
+			// Clipboard API verwenden, um den Text zu kopieren
+			navigator.clipboard.writeText(textToCopy).then(function() {
+				// Benutzer informieren, dass der Text kopiert wurde
+				<!--alert('Text wurde in die Zwischenablage kopiert: ' + textToCopy);-->
+			}).catch(function(err) {
+				console.error('Fehler beim Kopieren: ', err);
+			});
 		}
 	</script>
-    <script>
-        // JavaScript zum Anzeigen des Lade-Indikators
-        const form = document.getElementById('uploadForm');
-        const loading = document.getElementById('loading');
-
-        form.addEventListener('submit', function(event) {
-            // Lade-Indikator anzeigen
-            loading.style.display = 'block';
-        });		
-    </script>
 </body>
 </html>

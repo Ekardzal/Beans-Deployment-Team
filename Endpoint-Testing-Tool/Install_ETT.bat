@@ -2,14 +2,14 @@
 setlocal enabledelayedexpansion
 
 :: Define the paths of the files and folders to check
-set "projectFolder=Test_Share_AML-Endpoint-Testing-Tool"
+set "projectFolder=Endpoint-Testing-Tool"
 :: Define the destination directory
 set "destination=%userprofile%\Desktop\"
 if exist "%destination%" (goto PATH2)
 set "destination=%userprofile%\OneDrive\Desktop\"
-if not exist "%destination%\%projectFolder%" (mkdir "%destination%\%projectFolder%")
 :PATH2
 if not exist "%destination%\%projectFolder%" (mkdir "%destination%\%projectFolder%")
+set "destination=%destination%%projectFolder%"
 if not exist "%destination%" (echo [ERROR] Destination 1, 2 doesn't exist & goto ERRORPAUSE)
 set "batchToStart=Beans-TT-Setup.bat"
 set "appToStart=Test_Request_250118_17x41.py"
@@ -50,6 +50,7 @@ for %%F in ("%file1%" "%file2%" "%file3%" "%file4%" "%file5%" "%file6%" "%file7%
 
 :: Display the progress
 echo Exist Check [%found%/%total%]
+if "%found%" NEQ "%total%" (echo [ERROR] %found% There are missing files or folders & goto ERRORPAUSE)
 
 :: Copy the found files to the destination
 for %%F in ("%file1%" "%file2%" "%file3%" "%file4%" "%file5%" "%file6%" "%file7%" "%file8%") do (

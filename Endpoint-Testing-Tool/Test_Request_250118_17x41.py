@@ -565,7 +565,6 @@ def save_analysis_to_files(image_name, analysis_result, img):
     new_width = img.width // 2  # Reduziere Größe um 50 %
     new_height = img.height // 2
     scaled_img = img.resize((new_width, new_height), Image.Resampling.LANCZOS)  # Hochwertiges Resampling
-
     
     # Speichern des bearbeiteten Bildes
     scaled_img.save(output_imagefile, format="JPEG", quality=80)
