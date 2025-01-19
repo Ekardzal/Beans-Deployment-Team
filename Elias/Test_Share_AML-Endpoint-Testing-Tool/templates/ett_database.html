@@ -10,10 +10,16 @@
 		h1, h2, h3 {margin-left:10px; margin-right:10px;}
 		h3 {font-size:15px;}
 		/*Table*/
-		.table-wrapper {min-width:88%; width:88%; max-width:88%; margin-left:auto; margin-right:auto; margin-bottom:50px; box-shadow: 0px 15px 10px rgba( 0, 0, 0, 0.4 ); padding:0px;}
-		table {width:100%; height:100%; margin-left:auto; margin-right:auto; border-collapse:collapse;white-space:nowrap;border-spacing:20px;}
-		th {border: 2px solid #ddd; font-size:20px;color: #ffffff; background-color:#049ce4; padding:5px; border-radius:5px;}
+		.table-wrapper {min-width:88%; width:88%; max-width:88vw; margin-left:auto; margin-right:auto; margin-bottom:50px; box-shadow: 0px 15px 10px rgba( 0, 0, 0, 0.4 ); padding:0px;}
+		table {width:100%; max-width:100%; height:100%; margin-left:auto; margin-right:auto; border-collapse:collapse;white-space:nowrap;border-spacing:20px;}
+		th {border: 2px solid #ddd; max-width:5vw; font-size:20px;color: #ffffff; background-color:#049ce4; padding:5px; border-radius:5px; overflow: hidden; text-overflow: ellipsis;}
 		td {border: 2px solid #ddd; background:#F8F8F8; border-radius:5px;}
+		.db_td {    white-space: pre-wrap; /* Erlaubt Zeilenumbruch */
+			word-wrap: break-word; /* Lange Wörter werden umgebrochen */
+			max-width:5vw;
+			max-height:100px;
+			overflow: auto; /* Scrollbalken, falls der Text zu lang ist */
+			text-overflow: ellipsis; /* Zeigt "..." an, wenn der Text abgeschnitten wird */}
 		.fl-table p{margin:3px;}
 		/**/
 		.bannerUl {width:80%; overflow:hidden; margin:0; top:0; margin-left:auto; margin-right:auto; list-style-type:none; border-radius:5px;} /*background-color:#004e9e;*/
@@ -67,11 +73,6 @@
 		.image-preview img {width:auto;height:auto;min-width:20vw;max-width:100%;max-height:100%;margin-right:auto;margin-left:auto;}
 		.db-image {width:auto;height:auto;min-width:1vw;max-width:100%;max-height:100%;margin-right:auto;margin-left:auto;}
 		.separated {border-top: 1px solid #ddd; /* Schwarze Linie oben */padding-top: 10px; margin-top: 20px;}
-		.db_td {    white-space: pre-wrap; /* Erlaubt Zeilenumbruch */
-			word-wrap: break-word; /* Lange Wörter werden umgebrochen */
-			max-width: 300px; /* Maximalbreite für lange Inhalte */
-			overflow: auto; /* Scrollbalken, falls der Text zu lang ist */
-			text-overflow: ellipsis; /* Zeigt "..." an, wenn der Text abgeschnitten wird */}
 	</style>
 </head>
 <body>
@@ -131,24 +132,15 @@
 		<br><br>
 	</div>
 	<div class="content">
-		<!-- Formular zum Hochladen des Bildes -> TEST FORM FÜR AZURE OCR ROUTE -> Gerade gelöscht in Requesting Script
-		<form action="/azureocr" method="POST" enctype="multipart/form-data">
-			<input type="file" name="image">
-			<button type="submit">Upload Image</button>
-		</form>
-		 -->
-		<br><br>
-		<h1>Analyse Results Database</h1>
-		<br><br>
-		<table style="width:95%; max-width:95%; min-width:95%; margin-left:auto; margin-right:auto;">
+		<br><br><br>
+		<table style="width:95%; max-width:95%; min-width:95%; margin-left:auto; margin-right:auto;" id="sortableTable">
 			<thead>
 			<tr>
-				<th>ID</th>
 				<th>Bildname</th>
-				<th>Analysezeit</th>
+				<th onclick="sortTable(2, 'datetime')">Analysezeit</th>
+				<th>JSON Response</th>
 				<th>Bounding Boxes</th>
 				<th>BB-Image</th>
-				<th></th>
 			</tr>
 			</thead>
 			<tbody>
@@ -160,7 +152,6 @@
 				<td class="db_td">{{ item.bounding_boxes }}</td>
 				<td class="db_td"><img class="db-image" src="{{ item.image_url }}" alt="image with bounding boxes">{{ item.image_url }}</td>
 				<!--<td><img src="https://www.dropbox.com/scl/fi/lzlllkbksl15lcv32ebmx/text-types.jpg?rlkey=5okcvlx5ryv600gm6nu42d03j&dl=1"></td>-->
-
 			</tr>
 			{% endfor %}
 			</tbody>
@@ -168,33 +159,34 @@
 	</div>
     <script>
 		// Funktion zur Vorschau des Bildes
-		function previewImage(event) {
-			const imagePreview = document.getElementById('imagePreview');
-			const fileNameDisplay = document.getElementById('fileName');
-			const uploadButton = document.getElementById('uploadButton'); // Button
-			const file = event.target.files[0];
-					 
-			if (file) {
-				const reader = new FileReader();
+		let sortOrder = false; // true = aufsteigend, false = absteigend
 
-				reader.onload = function(e) {
-					imagePreview.innerHTML = `<img src="${e.target.result}" alt="Vorschau des ausgewählten Bildes">`;
-				};
+		function sortTable(columnIndex, type = 'string') {
+			const table = document.getElementById('sortableTable');
+			const tbody = table.querySelector('tbody');
+			const rows = Array.from(tbody.querySelectorAll('tr'));
 
-				reader.readAsDataURL(file); // Bild als Base64 laden
-				
-				// Zeigt den Dateinamen an
-				fileNameDisplay.textContent = `Selected Picture: ${file.name}`;
-				
-				// Button leuchten lassen
-				uploadButton.classList.add('ready');
-			} else {
-				imagePreview.innerHTML = '<p>Wähle ein Bild aus, um es hier anzuzeigen.</p>';
-				fileNameDisplay.textContent = 'Kein Bild ausgewählt';
-				
-				// Entferne den Leuchteffekt, wenn kein Bild ausgewählt wurde
-				uploadButton.classList.remove('ready');
-			}
+			const sortedRows = rows.sort((a, b) => {
+				const cellA = a.children[columnIndex].textContent.trim();
+				const cellB = b.children[columnIndex].textContent.trim();
+
+				let comparison;
+				if (type === 'number') {
+					comparison = parseFloat(cellA) - parseFloat(cellB);
+				} else if (type === 'datetime') {
+					comparison = new Date(cellA) - new Date(cellB);
+				} else {
+					comparison = cellA.localeCompare(cellB);
+				}
+
+				return sortOrder ? comparison : -comparison;
+			});
+
+			// Sortierreihenfolge umkehren
+			sortOrder = !sortOrder;
+
+			// Sortierte Zeilen wieder in den DOM einfügen
+			sortedRows.forEach(row => tbody.appendChild(row));
 		}
 	</script>
 	<script>
@@ -214,6 +206,30 @@
         const uploadButton = document.getElementById('uploadButton');
         uploadButton.classList.remove('ready');
     });*/ 
+	</script>
+	<script>
+		function sortTable(columnIndex, type = 'string') {
+		const table = document.getElementById('sortableTable');
+		const tbody = table.querySelector('tbody');
+		const rows = Array.from(tbody.querySelectorAll('tr'));
+
+		// Sortierlogik basierend auf Spaltentyp
+		const sortedRows = rows.sort((a, b) => {
+		const cellA = a.children[columnIndex].textContent.trim();
+		const cellB = b.children[columnIndex].textContent.trim();
+
+		if (type === 'number') {
+		return parseFloat(cellA) - parseFloat(cellB);
+		} else if (type === 'date') {
+		return new Date(cellA) - new Date(cellB);
+		} else {
+		return cellA.localeCompare(cellB);
+		}
+		});
+
+		// Reihenfolge in der Tabelle aktualisieren
+		sortedRows.forEach(row => tbody.appendChild(row));
+		}
 	</script>
     <script>
         // JavaScript zum Anzeigen des Lade-Indikators

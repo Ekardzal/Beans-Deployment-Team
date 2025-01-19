@@ -594,5 +594,14 @@ def save_analysis_to_db(image_name, analysis_result, bounding_boxes, image_url):
     finally:
         conn.close()
 
+# Funktion zum Öffnen des Ordners
+@app.route('/open-folder', methods=['GET'])
+def open_folder():
+    if os.path.exists(UPLOAD_FOLDER):
+        os.startfile(UPLOAD_FOLDER)  # Öffnet den Ordner im Explorer (Windows)
+        return "Ordner geöffnet!", 200
+    else:
+        return "Ordner existiert nicht!", 404
+
 if __name__ == '__main__':
     app.run(debug=True)
