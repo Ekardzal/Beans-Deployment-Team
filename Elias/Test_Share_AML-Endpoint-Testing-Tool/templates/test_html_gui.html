@@ -12,9 +12,10 @@
 	/*Table*/
 		.table-wrapper {min-width:88%; width:88%; max-width:88%; height:85vh; max-height:85vh; margin-left:auto; margin-right:auto; margin-bottom:50px; box-shadow: 0px 15px 10px rgba( 0, 0, 0, 0.4 ); padding:0px;}
 		table {width:100%; height:100%; max-height:100%; margin-left:auto; margin-right:auto; border-collapse:collapse; white-space:nowrap; border-spacing:20px; table-layout:fixed;}
-		th {border: 2px solid #ddd; font-size:20px;color: #ffffff; background-color:#049ce4; padding:5px; border-radius:5px; vertical-align: top;}
+		th {border: 2px solid #ddd; font-size:20px;color: #ffffff; background-color:#049ce4; padding:5px; border-radius:5px;}
 		td {border: 2px solid #ddd; background:#F8F8F8; border-radius:5px; vertical-align: top;}
-		.fl-table p{margin:3px;}
+		.fl-table p {margin:5px;}
+		.fl-table span {margin:0px;}
 	/**/
 		/* BANNER */
 		.banner {background-color:#004e9e; width:100vw; padding-top:3px; margin-left: auto; margin-right: auto; border-bottom:2px black solid;}  /*background: rgba(1, 1, 18, 0.8)*/
@@ -53,38 +54,32 @@
 		.success {background-color:white; color:#004e9e; box-shadow: 0 0 2px 4px rgba(255, 255, 255, 0.9); }
         .error {fill: red; /* Farbe bei Fehler: Rot */}
 		
-		#td_preview {min-width:35vw; max-height:100%;    overflow: hidden;text-overflow: ellipsis; /* Ellipsen anzeigen (...) für abgeschnittene Inhalte */white-space: nowrap;}
-		#td_response {border:1px solid black; min-width:35vw; height:75vh; max-height:5vh; overflow-y:auto; box-sizing: border-box; padding-top:5px;}
-		#td_JSON_response {min-width:35vw; height:25vh; max-height:5vh;}
+		#td_preview {min-width:35vw; max-height:100%; overflow: hidden;text-overflow: ellipsis; white-space: nowrap;}
+		#td_response {border:0px solid black; min-width:35vw; height:75vh; max-height:5vh; overflow-y:auto; box-sizing: border-box; padding-top:5px;}
+		#td_response h3 {margin-top:5px; margin-bottom:5px;}
 		#JSON_response {border:0px solid black; height:50%; min-height:30%; max-height:50%; width:100%; padding-left:0; padding-top:50px;}
-		#response_list {border:0px solid black; height:50%; max-height:30%; max-height:50%; width:100%; overflow-y:auto; padding-left:0; text-align:left; }
+		#response_list {border:0px solid black; height:15%; max-height:30%; max-height:50%; width:100%; overflow-y:auto; padding-left:0; text-align:left; }
 		#JSON_response li {display: flex;  height: 30px; margin: 2px 0; font-size:16px;}
 		#response_list li {display:block; font-weight: bold; height: 22px; margin: 2px 0; font-size:16px; padding-left:8px;}
 		#loading {display: none; font-size: 20px; color: black; text-align: center; margin-top: 20px; background:rgba(4, 156, 228, 0.7);}
 		#fileName {word-wrap: break-word; white-space: normal; word-break: break-word;}
-		.db-image {width:auto;height:auto;min-width:1vw;max-width:100%;max-height:100%;margin-right:auto;margin-left:auto;}
-		.separated {border-top: 1px solid #ddd; /* Schwarze Linie oben */padding-top: 10px; margin-top: 20px;}
-		.db_td {    white-space: pre-wrap; /* Erlaubt Zeilenumbruch */
-			word-wrap: break-word; /* Lange Wörter werden umgebrochen */
-			max-width: 300px; /* Maximalbreite für lange Inhalte */
-			overflow: auto; /* Scrollbalken, falls der Text zu lang ist */
-			text-overflow: ellipsis; /* Zeigt "..." an, wenn der Text abgeschnitten wird */}
+
+		.separated {border-top: 1px solid #ddd; padding-top: 10px; margin-top: 20px;}
 		/* Optional: Container für Text und Statusleuchte */
 		.status-container {display: flex; /* Stellt sicher, dass die Elemente nebeneinander sind */ align-items: center; /* Vertikal ausrichten */ font-size:20px; margin-right:auto; margin-left:auto;}
 		.status-light {width: 20px; height: 20px; border-radius: 50%; background-color: grey; /* Startfarbe (grau) */ transition: background-color 0.5s; /* Sanfter Übergang der Farben */ margin-left:10px;}
-		.status-light.valid {background-color: green; /* Grün, wenn valid */}
-		.status-light.invalid {background-color: red; /* Rot, wenn invalid */}
-		.status-light.missing {background-color: yellow; /* Gelb, wenn kein Token vorhanden */}
+		.status-light.valid {background-color: green;}
+		.status-light.invalid {background-color: red;}
+		.status-light.missing {background-color: yellow;}
 		.image-preview {border:0px solid black; position:relative; display: flex; justify-content: center; align-items: center; margin:0; width:97%; min-width:97%; max-width:97%;height:97%;min-height:90%;max-height:97%; margin-left:auto; margin-right:auto; object-fit:cover; overflow:auto;}
 		.image-preview img {width:auto;height:auto;min-width:20vw;max-width:100%;max-height:100%;margin-right:auto;margin-left:auto;}
 		/* Grundstil für die Labels */
 		.info-label {position: relative; cursor: pointer; font-size: clamp(12px, 1vw, 24px);}
 		/* Tooltip (Dropdown) Stil, der standardmäßig unsichtbar ist */
-		.info-label::after {content: attr(data-tooltip); z-index: 9999; min-width:8vw; max-width:300px; position:absolute; bottom: -50px; left:50px;  background-color: rgba(0, 0, 0, 0.7); color: white; padding: 5px 10px; border-radius: 5px; font-size: 12px; display: none; opacity: 0; transition: opacity 0.5s ease; transform: translate(-10%);}
+		.info-label::after {content: attr(data-tooltip); min-width:8vw; max-width:300px; position:absolute; bottom: -50px; left:50px;  background-color: rgba(0, 0, 0, 0.7); color: white; padding: 5px 10px; border-radius: 5px; font-size: 12px; display: none; opacity: 0; transition: opacity 0.5s ease; transform: translate(-10%);}
 		.info-label:hover::after {display: block; opacity: 1;left: auto;}
-		.hover-label {z-index: 9999; margin:0; position:absolute; margin-top:0px; top:2%; color:#049ce4;}
-		.hover-label:hover {opacity:0.2; cursor:pointer;}
-		.hover-label:hover ~ .preview-image {
+		.hover-label {z-index: 9999; margin:0; position:absolute; margin-top:0px; top:2%; color:black; font-size:15px;}
+		.preview-image:active {
 			position: fixed; /* Position fixieren, damit es immer im sichtbaren Bereich bleibt */
 			top: 50%; /* Vertikale Zentrierung */
 			left: 50%; /* Horizontale Zentrierung */
@@ -94,7 +89,7 @@
 			max-height:90vh;
 			background-color: black; /* Optional, je nachdem, ob du eine Hintergrundfarbe willst */
 			z-index: 10; /* Stellt sicher, dass das Bild über anderen Elementen liegt */
-			transition: all 0.4s ease;
+			transition: all 0.1s ease;
 		}
 	</style>
 </head>
@@ -227,7 +222,7 @@
 			</table>
 		</div>
 	</div>
-			<!--
+	<!--
 		<div class="bb-image">
 		<img style="margin-right:auto; margin-left:auto;" src="data:image/jpeg;base64,{{ image }}" onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
 		-->
