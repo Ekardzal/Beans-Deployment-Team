@@ -14,8 +14,8 @@
 		table {width:100%; max-width:100%; height:100%; margin-left:auto; margin-right:auto; border-collapse:collapse;white-space:nowrap;border-spacing:20px;}
 		.fl-table p{margin:3px;}
 		th {border: 2px solid #ddd; max-width:5vw; font-size:20px;color: #ffffff; background-color:#049ce4; padding:5px; border-radius:5px; overflow: hidden; text-overflow: ellipsis;}
-		td {border: 2px solid #ddd; background:#F8F8F8; border-radius:5px;}
-		.db_td {table-layout: auto;white-space: pre-wrap; word-wrap: break-word; max-width:5vw;  overflow: auto; text-overflow: ellipsis; /* Zeigt "..." an, wenn der Text abgeschnitten wird */}
+		td {border: 2px solid #ddd; background:#F8F8F8; border-radius:5px; vertical-align: middle;}
+		.db_td {table-layout: auto;white-space: pre-wrap; word-wrap: break-word; max-width:5vw;  overflow: auto; text-overflow: ellipsis;}
 		.db_BigFont {font-size:20px;}
 		/**/
 		.bannerUl {width:80%; overflow:hidden; margin:0; top:0; margin-left:auto; margin-right:auto; list-style-type:none; border-radius:5px;} /*background-color:#004e9e;*/
@@ -72,8 +72,8 @@
 		#response_list li {display: flex;  height: 30px; margin: 2px 0; font-size:16px; padding-left:8px;}
 		#loading {display: none; font-size: 20px; color: black; text-align: center; margin-top: 20px; background:rgba(4, 156, 228, 0.7);}
 		#fileName {word-wrap: break-word; white-space: normal; word-break: break-word;}
-		.image-preview img {width:auto;height:auto;min-width:20vw;max-width:100%;max-height:100%;margin-right:auto;margin-left:auto;}
-		.db-image {width:auto;height:auto;min-width:1vw;max-width:100%;max-height:100%;margin-right:auto;margin-left:auto;}
+		.image-preview img {width:auto;height:auto;min-width:20vw;max-width:100%;max-height:100%;margin-right:auto;margin-left:auto;margin-bottom:0;}
+		.db-image {display: block; width:auto;height:auto;min-width:1vw;max-width:100%;max-height:100%;margin-right:auto;margin-left:auto; margin-bottom:0;}
 		.db-image:active {
 			position: fixed; /* Position fixieren, damit es immer im sichtbaren Bereich bleibt */
 			top: 50%; /* Vertikale Zentrierung */
@@ -89,9 +89,9 @@
 		.db-image:hover + .container_image_dplink {opacity:100;}
 		.db-image:active + .container_image_dplink {opacity:0;}
 		.separated {border-top: 1px solid #ddd; /* Schwarze Linie oben */padding-top: 10px; margin-top: 20px;}
-		.container_image_dplink {z-index: 9999; display:flex; position: relative; margin:0px; opacity:0;}
+		.container_image_dplink {display:none; border:1px black solid; max-height:30px; margin:0; opacity:1;}
 		.container_image_dplink:hover {opacity:100; cursor:pointer;}
-		.image_dplink {max-width:40px; opacity:0.5;border: 1px solid black; background-color:white; z-index: 9999; position:absolute; top:-55px; margin:0px;}
+		.image_dplink {opacity:0.5;border: 1px solid black; max-height:100%; margin:0;}
 	</style>
 </head>
 <body>
@@ -151,7 +151,7 @@
 				<th onclick="sortTable(1, 'datetime')"><span style="cursor:pointer;">Analysezeit</span></th>
 				<th>JSON Response</th>
 				<th style="display:none;">Bounding Boxes</th>
-				<th>BB-Image</th>
+				<th onclick="reloadAllImages()">BB-Image</th>
 			</tr>
 			</thead>
 			<tbody>
@@ -159,12 +159,12 @@
 			<tr>
 				<td class="db_td db_BigFont">{{ item.image_name }}</td>
 				<td class="db_td db_BigFont">{{ item.analysis_time }}</td>
-				<td class="db_td JSON_response" onclick="toggleText(this)">{{ item.predictions }}<p class="unfold">click to unfold...</p></td>
+				<td class="db_td JSON_response" onclick="toggleText(this)" onload="console.log('Bild geladen:', this.src)">{{ item.predictions }}<p class="unfold">click to unfold...</p></td>
 				<td style="display:none;" class="db_td">{{ item.bounding_boxes }}</td>
-				<td class="db_td test123"><img class="db-image" src="{{ item.image_url }}" alt="image with bounding boxes">
+				<td class="db_td test123">
+					<img class="db-image" src="{{ item.image_url }}" alt="image with bounding boxes"></img>
 					<div class="container_image_dplink" onclick="copyToClipboard(this)" data-text="{{ item.image_url }}"><img class="image_dplink" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAACY0lEQVR4nO2Zz2oUQRCHv9wiRvMKYvTgQ0STrHh0UQRfwVz2pLDog+iK4DOo8RLBJILgC+jGSw4KiaDrn4mbi+BIQS0MTc9M947b3QvzQcHs0N1bv5mu3qpaaGlpmQeuAo+BIXCsJtcDoMMccAHYA/Ia29WxSbIGjBxE5GoydpXEuAz89hCRq31P6c3Inj+xOPlM39JpNbl+bhm3Q6Ii/gJ3K+bct4jZIEERPYe5W8a8h0RivYGIyUMozv1ABC4BPxuIEM4Y838RmAXgbUMRwlljDXkwQblmCdT+FOt0jDXeE5inhgPb+pZ8eRk72D8aDlyfYo17lrcqh0dQxoUvfwcs6v0bwBHwFbhVMb+nMVUU8ZoIjAsilvXebeBPwTER4ypiBKwQgf0aEWJfHEWcaNoShc0aEfL5pqOIDglQJkLuT5DTrD/PIuQA6AKvLKdTEBEbWooOtU441pjY9BCxrDGUxxBxvqI8rQtsVxGjWQd2VXn6v0TszPqILavsfEUIdzQVl3I309xJ0o6Z/2KXidjWtGPRQ0RylV3fSADnUkTPGNd1iAnZTlFY8yhPPzsEdvAaAu0djTwqu0OH00mCOjh7HiImW+sTcKDXwinjiM1iNJRzw6r6TmV0jTWCb62BpQPoy4Ild3pCYPYNB6ZJFfopdAczwwHpw/pgqyfeEIHMcGKpoYgfwEUiMJxya9lEjGOWpwPDmRcNRETvmueGPajpOyUnYsKuRcyWOrekTeWOpQOYlAjhnPabck8bp9IoKLLq+WflN+AKibJSss1ySxtTavnkWQceab6UhS5PW1paaMw/bajY23D20soAAAAASUVORK5CYII=" alt="link--v1"></div>
 				</td>
-				<!--<td><img src="https://www.dropbox.com/scl/fi/lzlllkbksl15lcv32ebmx/text-types.jpg?rlkey=5okcvlx5ryv600gm6nu42d03j&dl=1"></td>-->
 			</tr>
 			{% endfor %}
 			</tbody>
@@ -224,43 +224,6 @@
 		document.addEventListener('DOMContentLoaded', () => {
 			sortTable(1, 'datetime'); // Sortiere beim Laden der Seite nach der 2. Spalte (Datum)
 		});
-	</script>
-	<script>
-		let sortDirection = {}; // Objekt, um Sortierstatus für jede Spalte zu speichern
-
-		function sortTable(columnIndex, type = 'string') {
-			const table = document.getElementById('sortableTable');
-			const tbody = table.querySelector('tbody');
-			const rows = Array.from(tbody.querySelectorAll('tr'));
-
-			// Sortierrichtung umkehren, falls die Spalte erneut sortiert wird
-			if (!sortDirection[columnIndex]) {
-				sortDirection[columnIndex] = 'asc'; // Standardmäßig aufsteigend
-			} else {
-				sortDirection[columnIndex] = sortDirection[columnIndex] === 'asc' ? 'desc' : 'asc';
-			}
-
-			// Sortierlogik
-			const sortedRows = rows.sort((a, b) => {
-				const cellA = a.children[columnIndex].textContent.trim();
-				const cellB = b.children[columnIndex].textContent.trim();
-
-				let comparison = 0;
-				if (type === 'number') {
-					comparison = parseFloat(cellA) - parseFloat(cellB);
-				} else if (type === 'datetime') {
-					comparison = new Date(cellA) - new Date(cellB);
-				} else {
-					comparison = cellA.localeCompare(cellB);
-				}
-
-				// Ergebnis basierend auf Sortierrichtung umkehren
-				return sortDirection[columnIndex] === 'asc' ? comparison : -comparison;
-			});
-
-			// Reihenfolge in der Tabelle aktualisieren
-			sortedRows.forEach(row => tbody.appendChild(row));
-		}
 	</script>
 	<script>
 		// Dynamische Funktion zum Kopieren von Text

@@ -1,6 +1,6 @@
 setlocal enabledelayedexpansion
 @echo off
-SET "EDITED=LAST TIME EDITED [18.01.25] - [17:42]"
+SET "EDITED=LAST TIME EDITED [20.01.25] - [14:37]"
 :START
 REM ADAPTABLE VARIABLES - CHANGE HERE !!!
 :: Name of starting app
@@ -9,9 +9,11 @@ set "appToStart=Test_Request_250118_17x41.py"
 set "portWebApp=5000"
 :: Name der virtuellen Umgebung
 set venvDir=venv
+set "requirements_file=requirements.txt"
+:: Definiere die Bibliotheken, die überprüft werden sollen
+set "libs_to_check=flask requests pillow sqlitecloud dropbox"
 ::Name of this batch file
 set "batchName=Beans-TT-Setup.bat"
-set "gitPath=Elias\Test_Share_AML-Endpoint-Testing-Tool"
 set /a "gitTest=0"
 Color 0a
 CLS
@@ -31,15 +33,15 @@ set /a checkInt=0
 set "checkText="
 REM Check for Files:
 set /a "check1=0"
-set "check1Text=[Error] no python version found"
+set "check1Text=python"
 set /a "check2=0"
-set "check2Text=[Error] no pip Version found"
+set "check2Text=pip"
 set /a "check3=0"
-set "check3Text=[Error] no venv folder found"
+set "check3Text=venv"
 set /a "check4=0"
-set "check4Text=[Error] no requirements.txt found"
+set "check4Text=%appToStart%"
 set /a "check5=0"
-set "check5Text=[Error] no %appToStart% found"
+set "check5Text=%requirements_file%"
 REM Anzahl zu checkender Faktoren
 set checkInt=0
 set checkSum=5
@@ -48,13 +50,9 @@ set /a "check1=0"
 set /a "check2=0"
 set /a "check3=0"
 set /a "check4=0"
+set /a "check5=0"
 set /a "checkInt=0"
 CLS
-echo # %EDITED% # Timestamp: %timestamp% #
-echo Current Path: %CD%
-echo =======================================================
-echo Hello %username% (^^_^^)
-echo.
 echo Check for python installation...
 REM CHECK1
 python --version >nul 2>&1
@@ -67,24 +65,56 @@ REM CHECK3
 echo Check for venv folder...
 if not exist venv (set /a check3=%check3%+1 & color 0c) else (set /a checkInt=%checkInt%+1)
 REM CHECK4
-echo Check for requirements.txt...
-if not exist requirements.txt (set /a check4=%check4%+1 & color 0c) else (set /a checkInt=%checkInt%+1)
 echo Check for script "%appToStart%"
 if not exist %appToStart% (set /a check5=%check5%+1 & color 0c) else (set /a checkInt=%checkInt%+1)
+REM CHECK5
+echo Check for requirements.txt...
+if not exist %requirements_file% (set /a check5=%check5%+1 & color 0c) else (set /a checkInt=%checkInt%+1)
+REM clear checking echos
+CLS
+title CD: %cd%
+echo =======================================================================================
+echo # %EDITED% # Timestamp: %timestamp% #
 echo.
-if %check1% GTR 0 (echo %check1Text% & echo.)
-if %check2% GTR 0 (echo %check2Text% & echo.)
-if %check3% GTR 0 (echo %check3Text% & echo.)
-if %check4% GTR 0 (echo %check4Text% & echo.)
-echo = EXISTING REQUIREMENTS: [%checkInt%/%CheckSum%]
+REM check requirements.txt
+:: Zähler für gefundene Bibliotheken
+set /a found_count=0
+set /a total_count=0
+set "foundReqList="
+if exist %requirements_file% (
+    :: Schleife zum Überprüfen der Bibliotheken
+    for %%L in (%libs_to_check%) do (
+        set /a total_count+=1
+        REM echo Checking for %%L in %requirements_file%...
+        findstr /i "%%L" %requirements_file% >nul
+        if !errorlevel! neq 0 (
+            set "foundReqList=!foundReqList![Missing]%%L "
+            echo [Error] %%L is missing in %requirements_file%.
+        ) else (
+            set "foundReqList=!foundReqList![X]%%L "
+            set /a found_count+=1
+        )
+    )
+)
 echo.
-echo =======================================================
-echo 			MENU		
-echo =======================================================
+set "dependencies="
+if %check1% GTR 0 (echo [Missing] %check1Text% & echo.) else (set "dependencies=!dependencies![X]%check1Text% ")
+if %check2% GTR 0 (echo [Missing] %check2Text% & echo.) else (set "dependencies=!dependencies![X]%check2Text% ")
+if %check3% GTR 0 (echo [Missing] %check3Text% & echo.) else (set "dependencies=!dependencies![X]%check3Text% ")
+if %check4% GTR 0 (echo [Missing] %check4Text% & echo.) else (set "dependencies=!dependencies![X]%check4Text% ")
+if %check5% GTR 0 (echo [Missing] %check5Text% & echo.) else (set "dependencies=!dependencies![X]%check5Text% ")
+echo = [%checkInt%/%CheckSum%] !dependencies!
+echo = [%found_count%/%total_count%] !foundReqList!
+echo.
+echo Hello %username% (^^_^^)
+echo =======================================================================================
+echo 			    MENU
+echo =======================================================================================
 :MENU
-echo [1] Start App "%appToStart%"
+echo [1] Start App
 echo.
 echo [2] Start Virtual Environment
+echo.
 echo [3] Install Requirements
 echo [4] Install Extras
 echo .
@@ -141,9 +171,9 @@ call %venvDir%\Scripts\activate
 
 :: Installieren von Abhängigkeiten
 echo installing necessary dependencies...
-if exist requirements.txt (
+if exist %requirements_file% (
     pip install --upgrade pip
-    pip install -r requirements.txt
+    pip install -r %requirements_file%
 ) else (
     echo "requirements.txt" not found, please make sure it exists!
     pause
@@ -187,7 +217,8 @@ pause >nul
 goto END
 :COPYTOGIT
 ::1 -> GIT HUB PATH
-set "copyToPath=G:\Github Projects\Beans-Deployment-Team\Elias\Test_Share_AML-Endpoint-Testing-Tool"
+set "copyToPath=G:\Github Projects\Beans-Deployment-Team\Endpoint-Testing-Tool"
+if not exist "%copyToPath%" (echo [ERROR] copyToPath="%copyToPath%" doesn't exist & pause >nul)
 ::
 echo Do you want to copy the project to Github or your Desktop? [1 = G. / 2 = D.]
 set "wannaCopy="
@@ -206,14 +237,19 @@ set /a "checkInt=0"
 REM ----------------------------------
 ::2
 set "copy1=requirements.txt"
+if not exist "%copy1%" (echo [ERROR] copy1="%copy1%" doesn't exist & pause >nul)
 ::3
 set "copy2=fonts"
+if not exist "%copy2%" (echo [ERROR] copy2="%copy2%" doesn't exist & pause >nul)
 ::4
 set "copy3=static"
+if not exist "%copy3%" (echo [ERROR] copy1="%copy3%" doesn't exist & pause >nul)
 ::5
 set "copy4=templates"
+if not exist "%copy4%" (echo [ERROR] copy4="%copy4%" doesn't exist & pause >nul)
 ::6
 set "copy5=%appToStart%"
+if not exist "%copy5%" (echo [ERROR] copy5="%copy5%" doesn't exist & pause >nul)
 REM ----------------------------------
 set /a "checkSum=6"
 if exist "%copyToPath%" (echo EXIST: "%copyToPath%" & set /a "checkInt=%checkInt%+1") 
@@ -223,6 +259,9 @@ if exist "%copy3%" (echo EXIST: "%copy3%" & set /a "checkInt=%checkInt%+1")
 if exist "%copy4%" (echo EXIST: "%copy4%" & set /a "checkInt=%checkInt%+1") 
 if exist "%copy5%" (echo EXIST: "%copy5%" & set /a "checkInt=%checkInt%+1") 
 echo [INFO] EXIST STATUS [%checkInt%/%checkSum%]
+echo. 
+echo Press any key to continue...
+pause >nul
 echo.
 if %checkInt%==%checkSum% (
     echo everything exists copy process ist starting...

@@ -533,7 +533,7 @@ def test_route():
             else:
                 status_message = f"Fehler bei der Anfrage: {response.status}. Dauer: {duration} Sekunden"
                 svg_class = 'error'  # Setze die Klasse auf 'error' für rot
-            return render_template('test_html_gui.html', status_message=status_message, svg_class=svg_class) #, result=response_json -> Nicht notwendig momentan
+            return render_template('test_html_gui.html', status_message=status_message, svg_class=svg_class)
     
     except urllib.error.HTTPError as e:
         return f"HTTP-Fehler: {e.code} - {e.read().decode('utf-8')}"
