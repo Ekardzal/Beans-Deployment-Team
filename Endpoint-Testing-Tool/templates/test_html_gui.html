@@ -66,31 +66,18 @@
 
 		.separated {border-top: 1px solid #ddd; padding-top: 10px; margin-top: 20px;}
 		/* Optional: Container für Text und Statusleuchte */
-		.status-container {display: flex; /* Stellt sicher, dass die Elemente nebeneinander sind */ align-items: center; /* Vertikal ausrichten */ font-size:20px; margin-right:auto; margin-left:auto;}
-		.status-light {width: 20px; height: 20px; border-radius: 50%; background-color: grey; /* Startfarbe (grau) */ transition: background-color 0.5s; /* Sanfter Übergang der Farben */ margin-left:10px;}
+		.status-container {display: flex; align-items: center; font-size:20px; margin-right:auto; margin-left:auto;}
+		.status-light {width: 20px; height: 20px; border-radius: 50%; background-color: grey; transition: background-color 0.5s; /* Sanfter Übergang der Farben */ margin-left:10px;}
 		.status-light.valid {background-color: green;}
 		.status-light.invalid {background-color: red;}
 		.status-light.missing {background-color: yellow;}
 		.image-preview {border:0px solid black; position:relative; display: flex; justify-content: center; align-items: center; margin:0; width:97%; min-width:97%; max-width:97%;height:97%;min-height:90%;max-height:97%; margin-left:auto; margin-right:auto; object-fit:cover; overflow:auto;}
 		.image-preview img {width:auto;height:auto;min-width:20vw;max-width:100%;max-height:100%;margin-right:auto;margin-left:auto;}
-		/* Grundstil für die Labels */
 		.info-label {position: relative; cursor: pointer; font-size: clamp(12px, 1vw, 24px);}
-		/* Tooltip (Dropdown) Stil, der standardmäßig unsichtbar ist */
-		.info-label::after {content: attr(data-tooltip); min-width:8vw; max-width:300px; position:absolute; bottom: -50px; left:50px;  background-color: rgba(0, 0, 0, 0.7); color: white; padding: 5px 10px; border-radius: 5px; font-size: 12px; display: none; opacity: 0; transition: opacity 0.5s ease; transform: translate(-10%);}
+		.info-label::after {content: attr(data-tooltip); z-index:999; min-width:8vw; max-width:300px; position:absolute; bottom: -50px; left:50px;  background-color: rgba(0, 0, 0, 0.7); color: white; padding: 5px 10px; border-radius: 5px; font-size: 12px; display: none; opacity: 0; transition: opacity 0.5s ease; transform: translate(-10%);}
 		.info-label:hover::after {display: block; opacity: 1;left: auto;}
 		.hover-label {z-index: 9999; margin:0; position:absolute; margin-top:0px; top:2%; color:black; font-size:15px;}
-		.preview-image:active {
-			position: fixed; /* Position fixieren, damit es immer im sichtbaren Bereich bleibt */
-			top: 50%; /* Vertikale Zentrierung */
-			left: 50%; /* Horizontale Zentrierung */
-			transform: translate(-50%, -50%);
-			width: 60vw; /* Breite auf 75% der Viewport-Breite setzen */
-			height:auto;
-			max-height:90vh;
-			background-color: black; /* Optional, je nachdem, ob du eine Hintergrundfarbe willst */
-			z-index: 10; /* Stellt sicher, dass das Bild über anderen Elementen liegt */
-			transition: all 0.1s ease;
-		}
+		.preview-image:active {position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 60vw; height:auto; max-height:90vh; background-color: black;  z-index: 10; transition: all 0.1s ease;}
 	</style>
 </head>
 <body>

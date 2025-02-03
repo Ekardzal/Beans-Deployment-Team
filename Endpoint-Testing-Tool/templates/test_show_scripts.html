@@ -8,13 +8,15 @@
 		html {background-color:white;}
 		body {font-family: 'Lato', sans-serif; overflow-x: hidden; width: 100vw; height: 100%; text-align: center; font-size: 10px; margin: 0px; padding: 0px;}
 		h1, h2, h3 {margin-left:10px; margin-right:10px;}
-		table {border:solid black 0px; margin-left:auto; margin-right:auto; min-width:90%;}
-		th {border:solid black 0px; font-size:20px;}
+		table {border:solid black 0px; margin-left:auto; margin-right:auto; min-width:90%;    border-collapse: collapse background-color: #f1f5f9;}
+		th {border: 1px solid #ddd; font-size:18px; padding:0; margin:0; background-color:grey;background-color: #ffffff; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.06); /* Subtiler Bodenschatten */border-radius: 8px;}
 		td {border:solid black 0px;}
 		li { float:left; font-family:'Trebuchet MS'; margin-left:15px; margin-top:7px; margin-bottom:7px;}
 		li a {color:white; text-align:center; text-decoration:none; font-size:20px;}
 		li a:hover {color:#049ce4; border-bottom: 2px solid #049ce4;}
-		pre {text-align:left; padding:10px; margin:0; width:100%;}
+		pre {text-align:left; padding-left:15px; padding-right:15px; margin:0; width:100%}
+		code {padding:0; margin:0;}
+		#content1 #content2 #content3 #content4 #content5 {margin-top:-150px; margin-bottom:0;}
 
 		.banner {background-color:#004e9e; width:100vw; padding-top:3px; margin-left: auto; margin-right: auto; border-bottom:2px black solid;}  /*background: rgba(1, 1, 18, 0.8)*/
 		.bannerUl {width:80%; overflow:hidden; margin:0; top:0; margin-left:auto; margin-right:auto; list-style-type:none; border-radius:5px;} /*background-color:#004e9e;*/
@@ -34,14 +36,8 @@
 		.dropdown:hover .dropdown-content {display: block;}
 		.dropdown:hover .dropbtn {color:#049ce4; border-bottom: 2px solid #049ce4;}
 		.active {color:#049ce4; border-bottom: 2px solid #049ce4;}
-
-		#loading {
-      display: none; /* Startet als unsichtbar */
-      font-size: 20px;
-      color: blue;
-      text-align: center;
-      margin-top: 20px;
-    }
+		.divMarginAuto {padding-left:50px;display: flex;             /* Flexbox für Zentrierung */justify-content: center;   /* Horizontale Zentrierung */align-items: center;       /* Vertikale Zentrierung (optional, falls Container eine Höhe hat) */overflow-x: auto;          /* Ermöglicht horizontales Scrollen bei Überlauf */max-width: 100%;           /* Verhindert, dass der Container größer als der Viewport wird */padding: 1rem;             /* Optionale Polsterung */box-sizing: border-box;  }
+		#loading {display: none; font-size: 20px; color: black; text-align: center; margin-top: 20px; background:rgba(4, 156, 228, 0.7);}
 	</style>
 </head>
 <body>
@@ -73,18 +69,19 @@
 	<div class="content">
 		<br><br><br>
 		<!-- Buttons für Textwechsel -->
-		<button id="button1" class="rounded-button">Error Codes</button>
-		<button id="button2" class="rounded-button">"scoring.py" | ver0.1-TI</button>
-		<button id="button3" class="rounded-button">"scoring.py" | ver0.1-TR</button>
-		<button id="button4" class="rounded-button">"scoring.py" | 12.01.25 - Ti+Tr | DEPLOYED</button>
-		<button id="button5" class="rounded-button">openapi.yaml</button>
+		<button style="display:none;" id="button1" class="rounded-button">Error Codes</button>
+		<button style="display:none;" id="button2" class="rounded-button">"scoring.py" | ver0.1-TI</button>
+		<button id="button3" class="rounded-button">Vorlage_scoring.py_LET_250121</button>
+		<button style="display:none;" id="button4" class="rounded-button">"scoring.py" | 12.01.25 - Ti+Tr | DEPLOYED</button>
+		<button id="button5" class="rounded-button">EK_21.01.25_scoring.py</button>
+		<div class="divMarginAuto">
 		<table>
 			<tr>
 				<th>
 					<pre>
 						<code>
     <!-- Bereiche für Textanzeige -->
-	<div id="content1">
+	<div id="content1" style="display:none;">
 [Mögliche HTTP Fehlercodes]
 
 [HTTP-Fehler: 424]
@@ -177,8 +174,8 @@ def run(datarecieved): #funktioniert nur, wenn es data mit "image" gibt, dass zu
 	else:
 		return AMLResponse("Fehlende oder ungueltige Eingabe", 400)
     </div>
-    <div id="content3" style="display: none;">
-["Erster Versuch Scoring Script" | Entstehung: ca. 12.01.25 | Ersteller: Tristan]
+    <div id="content3" style="display:none;">
+[EK: Vorlage für Scoring Script Versuche - Start: 21.01.25]
 
 import os
 from ultralytics import YOLO
@@ -193,7 +190,7 @@ from PIL import Image
 import base64
 import io
 from io import BytesIO
-import urllib.request
+# Entfernt "import urllib.request" - 21.01.25
 
 errorlog = []
 client = ImageAnalysisClient(endpoint="https://wayt-azureocr.cognitiveservices.azure.com/",
@@ -299,15 +296,94 @@ def run(datarecieved): #funktioniert nur, wenn es data mit "image" gibt, dass zu
     <div id="content4" style="display: none;">
 		In Process...
     </div>
-	<div id="content5" style="display: none;">
-		In Process...
+	<div id="content5" style="">
+[EK_21.05.25_scoring.py]
+
+import os
+from ultralytics import YOLO
+import json
+import logging
+from azureml.contrib.services.aml_request import AMLRequest, rawhttp
+from azureml.contrib.services.aml_response import AMLResponse
+from azure.ai.vision.imageanalysis import ImageAnalysisClient
+from azure.ai.vision.imageanalysis.models import VisualFeatures
+from azure.core.credentials import AzureKeyCredential
+from PIL import Image
+import base64
+import io
+from io import BytesIO
+import urllib.request
+
+errorlog = []
+client = ImageAnalysisClient(endpoint="https://wayt-azureocr.cognitiveservices.azure.com/",
+credential=AzureKeyCredential("8bkM3LvovG72sEnfdZHZK0B30U0zdRtxAEEJipqZ1loIfHaoTDVNJQQJ99ALAC5RqLJXJ3w3AAAFACOGYosD"))
+clientstring = "client registered."
+errorlog.append(clientstring)
+
+
+def init():
+	global model
+
+	model_path = os.path.join(os.getenv("AZUREML_MODEL_DIR"), "best.pt")
+	model = YOLO(model_path)
+	clientstring = "YOLO loaded."
+	errorlog.append(clientstring)
+
+
+@rawhttp
+def run(datarecieved): #funktioniert nur, wenn es data mit "image" gibt, dass zu einem image file decodet werden kann
+	if (datarecieved.method == "POST"):
+		try:
+			json_result = []
+			jsondict = {}
+			recieved = json.loads(datarecieved.data)
+			clientstring = "request recieved"
+			errorlog.append(clientstring)
+			im_b64 = recieved["image"]
+			im_bytes = base64.b64decode(im_b64)
+			image = Image.open(io.BytesIO(im_bytes))
+			width, height = image.size
+			clientstring = "image loaded." + repr(width) + "x" + repr(height)
+			errorlog.append(clientstring)
+
+
+			clientstring = "prediction result for image"
+			errorlog.append(clientstring)
+			result = model(image)
+			json_result.append(json.loads(result[0].to_json()))
+			clientstring = "dumping results."
+			errorlog.append(clientstring)
+			boxing = result[0].boxes.xyxy
+			for box in boxing:
+				clientstring = "finding text..."
+				errorlog.append(clientstring)
+				byted = BytesIO()
+				cropped = image.crop(box.tolist())
+				cropped.save(byted, recieved["ext"])
+				imagebytes = byted.getvalue()
+				OCRresult = client.analyze(image_data=imagebytes, visual_features=[VisualFeatures.READ])
+				json_result.append(OCRresult.as_dict())
+				#json.dump(OCRresult.as_dict(), json_result)
+				clientstring = "dumping text in json"
+				errorlog.append(clientstring)
+
+			jsondict = {"predictions:":json_result}
+			package = str.encode(json.dumps(jsondict))
+			return AMLResponse(package, 200)
+		except Exception as e:
+			logging.debug(repr(e))
+			return AMLResponse(("Interner Serverfehler. " + repr(e) + repr(errorlog)), 500)
+
+	else:
+		return AMLResponse("Fehlende oder ungueltige Eingabe", 400)
     </div>
 
 						</code>
-					<pre>
+					</pre>
 				</th>
 			</tr>
 		</table>
+		</div>
 	</div>
 	<script>
         // Funktionen zum Ändern des angezeigten Textes
