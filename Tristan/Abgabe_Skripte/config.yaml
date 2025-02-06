@@ -1,0 +1,13 @@
+
+path: C:\Users\...\images                #Pfad zu dem Ueberordner der Bilder und Label
+train: C:\Users\...\images\train         #Pfad zum Unterverzeichnis train -> werden fuers Training verwendet
+val: C:\Users\...\images\val             #Pfad zum Unterverzeichnis val -> werden fuers Validieren verwendet
+
+names:                                   #Auflistung der Klassenname
+  0: Dose1                               #Klasse fuer die Dose
+  1: Label                               #Klasse fuer die Kabellabel
+
+
+
+
+  
