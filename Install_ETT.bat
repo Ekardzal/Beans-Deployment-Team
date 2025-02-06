@@ -12,8 +12,8 @@ set "destination=%userprofile%\OneDrive\Desktop\"
 if not exist "%destination%\%projectFolder%" (mkdir "%destination%\%projectFolder%")
 set "destination=%destination%%projectFolder%"
 if not exist "%destination%" (echo [ERROR] Destination 1, 2 doesn't exist & goto ERRORPAUSE)
-set "batchToStart=Beans-TT-Setup.bat"
-set "appToStart=Test_Request_250118_17x41.py"
+set "batchToStart=Setup-ETT.bat"
+set "appToStart=ETT.py"
 ::BATCH 
 set "file1=%projectFolder%\%batchToStart%"
 ::ALL OTHER FILES
