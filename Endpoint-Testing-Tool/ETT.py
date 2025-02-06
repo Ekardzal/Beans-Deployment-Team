@@ -19,6 +19,7 @@ import sqlitecloud
 import dropbox
 import logging
 logging.basicConfig(level=logging.DEBUG)
+#Last Time Edited: 03.02.2025 - 22:21
 
 app = Flask(__name__)
 
@@ -300,7 +301,7 @@ def encode_image(image_file):
 url = "https://end.westeurope.inference.ml.azure.com/score"
 
 # API-Schlüssel (ersetze mit deinem tatsächlichen Schlüssel)
-api_key = 'NLBHsesgjYRkev4IWqj0fASuXu3PlsVi'
+api_key = 'ldrG2x7xuTRZfKyyI4tHW9YcPZDdh0fT'
 
 # Funktion, um die predictions zu formatieren
 def extract_relevant_data(predictions_data):
@@ -388,7 +389,7 @@ def analyse():
          # Extrahiere die erkannten Klassen und Confidence-Werte
         detected_classes = []
         bounding_boxes = []
-        for prediction in response_json.get('predictions:', []):
+        for prediction in response_json.get('predictions', []):
             if isinstance(prediction, list):
                 for pred in prediction:
                     class_name = pred.get('name', 'Unbekannt')
