@@ -3,12 +3,12 @@ from ultralytics import YOLO
 import matplotlib.pyplot as plt
 import csv
 #------------------------------------------------------------------------------------------------------------#
-#Das ist ein script, das mit matplotlib nacheinander Graphen generiert. um den nächsten zu sehen, musst der alte geschlossen werden.
+#Das ist ein script, das mit matplotlib nacheinander Graphen generiert. um den nÃ¤chsten zu sehen, musst der alte geschlossen werden.
 #Das Fenster, in dem der Graph generiert wird hat verschiedene Funktionen, unter anderem das Resizen vom Viewport(das Fenster) und das abspeichern.
 #die Graphen sind mit Bindestrichen abgetrennt.
-#Weitere Graphen in sprinting.py
+#Weitere Graphen in Graphs2.py
 #------------------------------------------------------------------------------------------------------------#
-# öffnen und auslesen eines CSV files, wobei die werte in der 2. Reihe sind und alles, was nicht ein "Wert" (z.B. String) ist ignoriert wird und zur nächsten Zeile gesprungen wird
+# Ã¶ffnen und auslesen eines CSV files, wobei die werte in der 2. Reihe sind und alles, was nicht ein "Wert" (z.B. String) ist ignoriert wird und zur nÃ¤chsten Zeile gesprungen wird
 con = []
 with open("trainingresults\preAugRES\smallset30.aug\sorted_results.csv", "r", newline="") as file:
     reader = csv.reader(file)
@@ -29,7 +29,7 @@ average_normal = np.average((con[5], con[11], con[17], con[22]))
 label_container = ["normal", "heller (n = 2)", "dunkler", "blur", "gruen", "blau"]
 value_container = [average_normal, average_heller, average_dunkler, average_blur, average_gruen, average_blau]
 color_container = ["#004e9e", "#4a9edd", "#003366", "#72A0C1", "tab:green", "#004e9e"]
-#vergleichen von verschiedenen prediction ergebnissen auf augmentation (Säulendiagramm)
+#vergleichen von verschiedenen prediction ergebnissen auf augmentation (SÃ¤ulendiagramm)
 fig, ax = plt.subplots()
 bar_container = ax.bar(label_container,
        value_container,
@@ -39,7 +39,7 @@ ax.set_ylim(0.7, 1)
 ax.set_yticks(np.arange(0.7, 1, 0.03))
 ax.set_ylabel("confidence")
 ax.set_title("Durchschnittliche Confidence je Augmentierungsart\nVerwendete Bilder je Augmentierungsart: 4")
-#fig.set_size_inches(8.5, 5) #für einen besseren viewport falls gebraucht
+#fig.set_size_inches(8.5, 5) #fÃ¼r einen besseren viewport falls gebraucht
 plt.show()
 del con, fig, ax
 #------------------------------------------------------------------------------------------------------------#
@@ -91,7 +91,7 @@ del fig, ax
 #------------------------------------------------------------------------------------------------------------#
 
 #------------------------------------------------------------------------------------------------------------#
-#unorthodoxes plotten eines "stacked" Histogramms -> Matplotlib hat dafür schon eine Funktion (die ich nicht nutze)
+#unorthodoxes plotten eines "stacked" Histogramms -> Matplotlib hat dafÃ¼r schon eine Funktion (die ich nicht nutze)
 fig, ax = plt.subplots()
 ax.hist(con_noAug, label="keine Augmentation", color="#004e9e")
 ax.hist(con_10epoch, alpha=0.9, label="Augmentation 10 Epochen", color="tab:orange")
@@ -106,7 +106,7 @@ del fig, ax
 #------------------------------------------------------------------------------------------------------------#
 
 #------------------------------------------------------------------------------------------------------------#
-#splitten des Histogramms auf mehrere Diagramme (weil für Farbenblinde schwer auslesbar)
+#splitten des Histogramms auf mehrere Diagramme (weil fÃ¼r Farbenblinde schwer auslesbar)
 fig, (ax, bx) = plt.subplots(1, 2, sharex=True)
 ax.hist(con_noAug, label="keine Augmentation", color="#004e9e")
 
