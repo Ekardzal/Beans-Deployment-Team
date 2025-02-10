@@ -23,6 +23,12 @@ logging.basicConfig(level=logging.DEBUG)
 
 app = Flask(__name__)
 
+# Endpoint-URL (ersetze mit deinem tatsächlichen Endpoint)
+url = "https://endpoint-dose.westeurope.inference.ml.azure.com/score"
+
+# API-Schlüssel (ersetze mit deinem tatsächlichen Schlüssel)
+api_key = 'm57kaZd2nXYAvhSOu0d9VsHX6ATjRbCC'
+
 # URL für Swagger-UI und Pfad zur OpenAPI-Datei
 SWAGGER_URL = '/swagger'
 API_SPEC_URL = '/static/openapi.yaml'
@@ -296,12 +302,6 @@ def encode_image(image_file):
     """
     logging.debug("------------------------------------------ Encoding image to base64.")
     return base64.b64encode(image_file.read()).decode("utf-8")
-
-# Endpoint-URL (ersetze mit deinem tatsächlichen Endpoint)
-url = "https://end.westeurope.inference.ml.azure.com/score"
-
-# API-Schlüssel (ersetze mit deinem tatsächlichen Schlüssel)
-api_key = 'ldrG2x7xuTRZfKyyI4tHW9YcPZDdh0fT'
 
 # Funktion, um die predictions zu formatieren
 def extract_relevant_data(predictions_data):
