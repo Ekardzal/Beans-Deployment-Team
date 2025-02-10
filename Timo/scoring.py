@@ -1,98 +1,114 @@
 import os
-from ultralytics import YOLO 
+from ultralytics import YOLO  # YOLO-Modell für Objekterkennung importieren
 import json
 import logging
-from azureml.contrib.services.aml_request import AMLRequest, rawhttp
-from azureml.contrib.services.aml_response import AMLResponse
-from azure.ai.vision.imageanalysis import ImageAnalysisClient
-from azure.ai.vision.imageanalysis.models import VisualFeatures
-from azure.core.credentials import AzureKeyCredential
-from PIL import Image
-import base64
-import io
-from io import BytesIO
+from azureml.contrib.services.aml_request import AMLRequest, rawhttp  # AzureML Request Handling
+from azureml.contrib.services.aml_response import AMLResponse  # AzureML Response Handling
+from azure.ai.vision.imageanalysis import ImageAnalysisClient  # Azure OCR Client für Texterkennung
+from azure.ai.vision.imageanalysis.models import VisualFeatures  # Visuelle Features für OCR-Analyse
+from azure.core.credentials import AzureKeyCredential  # Azure-Authentifizierung
+from PIL import Image  # Bildverarbeitung mit PIL
+import base64  # Base64-Kodierung/-Dekodierung für Bilder
+import io  # Ein-/Ausgabeoperationen
+from io import BytesIO  # Verarbeitung von Byte-Daten
 
-#error log wird zu debuggen genutzt
-#ImageAnalaysisClient Klassenaufruf funktioniert nicht in init (glaube ich), deswegen außerhalb
+# Fehlerprotokoll-Liste
 errorlog = []
-client = ImageAnalysisClient(endpoint="https://wayt-azureocr.cognitiveservices.azure.com/", credential=AzureKeyCredential("8bkM3LvovG72sEnfdZHZK0B30U0zdRtxAEEJipqZ1loIfHaoTDVNJQQJ99ALAC5RqLJXJ3w3AAAFACOGYosD"))
+
+# Azure OCR-Client initialisieren
+client = ImageAnalysisClient(
+    endpoint="https://endpoint-d-ocr.cognitiveservices.azure.com/",
+    credential=AzureKeyCredential("CxcppgVbJYyNqF1T6fQSuQyzLzvrApNwcGSnEmIX6G4fdAxlxtVKJQQJ99BBACPV0roXJ3w3AAAFACOGJjE5")
+)
 errorlog.append("client registered.")
 
-#init() wird zum festlegen von globalen Variablen genutzt. In Azure wird Init als erste Funktion automatisch aufgerufen. Die Funktion ist zwingend Notwendig.
+# Funktion zum Initialisieren des YOLO-Modells
 def init():
-    global model
+    global model  # Globale Modellvariable
     try:
-        model_path = os.path.join(os.getenv("AZUREML_MODEL_DIR"), "best.pt") #AZUREML_MODEL_DIR ist eine Default Enviroment Variable in Azure, und zeigt auf das folder vom ausgewählten Model. (wenn es z.B. in nem Unterordner innerhalb des Models ist dann ist der path "Unterordner/best.pt")
-        model = YOLO(model_path) #YOLO modell wird initialisiert
+        model_path = os.path.join(os.getenv("AZUREML_MODEL_DIR"), "best.pt")  # Modellpfad ermitteln
+        model = YOLO(model_path)  # YOLO-Modell laden
         errorlog.append("YOLO loaded.")
     except Exception as e:
-        model = None
+        model = None  # Falls Fehler auftritt, Modell auf None setzen
         errorlog.append(f"Model loading failed: {repr(e)}")
 
-
-#run() wird aufgerufen, sobald ein(e?) Payload mit einem korrekten API key an die API gesendet wird, mit dem Payload als Parameter. Die Funktion ist zwingend Notwendig.
-@rawhttp
-def run(datarecieved): #funktioniert nur, wenn es data mit "image" gibt, dass zu einem image file decodet werden kann (und mit der POST methode gesendet wurde)
-
+@rawhttp  # Funktion als raw HTTP-Handler definieren
+def run(datarecieved):  # Verarbeitet HTTP-POST-Anfragen mit Bilddaten
     if (datarecieved.method == "POST"):
         try:
-
-            json_result = []
+            json_result = []  # Ergebnisse speichern
             jsondict = {}
-            recieved = json.loads(datarecieved.data) #payload wird geladen
+            recieved = json.loads(datarecieved.data)  # Eingehende JSON-Daten parsen
             errorlog.append("request received")
-            if recieved.get("image", None) is None: #kein key mit den name "image" wurde gefunden
+
+            # Überprüfung, ob das Bild in der Anfrage enthalten ist
+            if recieved.get("image", None) is None:
                 return AMLResponse("Request Timeout. The 'image' key is missing from the request.", 408)
 
-            if not model: #die globale variable "model" ist "Null"
+            # Überprüfung, ob das Modell geladen wurde
+            if not model:
                 errorlog.append("Failed Dependency: Model not loaded")
                 return AMLResponse("Failed Dependency. Model is not loaded.", 424)
-            im_b64 = recieved["image"]
-            im_bytes = base64.b64decode(im_b64) #das Bild wird zum Bytes Objekt dekodiert, damit es von BytesIO gestreamt werden kann und dieser Stream von Pillow geöffnet werden kann
-            image = Image.open(io.BytesIO(im_bytes))
-            width, height = image.size
 
-            file_extension = f"{image.format}" if image.format in ["JPEG", "PNG"] else None #file extention wird determiniert. Im Moment werden nur jpg/jpeg und PNG supportet weil das die gängigsten sind
-                                                                                               #JPG = JPEG = jpeg
-            if file_extension is None: #nicht JPEG oder PNG
+            # Base64-dekodiertes Bild verarbeiten
+            im_b64 = recieved["image"]  # Base64-kodiertes Bild aus JSON extrahieren
+            im_bytes = base64.b64decode(im_b64)  # Bild dekodieren
+            image = Image.open(io.BytesIO(im_bytes))  # Bild in ein PIL-Image umwandeln
+            width, height = image.size  # Bildgröße abrufen
+
+            # Unterstützte Dateiformate prüfen
+            file_extension = f"{image.format}" if image.format in ["JPEG", "PNG", "BMP", "WEBP", "TIFF", "JPG"] else None
+
+            if file_extension is None:
                 errorlog.append(f"Unsupported media type: {file_extension or 'unknown'}")
-                return AMLResponse("Unsupported Media Type. Only .jpg, .jpeg, and .png are supported.", 415)
+                return AMLResponse("Unsupported Media Type. Only .jpg, .jpeg, .png, .bmp, .webp, and .tiff are supported.", 415)
+            
             errorlog.append(f"image loaded: {width}x{height}")
             
-            
+            try:
+                errorlog.append("Starting YOLO prediction...")
+                result = model(image)  # YOLO-Vorhersage ausführen
+                errorlog.append("YOLO prediction completed successfully.")
 
-            errorlog.append("prediction result for image")
-            result = model(image) #inference mit dem YOLO Modell
-            json_result.append(json.loads(result[0].to_json())) #ergebnisse als json an json_result appended (to_json() ist ein string und kein dictionary!)
-            errorlog.append("dumping results.")
-            boxing = result[0].boxes.xyxy #xy Koordinaten der Bounding Boxen auf Koordinatensystem als TORCH TENSOR
+                try:
+                    json_result.append(json.loads(result[0].to_json()))  # Ergebnisse in JSON umwandeln
+                    errorlog.append("YOLO results successfully converted to JSON.")
+                except Exception as e:
+                    errorlog.append(f"Error converting YOLO results to JSON: {repr(e)}")
+                    return AMLResponse("Internal Server Error: Failed to process YOLO results.", 500)
+
+            except Exception as e:
+                errorlog.append(f"YOLO prediction failed: {repr(e)}")
+                return AMLResponse("Internal Server Error: YOLO prediction failed.", 500)
+            
+            # Bounding Boxes extrahieren
+            boxing = result[0].boxes.xyxy
             for box in boxing:
                 errorlog.append("finding text...")
                 byted = BytesIO()
-                cropped = image.crop(box.tolist()) #.tolist() transformiert Torch Tensor zur Liste
-                cropped.save(byted, image.format)
+                cropped = image.crop(box.tolist())  # Bereich mit Bounding Box ausschneiden
+                cropped.save(byted, image.format)  # Geschnittenes Bild speichern
                 imagebytes = byted.getvalue()
                 
-                try: #Inference mit Azure Vision (AzureOCR)
+                try:
+                    # Azure OCR-Analyse für den Bereich durchführen
                     OCRresult = client.analyze(image_data=imagebytes, visual_features=[VisualFeatures.READ])
-                    OCR_lines = {                                       #nur bestimmte Werte werden weitergegeben (um die größe der response zu reduzieren)
-                        "lines": OCRresult.as_dict().get("lines", []),
-                        "metadata": OCRresult.as_dict().get("metadata", {}),
-                        "language": OCRresult.as_dict().get("language", None)
-                    }
-                    json_result.append(OCR_lines)
+                    
+                    # OCR-Ergebnisse verarbeiten
+                    json_result.append(OCRresult.as_dict())
                     errorlog.append("dumping text in json")
                 except Exception as e:
                     errorlog.append(f"OCR analysis failed: {repr(e)}")
                     return AMLResponse("Failed to analyze the image for OCR. Please try again.", 500)
 
-            jsondict = {"predictions:":json_result}
-            package = str.encode(json.dumps(jsondict))
-            return AMLResponse(package, 200)
-        except Exception as e: #irgend was unerwartetes ist passiert -> error log
+            # Ergebnisse in JSON-Dictionary speichern
+            jsondict = {"predictions": json_result}
+            package = str.encode(json.dumps(jsondict))  # JSON in Bytes umwandeln
+            return AMLResponse(package, 200)  # Erfolgreiche Antwort zurückgeben
+        except Exception as e:
             logging.debug(repr(e))
-            return AMLResponse(("Internal Server Error. " + repr(e) + repr(errorlog)), 500)
-        
-    else: #hast du die POST methode verwendet?
-        return AMLResponse("Invalid or Missing input.", 400)
+            return AMLResponse(("Internal Server Error. " + repr(e) + repr(errorlog)), 500)  # Fehlerbehandlung
+    else:
+        return AMLResponse("Invalid or Missing input.", 400)  # Fehlermeldung für ungültige Anfragen
 
