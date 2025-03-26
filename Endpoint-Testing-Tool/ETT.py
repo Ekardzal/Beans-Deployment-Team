@@ -24,10 +24,10 @@ logging.basicConfig(level=logging.DEBUG)
 app = Flask(__name__)
 
 # Endpoint-URL (ersetze mit deinem tatsächlichen Endpoint)
-url = "https://endpoint-dose.westeurope.inference.ml.azure.com/score"
+url = "https://endpunkt-mjyxx.germanywestcentral.inference.ml.azure.com/score"
 
 # API-Schlüssel (ersetze mit deinem tatsächlichen Schlüssel)
-api_key = 'm57kaZd2nXYAvhSOu0d9VsHX6ATjRbCC'
+api_key = 'EOLqlbiHInFPB2qj5s7L0mqZHWvxOnoASrgub3odRS3tpaTuhoN0JQQJ99BCAAAAAAAAAAAAINFRAZML3lyt'
 
 # URL für Swagger-UI und Pfad zur OpenAPI-Datei
 SWAGGER_URL = '/swagger'

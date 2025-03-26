@@ -3,6 +3,8 @@ setlocal enabledelayedexpansion
 SET "EDITED=LAST TIME EDITED [30.01.25] - [22:34]"
 :START
 REM ADAPTABLE VARIABLES - CHANGE HERE !!!
+:: Pfad der lokalen python Version
+set "PYTHON_PATH=C:\Users\Tharwion\AppData\Local\Programs\Python\Python312\python.exe"
 :: Name der zu startenden App
 set "appToStart=ETT.py"
 :: Port zum Starten der WebApp
@@ -101,6 +103,9 @@ if %check4% GTR 0 (echo [Missing] %check4Text% & echo.) else (set "dependencies=
 if %check5% GTR 0 (echo [Missing] %check5Text% & echo.) else (set "dependencies=!dependencies![X]%check5Text% ")
 echo = [%checkInt%/%CheckSum%] !dependencies!
 echo = [%found_count%/%total_count%] !foundReqList!
+echo. 
+python --version
+pip --version
 echo.
 echo Hello %username% (^^_^^)
 echo =======================================================================================
@@ -110,9 +115,11 @@ echo ===========================================================================
 echo [1] Start App
 echo.
 echo [2] Start Virtual Environment
+echo [3] Pip List
 echo.
-echo [3] Install Requirements
-echo [4] Install Extras
+echo [4] Install Requirements
+echo [5] Install Extras
+echo [6] Upgrade Pip
 echo .
 set "input"=""
 set /p input=:
@@ -120,8 +127,10 @@ if "%input: =%"=="" (goto START)
 if "%input%"=="" (goto START) 
 if "%input%"=="1" (goto STARTAPP)
 if "%input%"=="2" (goto STARTVENV)
-if "%input%"=="3" (goto CREATEVENV)
-if "%input%"=="4" (goto INSTALLEXTRAS)
+if "%input%"=="3" (goto PIPLIST)
+if "%input%"=="4" (goto CREATEVENV)
+if "%input%"=="5" (goto INSTALLEXTRAS)
+if "%input%"=="6" (goto UPGRADEPIP)
 if "%input%"=="X" (goto CHECKREQ)
 if "%input%"=="git" (goto COPYTOGIT)
 goto START
@@ -148,6 +157,15 @@ start /b venv\Scripts\activate
 ) else (echo Can't find "%cd%\venv")
 pause >nul
 goto END
+:PIPLIST
+echo.
+if exist "%cd%\venv" (
+cd /d "%cd%"
+call venv\Scripts\activate
+) else (echo Can't find "%cd%\venv")
+pip list
+pause >nul
+goto START
 :CREATEVENV
 echo.
 echo installing python dependencies...
@@ -170,6 +188,7 @@ echo installing necessary dependencies...
 if exist %requirements_file% (
     pip install --upgrade pip
     pip install -r %requirements_file%
+	python -m pip install --upgrade pip
 ) else (
     echo "requirements.txt" not found, please make sure it exists!
     pause
@@ -188,6 +207,41 @@ if "%wannaStart%"=="1" (goto STARTAPP)
 if "%wannaStart%"=="2" (goto END)
 goto END
 :INSTALLEXTRAS
+echo Create venv
+%PYTHON_PATH% -m venv %venvDir%
+echo.
+echo CD: %cd%
+echo.
+:: Aktivieren der virtuellen Umgebung
+echo activating virtual environment...
+call %venvDir%\Scripts\activate
+
+:: Installieren von Abhängigkeiten
+echo installing necessary dependencies...
+if exist %requirements_file% (
+    pip install --upgrade pip
+    pip install -r %requirements_file%
+	python -m pip install --upgrade pip
+) else (
+    echo "requirements.txt" not found, please make sure it exists!
+    pause
+    exit /b
+)
+:: Abschlussmeldung
+start http://127.0.0.1:%portWebApp%/
+if exist "%cd%\venv" (
+cd /d "%cd%"
+REM start http://127.0.0.1:%portWebApp%/
+start /b venv\Scripts\activate
+"%cd%\venv\Scripts\python.exe" "%cd%\%appToStart%"
+) else (echo Can't find "%cd%\venv")
+echo.
+echo ENDE
+pause >nul
+start /b venv\Scripts\activate
+%PYTHON_PATH% "%cd%\%appToStart%"
+pause >nul
+goto START
 echo.
 echo Are you sure, that you want to install flask-swagger-ui? [Yes = 1][No = 2]
 set /p confirmExtraInstall=:
@@ -211,6 +265,15 @@ if "%confirmExtraInstall%"=="1" (
 if "%confirmExtraInstall%"=="2" (goto END)
 pause >nul
 goto END
+:UPGRADEPIP
+echo.
+if exist "%cd%\venv" (
+cd /d "%cd%"
+call venv\Scripts\activate
+) else (echo Can't find "%cd%\venv")
+python -m pip install --upgrade pip
+pause >nul
+goto START
 :COPYTOGIT
 ::1 -> GIT HUB PATH
 set "copyToPath=G:\Github Projects\Beans-Deployment-Team\Endpoint-Testing-Tool"
