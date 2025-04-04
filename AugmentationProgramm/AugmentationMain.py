@@ -2,11 +2,12 @@
 import os
 import random
 
-from PIL import Image, UnidentifiedImageError
+from PIL import Image, UnidentifiedImageError, ImageOps
 import numpy
 
 import albumentations
 import cv2
+from albumentations import ISONoise
 
 # Directories
 inputDir = r'input'
@@ -26,11 +27,18 @@ Illumination = ('I', albumentations.Illumination(
     p=1
 ))
 PlanckianJitter = ('P', albumentations.PlanckianJitter(
-    p=1
+    p=1,
+    temperature_limit=(5100, 8500)
 ))
 GaussianBlur = ('g', albumentations.GaussianBlur(
     p=1,
     sigma_limit=(4,8)
+))
+RGBShift = ('r', albumentations.RGBShift(
+    p=1
+))
+ISONoise = ('N', albumentations.ISONoise(
+    p=1
 ))
 
 # Quantity Limits
@@ -67,9 +75,11 @@ def saveImage(_imageMeta, _augmentedImage):
     _outputTagPath = os.path.join(_imageMeta[0], _augmentedImage[1] + '_' + _imageMeta[2])
 
     cv2.imwrite(_outputImagePath, _augmentedImage[0])
-    _outputTagFile = open(_outputTagPath, "w")
-    _outputTagFile.write(_imageMeta[3])
-    _outputTagFile.close()
+
+    if not _imageMeta[3] == '':
+        _outputTagFile = open(_outputTagPath, "w")
+        _outputTagFile.write(_imageMeta[3])
+        _outputTagFile.close()
 
 # Main
 for imageName in os.listdir(inputDir):
@@ -89,10 +99,12 @@ for imageName in os.listdir(inputDir):
                             break
 
                 except Exception as e:
-                    print(f'Es konnte keine Tag-File gefunden werden.')
+                    print(f"Fehler beim einlesen von '{ tagName }': {e}")
 
             # Basebild einlesen
             imageRaw = Image.open(imagePath).convert('RGB')  # Sicherstellen, dass es RGB ist
+            r, g, b = imageRaw.split()
+            imageRaw = Image.merge('RGB', (b, g, r))
             imageData = numpy.array(imageRaw)
 
             Images = [(imageData, 'AUG_')]
@@ -101,13 +113,12 @@ for imageName in os.listdir(inputDir):
             imageMeta = (outputDir, imageName, tagName, tagData)
 
             # Augmentation
-            Images = augment(RandomContrast, Images, imageMeta)
-            Images = augment(Illumination, Images, imageMeta)
-            Images = augment(PlanckianJitter, Images, imageMeta)
 
-            Images = augmentRandom(GaussianBlur, limitBlur, Images, imageMeta)
+            Images = augmentRandom(ISONoise, (1, 1), Images, imageMeta)  # -> 2
+            Images = augmentRandom(PlanckianJitter, (1, 1), Images, imageMeta)  # -> 3
+            Images = augment(Illumination, Images, imageMeta)  # -> 6
 
         except UnidentifiedImageError:
             print(f"Warnung: Das Bild '{imagePath}' konnte nicht geladen werden.")
-        #except Exception as e:
-        #    print(f"Ein Fehler ist aufgetreten bei '{imagePath}': {e}")
+        except Exception as e:
+            print(f"Ein Fehler ist aufgetreten bei '{imagePath}': {e}")
