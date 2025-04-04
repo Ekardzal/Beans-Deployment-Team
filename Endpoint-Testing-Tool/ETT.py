@@ -170,11 +170,15 @@ def callback():
 
 # Funktion zum Erstellen der Tabelle, falls sie noch nicht existiert
 def create_table():
+    conn = None  # Initialisierung, um `finally` sicher zu machen
     try:
-        conn = sqlitecloud.connect('sqlitecloud://cecmlolvhk.g4.sqlite.cloud:8860/ett-database?apikey=t6Rw9LxLwOBziI5Ahmwxn0QDRA1PYGuU0Q2IvTYVrko')
+        # Verbindung OHNE timeout-Parameter
+        conn = sqlitecloud.connect(
+            'sqlitecloud://cecmlolvhk.g4.sqlite.cloud:8860/ett-database?apikey=t6Rw9LxLwOBziI5Ahmwxn0QDRA1PYGuU0Q2IvTYVrko'
+        )
         cursor = conn.cursor()
-        result = cursor.fetchone()
 
+        # Tabelle erstellen (falls nicht vorhanden)
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS analysis_results (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -185,15 +189,23 @@ def create_table():
                 image_url TEXT
             )
         ''')
-
         conn.commit()
         logging.debug("Tabelle 'analysis_results' erfolgreich erstellt oder existiert bereits.")
+
     except sqlitecloud.exceptions.SQLiteCloudOperationalError as e:
-        logging.error(f"Datenbankfehler bei der Tabellenerstellung: {e}")
+        logging.error(f"Datenbankverbindungsfehler: {e}")
+        raise  # Falls die App ohne DB nicht laufen soll
+
+    except Exception as e:
+        logging.error(f"Unerwarteter Fehler bei der Tabellenerstellung: {e}")
+        raise
+
     finally:
-        conn.close()
-
-
+        if conn:  # Nur schließen, wenn Verbindung existiert
+            try:
+                conn.close()
+            except Exception as e:
+                logging.warning(f"Fehler beim Schließen der DB-Verbindung: {e}")
 create_table()
 
 # Funktion zum Hochladen des Bildes zu Dropbox
