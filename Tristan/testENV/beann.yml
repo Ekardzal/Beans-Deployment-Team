@@ -1,4 +1,4 @@
-name: beans
+name: beann
 channels:
   - defaults
   - https://repo.anaconda.com/pkgs/main
