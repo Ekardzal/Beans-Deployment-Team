@@ -7,7 +7,6 @@ import numpy
 
 import albumentations
 import cv2
-from albumentations import ISONoise
 
 # Directories
 inputDir = r'input'
