@@ -7,9 +7,13 @@ import numpy
 import albumentations
 import cv2
 
-# Directories
+from colorama import Fore, Back, Style
+
+# Variables
 inputDir = r'input'
 outputDir = r'output'
+
+currentIndex = 0;
 
 # region Albumentations
 RandomBrightness = ('B', albumentations.RandomBrightnessContrast(
@@ -86,7 +90,7 @@ def generateImageMeta(_inputDir, _outputDir, _imageName):
                     break
 
         except Exception as e:
-            print(f"Fehler beim einlesen von '{_tagName}': {e}")
+            print(Fore.LIGHTRED_EX + f"Fehler beim einlesen von '{_tagName}': {e}")
 
     return (_outputDir, _imageName, _tagName, _tagData)
 #endregion
@@ -95,13 +99,14 @@ def generateImageMeta(_inputDir, _outputDir, _imageName):
 for imageName in os.listdir(inputDir):
     if imageName.endswith('.jpg') or imageName.endswith('.png'):
         imagePath = os.path.join(inputDir, imageName)
+        currentIndex += 1
         try:
             # Initialization
             Images = initializeBaseImage(imagePath)
             imageMeta = generateImageMeta(inputDir, outputDir, imageName)
 
             # Augmentation
-            print(f"Augmentiere jetzt '{ imageName }'...")
+            print(Fore.CYAN + f"[{currentIndex}]" + Style.RESET_ALL + " Augmentiere jetzt '" + imageName + "'...")
 
             Images = augment(Illumination, Images, imageMeta)  # -> 2
             Images = augment(PlanckianJitter, Images, imageMeta)  # -> 3
@@ -109,9 +114,9 @@ for imageName in os.listdir(inputDir):
 
             saveAll(Images, imageMeta)
 
-            print(f"-> erfolgreich gespeichert!")
+            print(Fore.GREEN + f"-> erfolgreich gespeichert!")
 
         except UnidentifiedImageError:
-            print(f"Warnung: Das Bild '{imagePath}' konnte nicht geladen werden.")
+            print(Fore.LIGHTRED_EX + f"Warnung: Das Bild '{imagePath}' konnte nicht geladen werden.")
         except Exception as e:
-            print(f"Ein Fehler ist aufgetreten bei '{imagePath}': {e}")
+            print(Fore.LIGHTRED_EX + f"Ein Fehler ist aufgetreten bei '{imagePath}': {e}")
