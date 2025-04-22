@@ -13,8 +13,6 @@ from colorama import Fore, Back, Style
 inputDir = r'input'
 outputDir = r'output'
 
-imageName = ''
-
 currentIndex = 0
 
 # region Albumentations
