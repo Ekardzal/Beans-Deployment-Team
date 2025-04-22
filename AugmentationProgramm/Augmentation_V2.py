@@ -45,54 +45,59 @@ ISONoise = ('N', albumentations.ISONoise(
 #endregion
 
 #region Functions
-def augment(_function, _Images, _imageMeta):
-    _tempImages = _Images.copy()
-    _tempImages.append(doAugmentation(_function, _tempImages[0]))
-    return _tempImages.copy()
+def augment(function, Images, imageMeta):
+    tempImages = Images.copy()
+    tempImages.append(doAugmentation(function, tempImages[0]))
+    return tempImages.copy()
 
-def doAugmentation(_function, _augmentedImage):
-    _augmentor = _function[1](image=_augmentedImage[0])
-    _augImage = _augmentor['image']
-    return (_augImage, _augmentedImage[1] + _function[0])
+def doAugmentation(function, augmentedImage):
+    augmentor = function[1](image=augmentedImage[0])
+    augImage = augmentor['image']
+    return (augImage, augmentedImage[1] + function[0])
 
-def saveAll(_Images, _imageMeta):
-    for i in _Images:
-        _outputImagePath = os.path.join(_imageMeta[0], i[1] + '_' + _imageMeta[1])
-        _outputTagPath = os.path.join(_imageMeta[0], i[1] + '_' + _imageMeta[2])
+def saveAll(Images, imageMeta):
+    for i in Images:
+        outputImagePath = os.path.join(imageMeta[0], i[1] + '_' + imageMeta[1])
+        outputTagPath = os.path.join(imageMeta[0], i[1] + '_' + imageMeta[2])
 
-        cv2.imwrite(_outputImagePath, i[0])
+        image = cv2.cvtColor(i[0], cv2.COLOR_RGB2BGR)
+        image2 = Image.fromarray(image)
+        image2.save(outputImagePath)
+        #cv2.imwrite(_outputImagePath, i[0])
 
         # copy <tag>.txt from Input to Output, if it exists
-        if not _imageMeta[2] == '':
-            _outputTagFile = open(_outputTagPath, "w")
-            _outputTagFile.write(_imageMeta[3])
-            _outputTagFile.close()
+        if not imageMeta[2] == '':
+            outputTagFile = open(outputTagPath, "w")
+            outputTagFile.write(imageMeta[3])
+            outputTagFile.close()
 
-def initializeBaseImage(_imagePath):
+def initializeBaseImage(imagePath):
     # Convert Image to correct RGB-Array
-    _imageRaw = Image.open(_imagePath).convert('RGB')
-    r, g, b = _imageRaw.split()
-    _imageRaw = Image.merge('RGB', (b, g, r))
-    _imageData = numpy.array(_imageRaw)
+    imageRaw = Image.open(imagePath).convert('RGB')
+    r, g, b = imageRaw.split()
+    imageRaw = Image.merge('RGB', (b, g, r))
+    imageData = numpy.array(imageRaw)
 
-    return [(_imageData, 'AUG_')]
+    return [(imageData, 'AUG_')]
 
-def generateImageMeta(_inputDir, _outputDir, _imageName):
-    _tagName = ''
-    _tagData = ''
-    for _tagName in os.listdir(_inputDir):
+def generateImageMeta(inputDir, outputDir, imageName):
+    tagName = ''
+    tagData = ''
+    for t in os.listdir(inputDir):
         try:
-            if _tagName.endswith('.txt'):
-                if os.path.splitext(os.path.basename(_tagName))[0] == os.path.splitext(os.path.basename(_imageName))[0]:
-                    _tagFile = open(os.path.join(_inputDir, _tagName), 'r')
-                    _tagData = _tagFile.read()
-                    _tagFile.close()
+            if t.endswith('.txt'):
+                if os.path.splitext(os.path.basename(t))[0] == os.path.splitext(os.path.basename(imageName))[0]:
+                    tagName = t
+                    tagFile = open(os.path.join(inputDir, tagName), 'r')
+                    tagData = tagFile.read()
+                    tagFile.close()
                     break
 
         except Exception as e:
-            print(Fore.LIGHTRED_EX + f"Fehler beim einlesen von '{_tagName}': {e}")
+            print(Fore.LIGHTRED_EX + f"Fehler beim einlesen von '{tagName}': {e}")
 
-    return (_outputDir, _imageName, _tagName, _tagData)
+    return (outputDir, imageName, tagName, tagData)
+
 #endregion
 
 # Main
