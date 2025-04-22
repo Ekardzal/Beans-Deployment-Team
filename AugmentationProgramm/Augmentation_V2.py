@@ -13,7 +13,9 @@ from colorama import Fore, Back, Style
 inputDir = r'input'
 outputDir = r'output'
 
-currentIndex = 0;
+imageName = ''
+
+currentIndex = 0
 
 # region Albumentations
 RandomBrightness = ('B', albumentations.RandomBrightnessContrast(
@@ -63,9 +65,9 @@ def saveAll(_Images, _imageMeta):
         cv2.imwrite(_outputImagePath, i[0])
 
         # copy <tag>.txt from Input to Output, if it exists
-        if not _imageMeta[3] == '':
+        if not _imageMeta[2] == '':
             _outputTagFile = open(_outputTagPath, "w")
-            _outputTagFile.write(_imageMeta[2])
+            _outputTagFile.write(_imageMeta[3])
             _outputTagFile.close()
 
 def initializeBaseImage(_imagePath):
