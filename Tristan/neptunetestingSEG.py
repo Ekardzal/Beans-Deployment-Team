@@ -39,3 +39,21 @@ for i, result in enumerate(results):
 
 plt.show()
 
+
+
+# Plot and log the results
+#fig, ax = plt.subplots(figsize=(12, 8))
+
+#ax.imshow(cv2.cvtColor(results[0].plot(), cv2.COLOR_BGR2RGB))
+#ax.axis("off")
+
+# Upload the image to Neptune
+#run["predictions/images"].upload(neptune.types.File.as_image(fig))
+
+  # Close the figure to avoid memory warnings
+
+    #fig, ax = plt.subplots(figsize=(12, 8))
+   # ax.imshow(cv2.cvtColor(result.plot(), cv2.COLOR_BGR2RGB))
+    #ax.axis("off")
+   # run[f"predictions/images/image_{i}"].upload(neptune.types.File.as_image(fig))
+   # plt.close(fig)  # Close the figure to avoid memory warnings
