@@ -1,2 +1,2 @@
 Method,Name,Error,Occurrences
-POST,/score,CatchResponseError('Code: 424'),3
+POST,/score,CatchResponseError('Code: 424'),5

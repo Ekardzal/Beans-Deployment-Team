@@ -206,7 +206,10 @@ def create_table():
                 conn.close()
             except Exception as e:
                 logging.warning(f"Fehler beim Schließen der DB-Verbindung: {e}")
-create_table()
+try:
+    create_table()
+except Exception as e:
+    logging.warning(f"⚠️ Datenbank nicht erreichbar beim Start: {e}")
 
 # Funktion zum Hochladen des Bildes zu Dropbox
 def upload_image_with_boxes_to_dropbox(image_with_boxes, image_name, dropbox_client):
