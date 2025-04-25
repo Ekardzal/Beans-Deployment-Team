@@ -1,0 +1,13 @@
+
+path: E:\GAMING OMG oder medieninformatik oder so\SoSe25\WW3\roher Datensatz\dataset_ohne_Phillip              #Pfad zu dem Ueberordner der Bilder und Label
+train: E:\GAMING OMG oder medieninformatik oder so\SoSe25\WW3\roher Datensatz\dataset_ohne_Phillip\train      #Pfad zum Unterverzeichnis train -> werden fuers Training verwendet
+val: E:\GAMING OMG oder medieninformatik oder so\SoSe25\WW3\roher Datensatz\dataset_ohne_Phillip\val            #Pfad zum Unterverzeichnis val -> werden fuers Validieren verwendet
+
+names:                                   #Auflistung der Klassenname
+  0: Terminator                               #Klasse fuer die Dose
+  1: Label                               #Klasse fuer die Kabellabel
+
+
+
+
+  
