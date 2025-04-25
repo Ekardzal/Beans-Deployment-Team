@@ -22,7 +22,7 @@
 		.bannerUl {width:80%; overflow:hidden; margin:0; top:0; margin-left:auto; margin-right:auto; list-style-type:none; border-radius:5px;} /*background-color:#004e9e;*/
 		.bannerright {border: 0px black solid; width:11vw; min-width:11vw; height:100vh; float:right; padding-right:3px; display:flex; flex-direction:column; margin:0px; overflow:hidden; position:-webkit-sticky; /* Safari */ position:sticky;right:0;position:fixed;}
 		.bannerright label {padding: 10px; font-size: clamp(12px, 1vw, 24px); color:black; text-align:left; display:inline-flex; margin-left:10px;}
-		.bannerright input {float:right; margin-top:15px; margin-right:5px; transform: scale(1.2);}
+		.bannerright input {position:absolute; right:4%; margin-top:15px; margin-right:5px; transform: scale(1.2);}
 		.content {width:85%; height:auto; min-height:100vh; margin-left:auto; margin-right:auto;}
 		.bannerUl li {float:left; font-family:'Trebuchet MS'; margin-left:17px; margin-top:7px; margin-bottom:7px;}
 		li a {color:white; text-align:center; text-decoration:none; font-size:20px;}
@@ -39,7 +39,7 @@
 		.boxinvi {display: block; padding: 5px; border-radius:5px; padding:5px; padding-left:10px; padding-right:10px;}
 		.active {color:#049ce4; border-bottom: 2px solid #049ce4;}
 	/*Button*/
-		.rounded-button{text-align:center; max-height:50px;  min-width:90%; max-width:70%; margin-left:10px; margin-right:10px; white-space:nowrap;
+		.rounded-button{display:flex; align-items:center; vertical-align:center; justify-content:center; text-align:center; min-height:30px; max-height:50px;  min-width:90%; max-width:70%; margin-left:10px; margin-right:10px; white-space:nowrap;
 		overflow: hidden; text-overflow: ellipsis; padding: 10px; font-size: 16px; color: #ffffff; background-color:#049ce4; box-shadow:0px 4px 6px rgba(0, 0, 0, 0.1); border:none; border-radius:25px; cursor:pointer; transition: all 0.3s ease;}
 		.rounded-button:hover {background-color:#004e9e;}
 		.dynFon {text-align:center; font-size: clamp(12px, 1vw, 24px);}
@@ -108,7 +108,7 @@
 		<br><br><br>
 		<h1 class="dynFon">Dropbox Login</h1>
 		<br>
-		<button onclick="copyToClipboard(this)" data-text="SetE-Mail" class="rounded-button" data-tooltip="">Copy E-Mail</button>
+		<button onclick="copyToClipboard(this)" data-text="SetE-Mail" class="rounded-button" data-tooltip=""><span class="dynFon">Copy E-Mail</span></button>
 		<br><br>
 		<button onclick="copyToClipboard(this)" data-text="SetPassword" class="rounded-button" data-tooltip="">Copy Passwort</button>
 		<br><br>
