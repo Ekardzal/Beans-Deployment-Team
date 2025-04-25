@@ -1,21 +1,22 @@
 from ultralytics import YOLO
 import os
 import csv
-import shutil
 from colorama import Fore, Back, Style
 
 #region Variables
 _inputModelPath = r"F:\Unii\AAAAAAA\best.pt"
-_inputTestImagesPath = r"F:\Unii\test\imgstore" 
+_inputTestImagesPath = r"F:\Unii\GitHub\Beans-Deployment-Team\Tristan\input" 
 
 _outputPredictionResultsPath = r"F:\Unii\GitHub\Beans-Deployment-Team\Tristan\output"
-
-
-
 #endregion
-
 #region Functions
-
+def SaveToCSV(_outputPredictionResultsPath, _rawCSVData):
+    csv_path = os.path.join(_outputPredictionResultsPath, "results.csv")
+    with open(csv_path, mode="w", newline="") as file:
+        writer = csv.writer(file, delimiter=";")
+        writer.writerow(["File Name", "Confidence", "Class"])
+        writer.writerows(_rawCSVData)
+    return True
 #endregion
 
 # Main
@@ -34,9 +35,7 @@ for result in results:
 
         rawCSVData.append((_imageName, _confidence, _class))
 
-csv_path = os.path.join(_outputPredictionResultsPath, "results.csv")
+SaveToCSV(_outputPredictionResultsPath, rawCSVData)
 
-with open(csv_path, mode="w", newline="") as file:
-    writer = csv.writer(file, delimiter=";")
-    writer.writerow(["File Name", "Confidence", "Class"])
-    writer.writerows(rawCSVData)
+
+
