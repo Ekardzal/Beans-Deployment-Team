@@ -1,0 +1,13 @@
+
+path: F:\_DS-IT01_TrainValOrigAug              #Pfad zu dem Ueberordner der Bilder und Label
+train: F:\_DS-IT01_TrainValOrigAug\train_augmented    #Pfad zum Unterverzeichnis train -> werden fuers Training verwendet
+val: F:\_DS-IT01_TrainValOrigAug\validate_augmented
+
+names:                                   #Auflistung der Klassenname
+  0: Terminator                               #Klasse fuer die Dose
+  1: Label                               #Klasse fuer die Kabellabel
+
+
+
+
+  
