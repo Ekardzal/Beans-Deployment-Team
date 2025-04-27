@@ -1,7 +1,7 @@
 import csv
-import neptune
 
-def log_results(path, run_name, model_name, params):
+
+def log_results(path, run_name, model_name, params, imgcount):
     run = neptune.init_run(
         project="beans-baustelle/Use-Case-Dose",
         api_token="eyJhcGlfYWRkcmVzcyI6Imh0dHBzOi8vYXBwLm5lcHR1bmUuYWkiLCJhcGlfdXJsIjoiaHR0cHM6Ly9hcHAubmVwdHVuZS5haSIsImFwaV9rZXkiOiI0YmUyNDM5Ny0zZjM5LTRkYmItOTc4MC05Yzg2YTE1Yzg1MzEifQ==",
@@ -38,7 +38,6 @@ def log_results(path, run_name, model_name, params):
                 run["data/lr/pg1"].append(float(line[19]))
                 run["data/lr/pg2"].append(float(line[20]))
     run["results"].upload(path)
-    run["imgcount"] = 8076
+    run["imgcount"] = imgcount
     run.stop()
-
 

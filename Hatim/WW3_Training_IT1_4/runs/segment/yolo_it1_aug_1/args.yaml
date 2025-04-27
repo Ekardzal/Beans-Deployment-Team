@@ -1,6 +1,6 @@
 task: segment
 mode: train
-model: yolo11n-seg.pt
+model: runs\segment\yolo_it1_aug_1\weights\last.pt
 data: config.yaml
 epochs: 100
 time: null
@@ -24,7 +24,7 @@ single_cls: false
 rect: false
 cos_lr: false
 close_mosaic: 10
-resume: false
+resume: runs\segment\yolo_it1_aug_1\weights\last.pt
 amp: true
 fraction: 1.0
 profile: false

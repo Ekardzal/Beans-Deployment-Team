@@ -1,7 +1,7 @@
 
-path: F:\_DS-IT01_TrainValOrigAug              #Pfad zu dem Ueberordner der Bilder und Label
-train: F:\_DS-IT01_TrainValOrigAug\train_augmented    #Pfad zum Unterverzeichnis train -> werden fuers Training verwendet
-val: F:\_DS-IT01_TrainValOrigAug\validate_augmented
+path: E:\GAMING OMG oder medieninformatik oder so\SoSe25\WW3\roher Datensatz\FertigAnnotiert\Dataset           #Pfad zu dem Ueberordner der Bilder und Label
+train: E:\GAMING OMG oder medieninformatik oder so\SoSe25\WW3\roher Datensatz\FertigAnnotiert\Dataset\train    #Pfad zum Unterverzeichnis train -> werden fuers Training verwendet
+val: E:\GAMING OMG oder medieninformatik oder so\SoSe25\WW3\roher Datensatz\FertigAnnotiert\Dataset\val
 
 names:                                   #Auflistung der Klassenname
   0: Terminator                               #Klasse fuer die Dose
