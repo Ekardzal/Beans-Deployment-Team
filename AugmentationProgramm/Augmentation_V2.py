@@ -78,7 +78,13 @@ def initializeBaseImage(imagePath):
     imageRaw = Image.merge('RGB', (b, g, r))
     imageData = numpy.array(imageRaw)
 
-    return [(imageData, 'AUG_')]
+    # Resize Image
+    target_height = 640
+    (h, w) = imageData.shape[:2]
+    target_scale = target_height / h
+    imageData_sized = cv2.resize(imageData, None, fx = target_scale, fy = target_scale)
+
+    return [(imageData_sized, 'AUG_')]
 
 def generateImageMeta(inputDir, outputDir, imageName):
     tagName = ''
