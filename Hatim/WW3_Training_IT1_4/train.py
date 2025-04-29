@@ -62,6 +62,8 @@ def on_train_end_neptune(trainer):
 
     run.stop()
 
+
+### INPUT
 run_name = "yolo_it1_test"
 dataset = "it1"
 epochs = 2
@@ -70,6 +72,9 @@ lrf = 0
 imgcount = 2032  #8072
 save_period = 20
 optimizer = "adam"
+### INPUT
+
+
 params = {"learning_rate": learning_rate, "lrf": lrf, "name": run_name, "save_period" : save_period, "optimizer": optimizer, "epochs": epochs, "dataset": dataset}
 #add cosine lr, AdamW/SGD, close-mosaic off-
 model_name = "yolo11n-seg.pt"
