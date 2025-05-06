@@ -56,9 +56,14 @@ def doAugmentation(function, augmentedImage):
     return (augImage, augmentedImage[1] + function[0])
 
 def saveAll(Images, imageMeta):
+    # Create Directories if none exist
+    if not os.path.exists(imageMeta[0]): os.makedirs(imageMeta[0])
+    if not os.path.exists(os.path.join(imageMeta[0], 'images')): os.makedirs(os.path.join(imageMeta[0], 'images'))
+    if not os.path.exists(os.path.join(imageMeta[0], 'labels')): os.makedirs(os.path.join(imageMeta[0], 'labels'))
+
     for i in Images:
-        outputImagePath = os.path.join(imageMeta[0], i[1] + '_' + imageMeta[1])
-        outputTagPath = os.path.join(imageMeta[0], i[1] + '_' + imageMeta[2])
+        outputImagePath = os.path.join(imageMeta[0], r'images\\' + i[1] + '_' + imageMeta[1])
+        outputTagPath = os.path.join(imageMeta[0], r'labels\\' + i[1] + '_' + imageMeta[2])
 
         image = cv2.cvtColor(i[0], cv2.COLOR_RGB2BGR)
         image2 = Image.fromarray(image)
@@ -81,7 +86,8 @@ def initializeBaseImage(imagePath):
     # Resize Image
     target_height = 640
     (h, w) = imageData.shape[:2]
-    target_scale = target_height / h
+    shortSide = min(h, w)
+    target_scale = target_height / shortSide
     imageData_sized = cv2.resize(imageData, None, fx = target_scale, fy = target_scale)
 
     return [(imageData_sized, 'AUG_')]
