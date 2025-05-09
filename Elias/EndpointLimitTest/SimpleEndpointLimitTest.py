@@ -1,23 +1,22 @@
-import yaml
 from locust import HttpUser, task, between, events
 import base64
+import os
+import json
 import time
 import matplotlib.pyplot as plt
 
-# Konfiguration aus YAML laden
-with open("config.yaml", "r") as file:
-    config = yaml.safe_load(file)
-
-API_KEY = config["api_key"]
-TEST_IMAGES = config["test_images"]
-FAILURE_LIMIT = config["failure_limit"]
-host = config["host"]
-wait_time_min = config["wait_time"]["min"]
-wait_time_max = config["wait_time"]["max"]
+# Konfiguration
+API_KEY = "EOLqlbiHInFPB2qj5s7L0mqZHWvxOnoASrgub3odRS3tpaTuhoN0JQQJ99BCAAAAAAAAAAAAINFRAZML3lyt"  # AML-Endpunkt-Key
+TEST_IMAGES = [
+    "images/small.png",   # Kleines Bild (10KB)
+    "images/medium.png",  # Mittel (100KB)
+    "images/large.png"    # Groß (1MB+)
+]
+FAILURE_LIMIT = 0.05  # Max. akzeptable Fehlerrate (5%)
 
 class AMLUser(HttpUser):
-    host = host
-    wait_time = between(wait_time_min, wait_time_max)
+    host = "https://endpunkt-mjyxx.germanywestcentral.inference.ml.azure.com"  # Hier die Basis-URL eintragen
+    wait_time = between(0.1, 0.5)
 
     def on_start(self):
         self.headers = {"Authorization": f"Bearer {API_KEY}"}

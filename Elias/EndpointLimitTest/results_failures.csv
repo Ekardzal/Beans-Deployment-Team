@@ -1,1 +1,3 @@
 Method,Name,Error,Occurrences
+POST,/score,CatchResponseError('Code: 424'),7
+POST,/score,CatchResponseError('Timeout: 15495.604515075684ms'),1
